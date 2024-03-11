@@ -35,8 +35,6 @@ public class WaitingTable {
         this.predictWaitingTime = predictWaitingTime;
     }
 
-    // 게터와 세터
-
     public String getServerCode() {
         return serverCode;
     }
