@@ -1,7 +1,10 @@
 package com.example.demo.controller;
-
+import java.util.List;
 import com.example.demo.model.WaitingUserInfo;
 import com.example.demo.model.WaitingTable;
+import com.example.demo.model.LocationData;
+import com.example.demo.model.StoreInfo;
+import com.example.demo.DTO.StoreDistanceDTO;
 import com.example.demo.service.WaitingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,13 +20,6 @@ public class WaitingController {
     public WaitingController(WaitingService waitingService) {
         this.waitingService = waitingService;
     }
-
-    // REST API를 통한 웨이팅 정보 등록
-    //@PostMapping("/register")
-    //public WaitingUserInfo registerWaitingRest(@RequestBody WaitingUserInfo waitingUserInfo) {
-    //    System.out.println("Received waiting info via REST: " + waitingUserInfo);
-    //    return waitingService.registerWaiting(waitingUserInfo);
-    //}
 
     // 웹소켓을 통한 웨이팅 정보 등록
     @MessageMapping("/register")
@@ -43,15 +39,12 @@ public class WaitingController {
     @MessageMapping("/waitingInfoRequest")
     @SendTo("/topic/waitingInfo")
     public WaitingUserInfo sendCurrentWaitingInfo() {
-
         WaitingUserInfo tempWaitingInfo = new WaitingUserInfo();
         tempWaitingInfo.setServerCode("12345");
         tempWaitingInfo.setMyName("임시 사용자");
         tempWaitingInfo.setPhoneNumber("010-1234-5678");
         tempWaitingInfo.setNumberOfUs(4);
-
         // 생성한 임시 웨이팅 정보 객체를 클라이언트에게 전송
-
         return tempWaitingInfo;
     }
     @MessageMapping("/waitingTimeInfoRequest")
@@ -61,10 +54,16 @@ public class WaitingController {
         tempWaitingTable.setServerCode("77777");
         tempWaitingTable.setLastWaitingNumber(7);
         tempWaitingTable.setPredictWaitingTime(10);
-
-
         // 생성한 임시 웨이팅 정보 객체를 클라이언트에게 전송
-
         return tempWaitingTable;
+    }
+    @MessageMapping("/nearestStores")
+    @SendTo("/topic/nearestStores")
+    public List<StoreDistanceDTO> sendNearestStores(LocationData locationData) {
+        // 위치 데이터를 받아 가장 가까운 가게 목록을 조회하는 서비스 메소드 호출
+        List<StoreDistanceDTO> nearestStores = waitingService.findNearestStores(locationData);
+
+        // 객체로 클라이언트에게 보내줌 // {"id":3,"storeName":"단대골목","address":"경기도 용인시 죽전로 165","distance":45040.0},
+        return nearestStores;
     }
 }
