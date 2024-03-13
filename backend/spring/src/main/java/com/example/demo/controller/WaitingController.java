@@ -1,11 +1,15 @@
 package com.example.demo.controller;
 import java.util.List;
+
+import com.example.demo.DTO.StoreDTO;
+import com.example.demo.DTO.StoreInfoRequest;
 import com.example.demo.model.WaitingUserInfo;
 import com.example.demo.model.WaitingTable;
 import com.example.demo.model.LocationData;
 import com.example.demo.model.StoreInfo;
 import com.example.demo.DTO.StoreDistanceDTO;
 import com.example.demo.service.WaitingService;
+import com.example.demo.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -15,12 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class WaitingController {
 
     private final WaitingService waitingService;
+    private final StoreService storeService;
 
     @Autowired
-    public WaitingController(WaitingService waitingService) {
+    public WaitingController(WaitingService waitingService, StoreService storeService) {
         this.waitingService = waitingService;
+        this.storeService = storeService;
     }
-
     // 웹소켓을 통한 웨이팅 정보 등록
     @MessageMapping("/register")
     @SendTo("/topic/waitingInfo")
@@ -65,5 +70,14 @@ public class WaitingController {
 
         // 객체로 클라이언트에게 보내줌 // {"id":3,"storeName":"단대골목","address":"경기도 용인시 죽전로 165","distance":45040.0},
         return nearestStores;
+    }
+    @MessageMapping("/storeinfo")
+    @SendTo("/topic/storeinfo")
+    public StoreDTO sendStoreInfo(StoreInfoRequest request) {
+        // 요청된 가게 코드에 따른 스토어 정보 조회 서비스 메소드 호출
+        StoreDTO storeDTO = storeService.getStoreDetailsByStoreCode(request.getStoreCode());
+
+        // 조회된 스토어 정보를 객체로 클라이언트에게 보내줌
+        return storeDTO;
     }
 }
