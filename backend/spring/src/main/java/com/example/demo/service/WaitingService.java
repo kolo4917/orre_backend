@@ -55,8 +55,6 @@ public class WaitingService {
         double distance = R * c * 1000; // 거리를 미터로 변환
         long meter_distance = Math.round(distance); // 소수점 없이 반올림
 
-        System.out.println(distance + " meters");
-
         return meter_distance;
     }
 }
