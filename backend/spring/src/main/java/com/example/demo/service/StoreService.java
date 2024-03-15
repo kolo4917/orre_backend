@@ -25,7 +25,6 @@ public class StoreService {
 
     public StoreDTO getStoreDetailsByStoreCode(Integer storeCode) {
         Object[] storeDetails = storeRepository.findStoreDetailsByStoreCode(storeCode);
-        System.out.println("storeDetails 배열의 길이: " + storeDetails.length);
         if (storeDetails != null && storeDetails.length > 0) {
             Object firstElement = storeDetails[0];
             if (firstElement instanceof Object[]) {

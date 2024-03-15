@@ -1,7 +1,7 @@
 package com.example.demo.DTO.ToClient;
 
 // LOCATION_INFO 테이블 정보를 담고 비교해서 클라이언트에게 보내줄 정보
-public class StoreDistanceDTO implements Comparable<StoreDistanceDTO> {
+public class StoreListDTO implements Comparable<StoreListDTO> {
     private int storeCode;
     private String storeName;
     private String address;
@@ -9,7 +9,7 @@ public class StoreDistanceDTO implements Comparable<StoreDistanceDTO> {
     private double latitude; // Latitude field 추가
     private double longitude; // Longitude field 추가
 
-    public StoreDistanceDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude) {
+    public StoreListDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
@@ -80,7 +80,7 @@ public class StoreDistanceDTO implements Comparable<StoreDistanceDTO> {
 
     // Comparable 인터페이스의 compareTo 메소드 구현
     @Override
-    public int compareTo(StoreDistanceDTO other) {
+    public int compareTo(StoreListDTO other) {
         return Double.compare(this.distance, other.distance);
     }
 }
