@@ -1,27 +1,27 @@
 package com.example.demo.DTO.ToServer;
 
 public class AdminLoginRequest {
-    private String adminphonenumber;
-    private String adminpassword;
+    private String adminPhoneNumber;
+    private String adminPassword;
 
-    public AdminLoginRequest(String adminphonenumber, String adminpassword) {
-        this.adminphonenumber = adminphonenumber;
-        this.adminpassword = adminpassword;
+    public AdminLoginRequest(String adminPhoneNumber, String adminPassword) {
+        this.adminPhoneNumber = adminPhoneNumber;
+        this.adminPassword = adminPassword;
     }
 
     public String getAdminPhoneNumber() {
-        return adminphonenumber;
+        return adminPhoneNumber;
     }
 
-    public void setAdminPhoneNumber(String adminphonenumber) {
-        this.adminphonenumber = adminphonenumber;
+    public void setAdminPhoneNumber(String adminPhoneNumber) {
+        this.adminPhoneNumber = adminPhoneNumber;
     }
 
     public String getAdminPassword() {
-        return adminpassword;
+        return adminPassword;
     }
 
-    public void setAdminPassword(String adminpassword) {
-        this.adminpassword = adminpassword;
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
     }
 }
