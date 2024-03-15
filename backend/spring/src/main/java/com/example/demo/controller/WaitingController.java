@@ -92,13 +92,13 @@ public class WaitingController {
     @MessageMapping("/user/dynamicQueue")
     @SendTo("/topic/user/dynamicQueue") //기존의 클라이언트 -> 서버 구조
     public List<StoreDynamicQueue> sendDynamicQueue() {
-        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue();
+        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(null);
         return dynamicQueues;
     }
     @Scheduled(fixedRate = 50000)
     public void sendDynamicQueue2() {
         System.out.println("Sending dynamic queue...");
-        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue();
+        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(null);
         messagingTemplate.convertAndSend("/topic/dynamicQueue", dynamicQueues);
     }
 

@@ -1,15 +1,20 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.ToClient.StoreDynamicQueue;
+import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import com.example.demo.DTO.ToClient.AdminLoginResponse;
 import com.example.demo.DTO.ToServer.AdminLoginRequest;
+import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.model.DataBase.Admin;
-import com.example.demo.service.AdminLoginService;
+import com.example.demo.service.StoreDynamicQueueService;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,12 +22,25 @@ import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
+import java.util.Arrays;
 
 @Controller
 public class StoreAdminController {
 
     @Autowired
-    private AdminLoginService adminLoginService; // AdminLoginService 주입
+    private final AdminLoginService adminLoginService; // AdminLoginService 주입
+    private final StoreDynamicQueueService storeDynamicQueueService;
+    private final SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
+    public StoreAdminController(AdminLoginService adminLoginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate) {
+        this.adminLoginService = adminLoginService;
+        this.storeDynamicQueueService = storeDynamicQueueService;
+        this.messagingTemplate = messagingTemplate;
+
+    }
+
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
     @SendTo("/topic/admin/StoreAdmin/login/{adminPhoneNumber}")
@@ -55,5 +73,23 @@ public class StoreAdminController {
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+    }
+    @MessageMapping("/admin/dynamicQueue/{storeCode}")
+    @SendTo("/topic/admin/dynamicQueue/{storeCode}") //기존의 클라이언트 -> 서버 구조
+    public List<StoreDynamicQueue> sendDynamicQueue3(@DestinationVariable Integer storeCode) {
+        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
+        return dynamicQueues;
+    }
+    @Scheduled(fixedRate = 50000)
+    public void sendDynamicQueue4() {
+        System.out.println("Sending admin dynamic queue to all stores...");
+        // 정의된 스토어 코드 리스트
+        List<Integer> storeCodes = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        for (Integer storeCode : storeCodes) {
+            List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
+            String destination = "/topic/admin/dynamicQueue/" + storeCode;
+            messagingTemplate.convertAndSend(destination, dynamicQueues);
+        }
     }
 }
