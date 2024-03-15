@@ -66,36 +66,36 @@ public class WaitingController {
         // 생성한 임시 웨이팅 정보 객체를 클라이언트에게 전송
         return tempWaitingTable;
     }
-    @MessageMapping("/storeList/nearestStores")
-    @SendTo("/topic/storeList/nearestStores")
+    @MessageMapping("/user/storeList/nearestStores")
+    @SendTo("/topic/user/storeList/nearestStores")
     public List<StoreListDTO> sendNearestStores(LocationData locationData) {
         // 위치 데이터를 받아 가장 가까운 가게 목록을 조회하는 서비스 메소드 호출
         List<StoreListDTO> nearestStores = waitingService.findNearestStores(locationData);
         // 객체로 클라이언트에게 보내줌 // {"storeCode":3,"storeName":"단대골목","address":"경기도 용인시 죽전로 165","distance":45040.0},
         return nearestStores;
     }
-    @MessageMapping("/storeList/basicStores")
-    @SendTo("/topic/storeList/basicStores")
+    @MessageMapping("/user/storeList/basicStores")
+    @SendTo("/topic/user/storeList/basicStores")
     public List<StoreListDTO> sendbasicStores(LocationData locationData) {
         List<StoreListDTO> basicStores = waitingService.findBasicStore(locationData);
         // 객체로 스토어 번호 오름차순으로 클라이언트에게 보내줌 // {"storeCode":3,"storeName":"단대골목","address":"경기도 용인시 죽전로 165","distance":45040.0},
         return basicStores;
     }
-    @MessageMapping("/storeInfo")
-    @SendTo("/topic/storeInfo")
+    @MessageMapping("/user/storeInfo")
+    @SendTo("/topic/user/storeInfo")
     public StoreDTO sendStoreInfo(StoreInfoRequest request) {
         StoreDTO storeDTO = storeService.getStoreDetailsByStoreCode(request.getStoreCode());
 
         // 조회된 스토어 정보를 객체로 클라이언트에게 보내줌
         return storeDTO;
     }
-    @MessageMapping("/dynamicQueue")
-    @SendTo("/topic/dynamicQueue") //기존의 클라이언트 -> 서버 구조
+    @MessageMapping("/user/dynamicQueue")
+    @SendTo("/topic/user/dynamicQueue") //기존의 클라이언트 -> 서버 구조
     public List<StoreDynamicQueue> sendDynamicQueue() {
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue();
         return dynamicQueues;
     }
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 50000)
     public void sendDynamicQueue2() {
         System.out.println("Sending dynamic queue...");
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue();
