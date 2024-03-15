@@ -2,41 +2,46 @@ package com.example.demo.controller;
 import java.util.List;
 
 import com.example.demo.DTO.ToClient.StoreDTO;
+import com.example.demo.DTO.ToClient.StoreDynamicQueue;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.model.WaitingUserInfo;
 import com.example.demo.model.WaitingTable;
 import com.example.demo.model.LocationData;
-import com.example.demo.DTO.ToClient.StoreDistanceDTO;
+import com.example.demo.DTO.ToClient.StoreListDTO;
 import com.example.demo.service.WaitingService;
 import com.example.demo.service.StoreService;
+import com.example.demo.service.StoreDynamicQueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
 
-@RestController
+
+@Controller
 public class WaitingController {
 
     private final WaitingService waitingService;
     private final StoreService storeService;
+    private final StoreDynamicQueueService storeDynamicQueueService;
+    private final SimpMessagingTemplate messagingTemplate;
+
+
 
     @Autowired
-    public WaitingController(WaitingService waitingService, StoreService storeService) {
+    public WaitingController(WaitingService waitingService, StoreService storeService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate) {
         this.waitingService = waitingService;
         this.storeService = storeService;
+        this.storeDynamicQueueService = storeDynamicQueueService;
+        this.messagingTemplate = messagingTemplate;
     }
     // 웹소켓을 통한 웨이팅 정보 등록
     @MessageMapping("/register")
     @SendTo("/topic/waitingInfo")
     public WaitingUserInfo registerWaitingWebSocket(WaitingUserInfo waitingUserInfo) {
-        // 웹소켓을 통해 받은 데이터 DB에 입력(웨이팅 번호 - 현재 입장한 웨이팅 번호 = 남은 대기 웨이팅)
-        // DB에서 가장 뒷 번호 +1  = 웨이팅 번호 SQL 삽입
-        // 입장 처리되지 않은 제일 작은 번호 = 이제 불릴 번호 -> MYSQL에서 입장처리 되지 않은 제일 작은 번호 추출하는 알고리즘
-
         // DB로 부터 해당 유저 정보 출력
         System.out.println("Received waiting info via WebSocket: " + waitingUserInfo.toString()); // toString 호출
-
-
         // 웨이팅 번호 보여주는 알고리즘
         return waitingUserInfo;
     }
@@ -63,29 +68,38 @@ public class WaitingController {
     }
     @MessageMapping("/storeList/nearestStores")
     @SendTo("/topic/storeList/nearestStores")
-    public List<StoreDistanceDTO> sendNearestStores(LocationData locationData) {
+    public List<StoreListDTO> sendNearestStores(LocationData locationData) {
         // 위치 데이터를 받아 가장 가까운 가게 목록을 조회하는 서비스 메소드 호출
-        List<StoreDistanceDTO> nearestStores = waitingService.findNearestStores(locationData);
-
+        List<StoreListDTO> nearestStores = waitingService.findNearestStores(locationData);
         // 객체로 클라이언트에게 보내줌 // {"storeCode":3,"storeName":"단대골목","address":"경기도 용인시 죽전로 165","distance":45040.0},
         return nearestStores;
     }
     @MessageMapping("/storeList/basicStores")
     @SendTo("/topic/storeList/basicStores")
-    public List<StoreDistanceDTO> sendbasicStores(LocationData locationData) {
-        // 위치 데이터를 받아 가장 가까운 가게 목록을 조회하는 서비스 메소드 호출
-        List<StoreDistanceDTO> basicStores = waitingService.findBasicStore(locationData);
-
+    public List<StoreListDTO> sendbasicStores(LocationData locationData) {
+        List<StoreListDTO> basicStores = waitingService.findBasicStore(locationData);
         // 객체로 스토어 번호 오름차순으로 클라이언트에게 보내줌 // {"storeCode":3,"storeName":"단대골목","address":"경기도 용인시 죽전로 165","distance":45040.0},
         return basicStores;
     }
     @MessageMapping("/storeInfo")
     @SendTo("/topic/storeInfo")
     public StoreDTO sendStoreInfo(StoreInfoRequest request) {
-        // 요청된 가게 코드에 따른 스토어 정보 조회 서비스 메소드 호출
         StoreDTO storeDTO = storeService.getStoreDetailsByStoreCode(request.getStoreCode());
 
         // 조회된 스토어 정보를 객체로 클라이언트에게 보내줌
         return storeDTO;
     }
+    @MessageMapping("/dynamicQueue")
+    @SendTo("/topic/dynamicQueue") //기존의 클라이언트 -> 서버 구조
+    public List<StoreDynamicQueue> sendDynamicQueue() {
+        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue();
+        return dynamicQueues;
+    }
+    @Scheduled(fixedRate = 5000)
+    public void sendDynamicQueue2() {
+        System.out.println("Sending dynamic queue...");
+        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue();
+        messagingTemplate.convertAndSend("/topic/dynamicQueue", dynamicQueues);
+    }
+
 }

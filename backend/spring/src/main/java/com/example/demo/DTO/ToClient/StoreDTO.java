@@ -4,7 +4,7 @@ import java.util.List;
 
 public class StoreDTO {
 
-    private long storeCode;
+    private int storeCode;
     private String storeName;
     private int storeInfoVersion;
     private int numberOfTeamsWaiting;
@@ -16,7 +16,7 @@ public class StoreDTO {
     }
 
     // 모든 필드를 포함한 생성자
-    public StoreDTO(long storeCode, String storeName, int storeInfoVersion,
+    public StoreDTO(int storeCode, String storeName, int storeInfoVersion,
                     int numberOfTeamsWaiting, int estimatedWaitingTime, List<MenuInfo> menuInfo) {
         this.storeCode = storeCode;
         this.storeName = storeName;
@@ -27,7 +27,7 @@ public class StoreDTO {
     }
 
     // Getters
-    public long getStoreCode() {
+    public int getStoreCode() {
         return storeCode;
     }
 
@@ -52,7 +52,7 @@ public class StoreDTO {
     }
 
     // Setters
-    public void setStoreCode(long storeCode) {
+    public void setStoreCode(int storeCode) {
         this.storeCode = storeCode;
     }
 
