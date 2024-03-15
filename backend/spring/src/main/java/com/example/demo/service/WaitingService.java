@@ -2,7 +2,7 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import com.example.demo.DTO.ToClient.StoreDistanceDTO;
+import com.example.demo.DTO.ToClient.StoreListDTO;
 import com.example.demo.model.LocationData;
 import com.example.demo.model.DataBase.StoreInfo;
 import com.example.demo.model.WaitingTable;
@@ -25,14 +25,14 @@ public class WaitingService {
     }
 
     // 스토어 정보 가져와서 현재 위치와 비교
-    public List<StoreDistanceDTO> findNearestStores(LocationData locationData) {
+    public List<StoreListDTO> findNearestStores(LocationData locationData) {
         List<StoreInfo> allStores = storeInfoRepository.findAll(); // 테이블의 모든 정보를 가져옴
-        List<StoreDistanceDTO> nearestStoresWithDistance = new ArrayList<>();
+        List<StoreListDTO> nearestStoresWithDistance = new ArrayList<>();
 
         for (StoreInfo store : allStores) {
             double distance = calculateDistance(locationData.getLatitude(), locationData.getLongitude(), //클라이언트로 부터 받은 위도 경도
                     store.getLatitude(), store.getLongitude()); // 테이블 한 행에 있는 위도 경도
-            nearestStoresWithDistance.add(new StoreDistanceDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(), distance,store.getLatitude(), store.getLongitude())); //distance를 추가해서 저장
+            nearestStoresWithDistance.add(new StoreListDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(), distance,store.getLatitude(), store.getLongitude())); //distance를 추가해서 저장
         }
 
         // distance 따라 정렬
@@ -57,14 +57,14 @@ public class WaitingService {
 
         return meter_distance;
     }
-    public List<StoreDistanceDTO> findBasicStore(LocationData locationData) {
+    public List<StoreListDTO> findBasicStore(LocationData locationData) {
         List<StoreInfo> allStores = storeInfoRepository.findAll(); // 테이블의 모든 정보를 가져옴
-        List<StoreDistanceDTO> basicStoresWithStoreCode = new ArrayList<>();
+        List<StoreListDTO> basicStoresWithStoreCode = new ArrayList<>();
 
         for (StoreInfo store : allStores) {
             double distance = calculateDistance(locationData.getLatitude(), locationData.getLongitude(), //클라이언트로 부터 받은 위도 경도
                     store.getLatitude(), store.getLongitude()); // 테이블 한 행에 있는 위도 경도
-            basicStoresWithStoreCode.add(new StoreDistanceDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(), distance,store.getLatitude(), store.getLongitude())); //distance를 추가해서 저장
+            basicStoresWithStoreCode.add(new StoreListDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(), distance,store.getLatitude(), store.getLongitude())); //distance를 추가해서 저장
         }
 
         return basicStoresWithStoreCode;
