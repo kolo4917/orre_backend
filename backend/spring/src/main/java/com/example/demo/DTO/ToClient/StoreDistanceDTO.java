@@ -1,16 +1,16 @@
-package com.example.demo.DTO;
+package com.example.demo.DTO.ToClient;
 
 // LOCATION_INFO 테이블 정보를 담고 비교해서 클라이언트에게 보내줄 정보
 public class StoreDistanceDTO implements Comparable<StoreDistanceDTO> {
-    private Long id;
+    private int storeCode;
     private String storeName;
     private String address;
     private double distance;
     private double latitude; // Latitude field 추가
     private double longitude; // Longitude field 추가
 
-    public StoreDistanceDTO(Long id, String storeName, String address, double distance, double latitude, double longitude) {
-        this.id = id;
+    public StoreDistanceDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude) {
+        this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
         this.distance = distance;
@@ -19,13 +19,13 @@ public class StoreDistanceDTO implements Comparable<StoreDistanceDTO> {
     }
 
     // ID에 대한 getter
-    public Long getId() {
-        return id;
+    public int getStoreCode() {
+        return storeCode;
     }
 
     // ID에 대한 setter
-    public void setId(Long id) {
-        this.id = id;
+    public void setStoreCode(int storeCode) {
+        this.storeCode = storeCode;
     }
 
     // StoreName에 대한 getter

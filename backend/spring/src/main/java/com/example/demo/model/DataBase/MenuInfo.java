@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model.DataBase;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -16,11 +16,9 @@ public class MenuInfo implements Serializable {
     @Column(name = "menu_info_store_code")
     private Integer storeCode;
 
-    @Id
     @Column(name = "menu_info_table_number")
     private Integer tableNumber;
 
-    @Id
     @Column(name = "menu_info_menu")
     private String menu;
 

@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model.DataBase;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -13,7 +13,7 @@ public class StoreInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "location_store_code")
-    private Long id;
+    private int storeCode;
 
     @Column(name = "location_store_name")
     private String storeName;
@@ -32,17 +32,17 @@ public class StoreInfo {
     }
 
     // 모든 필드를 포함하는 생성자
-    public StoreInfo(Long id, String storeName, String address, Double longitude, Double latitude) {
-        this.id = id;
+    public StoreInfo(int storeCode, String storeName, String address, Double longitude, Double latitude) {
+        this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public Long getId() {return id;}
+    public int getstoreCode() {return storeCode;}
 
-    public void setId(Long id) {this.id = id;}
+    public void setstoreCode(int storeCode) {this.storeCode = storeCode;}
 
     public String getStoreName() {return storeName;}
 
