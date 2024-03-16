@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.ToClient.EmptySeat;
 import com.example.demo.DTO.ToClient.StoreDynamicQueue;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +33,17 @@ public class StoreAdminController {
     private final AdminLoginService adminLoginService; // AdminLoginService 주입
     private final StoreDynamicQueueService storeDynamicQueueService;
     private final SimpMessagingTemplate messagingTemplate;
+    private EmptySeatService emptySeatService;
+
 
     @Autowired
-    public StoreAdminController(AdminLoginService adminLoginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate) {
+    public StoreAdminController(AdminLoginService adminLoginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate, EmptySeatService emptySeatService) {
         this.adminLoginService = adminLoginService;
         this.storeDynamicQueueService = storeDynamicQueueService;
         this.messagingTemplate = messagingTemplate;
+        this.emptySeatService = emptySeatService;
 
     }
-
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
     @SendTo("/topic/admin/StoreAdmin/login/{adminPhoneNumber}")
@@ -74,12 +77,14 @@ public class StoreAdminController {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
+
     @MessageMapping("/admin/dynamicQueue/{storeCode}")
     @SendTo("/topic/admin/dynamicQueue/{storeCode}") //기존의 클라이언트 -> 서버 구조
     public List<StoreDynamicQueue> sendDynamicQueue3(@DestinationVariable Integer storeCode) {
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
         return dynamicQueues;
     }
+
     @Scheduled(fixedRate = 50000)
     public void sendDynamicQueue4() {
         System.out.println("Sending admin dynamic queue to all stores...");
@@ -91,5 +96,12 @@ public class StoreAdminController {
             String destination = "/topic/admin/dynamicQueue/" + storeCode;
             messagingTemplate.convertAndSend(destination, dynamicQueues);
         }
+    }
+
+    @MessageMapping("/admin/StoreAdmin/available/{storeCode}")
+    @SendTo("/topic/admin/StoreAdmin/available/{storeCode}")
+    public List<EmptySeat> emptySeat(StoreInfoRequest request, @DestinationVariable Integer storeCode) {
+        // EmptySeatService를 사용하여 storeCode에 해당하는 비어 있는 자리 정보 조회
+        return emptySeatService.findEmptySeats(storeCode);
     }
 }
