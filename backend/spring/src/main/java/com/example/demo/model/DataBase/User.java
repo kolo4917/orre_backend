@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.criteria.CriteriaBuilder;
-
 import java.io.Serializable;
 
 @Entity
@@ -35,12 +33,9 @@ public class User implements Serializable {
     @Column(name = "user_location")
     private String location;
 
-    @Column(name = "user_store_waiting_code")
-    private Integer storeWaitingCode;
-
     public User() {}
 
-    public User(Integer phoneNumber, Integer storeCode, String password, String name, String token, Integer creditInfo, String location,Integer storeWaitingCode) {
+    public User(Integer phoneNumber, Integer storeCode, String password, String name, String token, Integer creditInfo, String location) {
         this.phoneNumber = phoneNumber;
         this.storeCode = storeCode;
         this.password = password;
@@ -48,7 +43,6 @@ public class User implements Serializable {
         this.token = token;
         this.creditInfo = creditInfo;
         this.location = location;
-        this.storeWaitingCode = storeWaitingCode;
     }
 
     public Integer getPhoneNumber() { return phoneNumber; }
@@ -71,10 +65,6 @@ public class User implements Serializable {
 
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
-
-    public Integer getStoreWaitingCode() {return storeWaitingCode;}
-
-    public void setStoreWaitingCode(Integer storeWaitingCode) {this.storeWaitingCode = storeWaitingCode;}
 
     // toString, equals, hashCode 메소드는 필요에 따라 구현
 }
