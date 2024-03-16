@@ -15,7 +15,6 @@ public class RestaurantTable {
     @Column(name = "store_code")
     private Integer storeCode;
 
-    @Id
     @Column(name = "table_number")
     private Integer tableNumber;
 
