@@ -12,9 +12,8 @@ public class User implements Serializable {
 
     @Id
     @Column(name = "user_phone_number")
-    private Integer phoneNumber;
+    private String phoneNumber;
 
-    @Id
     @Column(name = "user_store_code")
     private Integer storeCode;
 
@@ -35,7 +34,7 @@ public class User implements Serializable {
 
     public User() {}
 
-    public User(Integer phoneNumber, Integer storeCode, String password, String name, String token, Integer creditInfo, String location) {
+    public User(String phoneNumber, Integer storeCode, String password, String name, String token, Integer creditInfo, String location) {
         this.phoneNumber = phoneNumber;
         this.storeCode = storeCode;
         this.password = password;
@@ -45,8 +44,8 @@ public class User implements Serializable {
         this.location = location;
     }
 
-    public Integer getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(Integer phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public Integer getStoreCode() { return storeCode; }
     public void setStoreCode(Integer storeCode) { this.storeCode = storeCode; }
