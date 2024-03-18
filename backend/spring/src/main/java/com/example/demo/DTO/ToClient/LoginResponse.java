@@ -1,6 +1,6 @@
 package com.example.demo.DTO.ToClient;
 
-public class AdminLoginResponse {
+public class LoginResponse {
     private String status;
     private String token;
 
@@ -8,7 +8,7 @@ public class AdminLoginResponse {
 
     private int storeCode;
 
-    public AdminLoginResponse(String status, String token, int storeCode) {
+    public LoginResponse(String status, String token, int storeCode) {
         this.status = status;
         this.token = token;
         this.storeCode = storeCode;
