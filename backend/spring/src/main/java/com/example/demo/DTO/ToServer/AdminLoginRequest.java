@@ -4,6 +4,7 @@ public class AdminLoginRequest {
     private String adminPhoneNumber;
     private String adminPassword;
 
+
     public AdminLoginRequest(String adminPhoneNumber, String adminPassword) {
         this.adminPhoneNumber = adminPhoneNumber;
         this.adminPassword = adminPassword;

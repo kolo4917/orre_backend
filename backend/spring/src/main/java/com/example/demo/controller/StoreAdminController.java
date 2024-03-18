@@ -11,7 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
-import com.example.demo.DTO.ToClient.AdminLoginResponse;
+import com.example.demo.DTO.ToClient.LoginResponse;
 import com.example.demo.DTO.ToServer.AdminLoginRequest;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.model.DataBase.Admin;
@@ -30,15 +30,15 @@ import java.util.Arrays;
 public class StoreAdminController {
 
     @Autowired
-    private final AdminLoginService adminLoginService; // AdminLoginService 주입
+    private final LoginService loginService; // AdminLoginService 주입
     private final StoreDynamicQueueService storeDynamicQueueService;
     private final SimpMessagingTemplate messagingTemplate;
     private EmptySeatService emptySeatService;
 
 
     @Autowired
-    public StoreAdminController(AdminLoginService adminLoginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate, EmptySeatService emptySeatService) {
-        this.adminLoginService = adminLoginService;
+    public StoreAdminController(LoginService loginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate, EmptySeatService emptySeatService) {
+        this.loginService = loginService;
         this.storeDynamicQueueService = storeDynamicQueueService;
         this.messagingTemplate = messagingTemplate;
         this.emptySeatService = emptySeatService;
@@ -47,17 +47,17 @@ public class StoreAdminController {
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
     @SendTo("/topic/admin/StoreAdmin/login/{adminPhoneNumber}")
-    public AdminLoginResponse login(AdminLoginRequest request, @DestinationVariable String adminPhoneNumber) {
+    public LoginResponse login(AdminLoginRequest request, @DestinationVariable String adminPhoneNumber) {
         // 전화번호와 비밀번호를 받아 서비스를 통해 인증
-        Admin isValidUser = adminLoginService.validateAdminCredentials(request.getAdminPhoneNumber(), request.getAdminPassword());
+        Admin isValidUser = loginService.validateAdminCredentials(request.getAdminPhoneNumber(), request.getAdminPassword());
         if (isValidUser != null) {
             // JWT 발급
             String token = generateJwtToken(adminPhoneNumber);
             // 인증된 사용자의 storeCode를 가져오는 로직 (가정)
-            return new AdminLoginResponse("success", token, isValidUser.getAdminStoreCode());
+            return new LoginResponse("success", token, isValidUser.getAdminStoreCode());
         } else {
             // 인증 실패 시
-            return new AdminLoginResponse("failure", null, 0);
+            return new LoginResponse("failure", null, 0);
         }
     }
 
