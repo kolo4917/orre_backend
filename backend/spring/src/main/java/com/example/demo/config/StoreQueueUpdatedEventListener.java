@@ -19,7 +19,8 @@ public class StoreQueueUpdatedEventListener implements ApplicationListener<Store
     @Override
     public void onApplicationEvent(StoreQueueUpdatedEvent event) {
         Integer storeCode = event.getStoreCode();
-        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
-        messagingTemplate.convertAndSend("/topic/user/dynamicStoreWaitingInfo/" + storeCode, dynamicQueues);
+        StoreDynamicQueue dynamicQueue = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
+        messagingTemplate.convertAndSend("/topic/user/dynamicStoreWaitingInfo/" + storeCode, dynamicQueue);
     }
+
 }

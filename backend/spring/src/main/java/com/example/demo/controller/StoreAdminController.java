@@ -80,23 +80,28 @@ public class StoreAdminController {
 
     @MessageMapping("/admin/dynamicQueue/{storeCode}")
     @SendTo("/topic/admin/dynamicQueue/{storeCode}") //기존의 클라이언트 -> 서버 구조
-    public List<StoreDynamicQueue> sendDynamicQueue3(@DestinationVariable Integer storeCode) {
-        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
-        return dynamicQueues;
+    public StoreDynamicQueue sendDynamicQueue3(@DestinationVariable Integer storeCode) {
+        StoreDynamicQueue dynamicQueue = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
+        return dynamicQueue;
     }
 
-    @Scheduled(fixedRate = 50000)
+    //유저 알고리즘과 동일하게 수정 예정
+    /*@Scheduled(fixedRate = 50000)
     public void sendDynamicQueue4() {
         System.out.println("Sending admin dynamic queue to all stores...");
         // 정의된 스토어 코드 리스트
         List<Integer> storeCodes = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
         for (Integer storeCode : storeCodes) {
-            List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
-            String destination = "/topic/admin/dynamicQueue/" + storeCode;
-            messagingTemplate.convertAndSend(destination, dynamicQueues);
+            StoreDynamicQueue dynamicQueue = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
+            if (dynamicQueue != null) {
+                String destination = "/topic/admin/dynamicQueue/" + storeCode;
+                messagingTemplate.convertAndSend(destination, dynamicQueue);
+            } else {
+                System.out.println("Dynamic queue for store " + storeCode + " is null.");
+            }
         }
-    }
+    }*/
 
     @MessageMapping("/admin/StoreAdmin/available/{storeCode}")
     @SendTo("/topic/admin/StoreAdmin/available/{storeCode}")
