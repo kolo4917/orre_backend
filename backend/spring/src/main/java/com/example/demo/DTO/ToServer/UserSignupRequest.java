@@ -7,10 +7,15 @@ public class UserSignupRequest {
     private String verificationCode;
     private String password;
 
-    public UserSignupRequest(String phoneNumber, String verificationCode, String password) {
+
+
+    private String username;
+
+    public UserSignupRequest(String phoneNumber, String verificationCode, String password,String username) {
         this.phoneNumber = phoneNumber;
         this.verificationCode = verificationCode;
         this.password = password;
+        this.username = username;
     }
 
     public String getPhoneNumber() {
@@ -35,5 +40,12 @@ public class UserSignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

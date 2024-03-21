@@ -1,4 +1,6 @@
 package com.example.demo.service;
+import com.example.demo.repository.UserSaveRepository;
+import com.example.demo.model.DataBase.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,8 @@ public class SignupService {
 
     private final DefaultMessageService messageService;
     private final Map<String, String> verificationCodeMap;
-
+    @Autowired
+    private UserSaveRepository userSaveRepository; // UserRepository 주입
     private final String apiKey;
     private final String apiSecret;
     private final String senderNumber;
@@ -75,18 +78,27 @@ public class SignupService {
         return sb.toString();
     }
 
-    // 유저의 인증번호를 확인하고, 유효하면 true를 반환하는 메서드
-    public boolean verifySignup(String phoneNumber, String userVerificationCode, String userPassword) {
+    // 인증번호 확인 및 사용자 정보 DB 저장
+    public boolean registerUser(String phoneNumber, String verificationCode, String password, String userName) {
         // 맵에서 유저의 인증번호 가져오기
         String storedVerificationCode = verificationCodeMap.get(phoneNumber);
         // 맵에 저장된 인증번호와 유저가 입력한 인증번호 비교
-        if (storedVerificationCode != null && storedVerificationCode.equals(userVerificationCode)) {
-            // 인증번호가 일치하면 회원가입 완료
-            System.out.println("회원가입 완료: " + phoneNumber + ", " + userPassword);
+        if (storedVerificationCode != null && storedVerificationCode.equals(verificationCode)) {
+            User newUser = new User();
+            newUser.setPhoneNumber(phoneNumber);
+            newUser.setPassword(password); // 실제 서비스에서는 비밀번호를 해시하여 저장
+            newUser.setName(userName);
+            newUser.setStoreCode(1);
+            newUser.setToken("token9999");
+            userSaveRepository.save(newUser);
+
+            // 인증번호 맵에서 해당 전화번호 삭제
+            verificationCodeMap.remove(phoneNumber);
+
+            System.out.println("회원가입 완료: " + phoneNumber);
             return true;
         } else {
-            // 인증번호가 일치하지 않으면 회원가입 실패
-            System.out.println("회원가입 실패: " + phoneNumber + ", " + userPassword);
+            System.out.println("회원가입 실패: 인증번호 불일치");
             return false;
         }
     }

@@ -13,7 +13,6 @@ public class UserStoreWait {
     @Column(name = "user_store_wait_phone_number")
     private String phoneNumber;
 
-    @Id
     @Column(name = "user_store_wait_store_code")
     private Integer storeCode;
 
