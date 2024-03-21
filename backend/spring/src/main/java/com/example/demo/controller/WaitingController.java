@@ -110,10 +110,11 @@ public class WaitingController {
     }*/
     @MessageMapping("/user/dynamicStoreWaitingInfo/{storeCode}")
     @SendTo("/topic/user/dynamicStoreWaitingInfo/{storeCode}")
-    public List<StoreDynamicQueue> sendDynamicQueue(@DestinationVariable Integer storeCode) {
-        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
-        return dynamicQueues;
+    public StoreDynamicQueue sendDynamicQueue(@DestinationVariable Integer storeCode) {
+        StoreDynamicQueue dynamicQueue = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
+        return dynamicQueue;
     }
+
 
     @MessageMapping("/user/waiting/make/{storeCode}/{userPhoneNumber}")
     @SendTo("/topic/user/waiting/make/{storeCode}/{userPhoneNumber}")
