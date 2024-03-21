@@ -20,6 +20,6 @@ public class StoreQueueUpdatedEventListener implements ApplicationListener<Store
     public void onApplicationEvent(StoreQueueUpdatedEvent event) {
         Integer storeCode = event.getStoreCode();
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
-        messagingTemplate.convertAndSend("/topic/user/dynamicQueue/" + storeCode, dynamicQueues);
+        messagingTemplate.convertAndSend("/topic/user/dynamicStoreWaitingInfo/" + storeCode, dynamicQueues);
     }
 }
