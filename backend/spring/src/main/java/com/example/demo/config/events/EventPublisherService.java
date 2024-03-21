@@ -1,5 +1,6 @@
-package com.example.demo.config;
+package com.example.demo.config.events;
 
+import com.example.demo.config.events.StoreQueueUpdatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;

@@ -1,6 +1,6 @@
-package com.example.demo.config;
+package com.example.demo.config.events.listener;
 
-import java.util.List;
+import com.example.demo.config.events.StoreQueueUpdatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
