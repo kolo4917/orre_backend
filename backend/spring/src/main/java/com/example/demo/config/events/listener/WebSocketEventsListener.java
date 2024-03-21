@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.events.listener;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
