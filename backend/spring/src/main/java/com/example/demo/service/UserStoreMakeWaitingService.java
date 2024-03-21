@@ -50,4 +50,16 @@ public class UserStoreMakeWaitingService {
 
         return savedUserStoreWait;
     }
+
+    public boolean deactivateUserStoreWaitByPhoneNumber(UserStoreWaitRequest request) {
+        UserStoreWait userStoreWait = userStoreWaitRepository.findByPhoneNumberAndStoreCode(request.getPhoneNumber(), request.getStoreCode());
+        if (userStoreWait != null) {
+            userStoreWait.setStatus(0); // 상태를 비활성화로 변경
+            userStoreWaitRepository.save(userStoreWait);
+            // 이벤트 발행
+            eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, request.getStoreCode()), 1000); // 1초 딜레이
+            return true;
+        }
+        return false;
+    }
 }
