@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.DTO.ToServer.UserStoreWaitRequest;
 import com.example.demo.model.DataBase.UserStoreWait;
 import com.example.demo.repository.UserStoreWaitRepository;
-import com.example.demo.config.StoreQueueUpdatedEvent;
+import com.example.demo.config.events.StoreQueueUpdatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import com.example.demo.config.EventPublisherService;
+import com.example.demo.config.events.EventPublisherService;
 
 @Service
 public class UserStoreMakeWaitingService {

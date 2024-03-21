@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.events.listener;
 
 import javax.sql.DataSource;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
