@@ -96,7 +96,7 @@ public class WaitingController {
         // 조회된 스토어 정보를 객체로 클라이언트에게 보내줌
         return storeDTO;
     }
-    @MessageMapping("/user/dynamicQueue")
+    /*@MessageMapping("/user/dynamicQueue")
     @SendTo("/topic/user/dynamicQueue") //기존의 클라이언트 -> 서버 구조
     public List<StoreDynamicQueue> sendDynamicQueue() {
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(null);
@@ -107,9 +107,9 @@ public class WaitingController {
         System.out.println("Sending dynamic queue...");
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(null);
         messagingTemplate.convertAndSend("/topic/dynamicQueue", dynamicQueues);
-    }
-    @MessageMapping("/user/dynamicQueue/{storeCode}")
-    @SendTo("/topic/user/dynamicQueue/{storeCode}")
+    }*/
+    @MessageMapping("/user/dynamicStoreWaitingInfo/{storeCode}")
+    @SendTo("/topic/user/dynamicStoreWaitingInfo/{storeCode}")
     public List<StoreDynamicQueue> sendDynamicQueue(@DestinationVariable Integer storeCode) {
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
         return dynamicQueues;
@@ -137,6 +137,29 @@ public class WaitingController {
             response.setWaitingDetails(newUserStoreWait); // 응답에 대기열 상세 정보 포함
         } else {
             response.setMessage("대기열 생성 실패");
+            response.setSuccess(false);
+        }
+        return response;
+    }
+    @MessageMapping("/user/waiting/cancel/{storeCode}/{userPhoneNumber}")
+    @SendTo("/topic/user/waiting/cancel/{storeCode}/{userPhoneNumber}")
+    public UserStoreWaitResponse cancelWaiting(@DestinationVariable Integer storeCode, @DestinationVariable String userPhoneNumber, UserStoreWaitRequest request) {
+        // 여기서 request 객체는 클라이언트로부터 인원수 등의 추가 정보를 받기 위한 DTO 객체입니다.
+        // 필요한 경우 request 객체에 storeCode와 userPhoneNumber를 추가로 설정할 수 있습니다.
+        request.setStoreCode(storeCode);
+        request.setPhoneNumber(userPhoneNumber);
+
+        // 대기열 생성 서비스 호출
+        UserStoreWait newUserStoreWait = userStoreMakeWaitingService.createUserStoreWait(request);
+
+        // 생성 결과를 클라이언트에 전송할 응답 객체 생성
+        UserStoreWaitResponse response = new UserStoreWaitResponse();
+        if (newUserStoreWait != null) {
+            response.setMessage("대기열 삭제 성공");
+            response.setSuccess(true);
+            response.setWaitingDetails(newUserStoreWait); // 응답에 대기열 상세 정보 포함
+        } else {
+            response.setMessage("대기열 삭제 실패");
             response.setSuccess(false);
         }
         return response;

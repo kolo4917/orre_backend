@@ -1,19 +1,23 @@
 package com.example.demo.DTO.ToClient;
 
+import java.util.List;
+
 public class StoreDynamicQueue {
     private int storeCode;
-    private int numberOfTeamsWaiting;
-    private int estimatedWaitingTime;
+    private List<Integer> waitingTeamList;
+    private List<Integer> enteringTeamList;
+    private int estimatedWaitingTimePerTeam;
 
     // 기본 생성자
     public StoreDynamicQueue() {
     }
 
     // 모든 필드를 포함한 생성자
-    public StoreDynamicQueue(int storeCode, int numberOfTeamsWaiting, int estimatedWaitingTime) {
+    public StoreDynamicQueue(int storeCode, List<Integer> waitingTeamList, List<Integer> enteringTeamList, int estimatedWaitingTimePerTeam) {
         this.storeCode = storeCode;
-        this.numberOfTeamsWaiting = numberOfTeamsWaiting;
-        this.estimatedWaitingTime = estimatedWaitingTime;
+        this.waitingTeamList = waitingTeamList;
+        this.enteringTeamList = enteringTeamList;
+        this.estimatedWaitingTimePerTeam = estimatedWaitingTimePerTeam;
     }
 
     // Getters
@@ -21,12 +25,16 @@ public class StoreDynamicQueue {
         return storeCode;
     }
 
-    public int getNumberOfTeamsWaiting() {
-        return numberOfTeamsWaiting;
+    public List<Integer> getWaitingTeamList() {
+        return waitingTeamList;
     }
 
-    public int getEstimatedWaitingTime() {
-        return estimatedWaitingTime;
+    public List<Integer> getEnteringTeamList() {
+        return enteringTeamList;
+    }
+
+    public int getEstimatedWaitingTimePerTeam() {
+        return estimatedWaitingTimePerTeam;
     }
 
     // Setters
@@ -34,11 +42,15 @@ public class StoreDynamicQueue {
         this.storeCode = storeCode;
     }
 
-    public void setNumberOfTeamsWaiting(int numberOfTeamsWaiting) {
-        this.numberOfTeamsWaiting = numberOfTeamsWaiting;
+    public void setWaitingTeamList(List<Integer> waitingTeamList) {
+        this.waitingTeamList = waitingTeamList;
     }
 
-    public void setEstimatedWaitingTime(int estimatedWaitingTime) {
-        this.estimatedWaitingTime = estimatedWaitingTime;
+    public void setEnteringTeamList(List<Integer> enteringTeamList) {
+        this.enteringTeamList = enteringTeamList;
+    }
+
+    public void setEstimatedWaitingTimePerTeam(int estimatedWaitingTimePerTeam) {
+        this.estimatedWaitingTimePerTeam = estimatedWaitingTimePerTeam;
     }
 }
