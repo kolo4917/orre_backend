@@ -145,23 +145,22 @@ public class WaitingController {
     @MessageMapping("/user/waiting/cancel/{storeCode}/{userPhoneNumber}")
     @SendTo("/topic/user/waiting/cancel/{storeCode}/{userPhoneNumber}")
     public UserStoreWaitResponse cancelWaiting(@DestinationVariable Integer storeCode, @DestinationVariable String userPhoneNumber, UserStoreWaitRequest request) {
-        // 여기서 request 객체는 클라이언트로부터 인원수 등의 추가 정보를 받기 위한 DTO 객체입니다.
-        // 필요한 경우 request 객체에 storeCode와 userPhoneNumber를 추가로 설정할 수 있습니다.
         request.setStoreCode(storeCode);
         request.setPhoneNumber(userPhoneNumber);
+        request.setPersonNumber(0);
+        // 대기열 비활성화 서비스 호출
+        boolean isCancelled = userStoreMakeWaitingService.deactivateUserStoreWaitByPhoneNumber(request);
 
-        // 대기열 생성 서비스 호출
-        UserStoreWait newUserStoreWait = userStoreMakeWaitingService.createUserStoreWait(request);
-
-        // 생성 결과를 클라이언트에 전송할 응답 객체 생성
+        // 응답 객체 생성
         UserStoreWaitResponse response = new UserStoreWaitResponse();
-        if (newUserStoreWait != null) {
+        if (isCancelled) {
             response.setMessage("대기열 삭제 성공");
             response.setSuccess(true);
-            response.setWaitingDetails(newUserStoreWait); // 응답에 대기열 상세 정보 포함
+            response.setWaitingDetails(null);
         } else {
             response.setMessage("대기열 삭제 실패");
             response.setSuccess(false);
+            response.setWaitingDetails(null);
         }
         return response;
     }
