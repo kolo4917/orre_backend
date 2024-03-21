@@ -56,12 +56,15 @@ public class UserController {
     public LoginResponse completeSignup(UserSignupRequest request, @DestinationVariable String userPhoneNumber) {
         String userVerificationCode = request.getVerificationCode();
         String userPassword = request.getPassword();
+        String userName = request.getUsername(); // 사용자 이름 받기
 
-        boolean isValid = signupService.verifySignup(userPhoneNumber, userVerificationCode, userPassword);
-
-        if (isValid) {
+        // isValid를 registerUser로 변경하여 DB에 저장 로직을 포함
+        boolean isRegistered = signupService.registerUser(userPhoneNumber, userVerificationCode, userPassword, userName);
+        if (isRegistered) {
+            // DB에 해당 유저 정보 추가 후 성공 응답
             return new LoginResponse("success", "회원가입이 성공적으로 완료되었습니다.", 0);
         } else {
+            // 인증번호 불일치 또는 기타 오류로 인한 실패 응답
             return new LoginResponse("failure", "회원가입에 실패했습니다. 인증번호나 비밀번호가 잘못되었습니다.", 0);
         }
     }
