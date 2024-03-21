@@ -4,14 +4,19 @@ import java.util.List;
 import com.example.demo.DTO.ToClient.StoreDTO;
 import com.example.demo.DTO.ToClient.StoreDynamicQueue;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
+import com.example.demo.DTO.ToServer.UserStoreWaitRequest;
+import com.example.demo.DTO.ToClient.UserStoreWaitResponse;
 import com.example.demo.model.WaitingUserInfo;
+import com.example.demo.model.DataBase.UserStoreWait;
 import com.example.demo.model.WaitingTable;
 import com.example.demo.model.LocationData;
 import com.example.demo.DTO.ToClient.StoreListDTO;
 import com.example.demo.service.WaitingService;
 import com.example.demo.service.StoreService;
 import com.example.demo.service.StoreDynamicQueueService;
+import com.example.demo.service.UserStoreMakeWaitingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -26,6 +31,8 @@ public class WaitingController {
     private final StoreService storeService;
     private final StoreDynamicQueueService storeDynamicQueueService;
     private final SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private UserStoreMakeWaitingService userStoreMakeWaitingService;
 
 
 
@@ -95,11 +102,43 @@ public class WaitingController {
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(null);
         return dynamicQueues;
     }
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(fixedRate = 360000) //10분마다
     public void sendDynamicQueue2() {
         System.out.println("Sending dynamic queue...");
         List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(null);
         messagingTemplate.convertAndSend("/topic/dynamicQueue", dynamicQueues);
     }
+    @MessageMapping("/user/dynamicQueue/{storeCode}")
+    @SendTo("/topic/user/dynamicQueue/{storeCode}")
+    public List<StoreDynamicQueue> sendDynamicQueue(@DestinationVariable Integer storeCode) {
+        List<StoreDynamicQueue> dynamicQueues = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
+        return dynamicQueues;
+    }
 
+    @MessageMapping("/user/waiting/make/{storeCode}/{userPhoneNumber}")
+    @SendTo("/topic/user/waiting/make/{storeCode}/{userPhoneNumber}")
+    public UserStoreWaitResponse makeWaiting(
+            @DestinationVariable Integer storeCode,
+            @DestinationVariable String userPhoneNumber,
+            UserStoreWaitRequest request) {
+        // 여기서 request 객체는 클라이언트로부터 인원수 등의 추가 정보를 받기 위한 DTO 객체입니다.
+        // 필요한 경우 request 객체에 storeCode와 userPhoneNumber를 추가로 설정할 수 있습니다.
+        request.setStoreCode(storeCode);
+        request.setPhoneNumber(userPhoneNumber);
+
+        // 대기열 생성 서비스 호출
+        UserStoreWait newUserStoreWait = userStoreMakeWaitingService.createUserStoreWait(request);
+
+        // 생성 결과를 클라이언트에 전송할 응답 객체 생성
+        UserStoreWaitResponse response = new UserStoreWaitResponse();
+        if (newUserStoreWait != null) {
+            response.setMessage("대기열 생성 성공");
+            response.setSuccess(true);
+            response.setWaitingDetails(newUserStoreWait); // 응답에 대기열 상세 정보 포함
+        } else {
+            response.setMessage("대기열 생성 실패");
+            response.setSuccess(false);
+        }
+        return response;
+    }
 }
