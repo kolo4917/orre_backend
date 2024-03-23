@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import com.example.demo.DTO.ToClient.LoginResponse;
+import com.example.demo.DTO.ToClient.ExtendedStoreDynamicQueue;
 import com.example.demo.DTO.ToServer.AdminLoginRequest;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.model.DataBase.Admin;
@@ -78,11 +79,11 @@ public class StoreAdminController {
                 .compact();
     }
 
-    @MessageMapping("/admin/dynamicQueue/{storeCode}")
-    @SendTo("/topic/admin/dynamicQueue/{storeCode}") //기존의 클라이언트 -> 서버 구조
-    public StoreDynamicQueue sendDynamicQueue3(@DestinationVariable Integer storeCode) {
-        StoreDynamicQueue dynamicQueue = storeDynamicQueueService.findStoreDynamicQueue(storeCode);
-        return dynamicQueue;
+    @MessageMapping("/admin/dynamicStoreWaitingInfo/{storeCode}")
+    @SendTo("/topic/admin/dynamicStoreWaitingInfo/{storeCode}")
+    public ExtendedStoreDynamicQueue sendExtendedDynamicQueue(@DestinationVariable Integer storeCode) {
+        ExtendedStoreDynamicQueue extendedDynamicQueue = storeDynamicQueueService.findStoreByExtendedQueue(storeCode);
+        return extendedDynamicQueue;
     }
 
     @MessageMapping("/admin/StoreAdmin/available/{storeCode}")
