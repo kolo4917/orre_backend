@@ -26,7 +26,6 @@ jobs:
           cd backend/spring
           ./gradlew build -x test
 
-
       - name: Build Docker image
         run: |
           docker build -t orre:$GITHUB_SHA -f backend/spring/Dockerfile .
