@@ -3,7 +3,7 @@ name: CI/CD Pipeline with Docker and EC2
 on:
   pull_request:
     branches: [ "main" ]
-    types: [opened, synchronize, reopened, closed]
+    types: [opened]
 
 jobs:
   deploy:
@@ -17,7 +17,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      
+          
+      # Give execute permission to gradlew
+      - name: Give execute permission to gradlew
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
         run: |
           cd backend/spring
