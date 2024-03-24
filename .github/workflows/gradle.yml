@@ -43,6 +43,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/orre:$GITHUB_SHA
             docker stop orre || true
