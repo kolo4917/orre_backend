@@ -18,9 +18,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           
-      # Give execute permission to gradlew
       - name: Give execute permission to gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./backend/spring/gradlew
 
       - name: Build with Gradle
         run: |
