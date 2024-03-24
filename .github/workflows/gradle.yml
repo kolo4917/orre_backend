@@ -46,11 +46,11 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             echo "Pulling Docker image..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/orre:$GITHUB_SHA
+            docker pull ${{ secrets.DOCKER_USERNAME }}/orre:latest
             echo "Stopping existing container if it exists..."
             docker stop orre || true
             echo "Removing existing container if it exists..."
             docker rm orre || true
             echo "Running new container..."
-            docker run -d --name orre -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/orre:$GITHUB_SHA
-            echo "Deployment completed."  
+            docker run -d --name orre -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/orre:latest
+
