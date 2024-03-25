@@ -57,4 +57,4 @@ jobs:
             echo "Removing existing container if it exists..."
             docker rm orre || true
             echo "Running new container..."
-            docker run -d --name orre -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
+            docker run -d --name orre -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
