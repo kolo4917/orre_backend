@@ -47,7 +47,6 @@ public class UserStoreMakeWaitingService {
 
         // 이벤트 발행
         eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, request.getStoreCode()), 1000); // 1초 딜레이
-
         return savedUserStoreWait;
     }
 

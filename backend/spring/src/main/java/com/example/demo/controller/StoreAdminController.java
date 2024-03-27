@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.DTO.ToClient.EmptySeat;
 import com.example.demo.DTO.ToClient.StoreDynamicQueue;
+import com.example.demo.DTO.ToClient.BooleanResponse;
+import com.example.demo.DTO.ToServer.AdminNoShowRequest;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -34,16 +36,18 @@ public class StoreAdminController {
     private final LoginService loginService; // AdminLoginService 주입
     private final StoreDynamicQueueService storeDynamicQueueService;
     private final SimpMessagingTemplate messagingTemplate;
+
+    private final NoShowService noShowService;
     private EmptySeatService emptySeatService;
 
 
     @Autowired
-    public StoreAdminController(LoginService loginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate, EmptySeatService emptySeatService) {
+    public StoreAdminController(LoginService loginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate, EmptySeatService emptySeatService, NoShowService noShowService) {
         this.loginService = loginService;
         this.storeDynamicQueueService = storeDynamicQueueService;
         this.messagingTemplate = messagingTemplate;
         this.emptySeatService = emptySeatService;
-
+        this.noShowService = noShowService;
     }
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
@@ -92,4 +96,11 @@ public class StoreAdminController {
         // EmptySeatService를 사용하여 storeCode에 해당하는 비어 있는 자리 정보 조회
         return emptySeatService.findEmptySeats(storeCode);
     }
+    @MessageMapping("/admin/StoreAdmin/noShow/{storeCode}")
+    @SendTo("/topic/admin/StoreAdmin/noShow/{storeCode}")
+    public BooleanResponse handleNoShow(AdminNoShowRequest request, @DestinationVariable Integer storeCode) {
+        // NoShowService를 사용하여 no-show 처리
+        return noShowService.handleNoShowCustomers(request.getNoShowUserCode(), storeCode);
+    }
+
 }
