@@ -11,5 +11,8 @@ public interface UserStoreWaitRepository extends JpaRepository<UserStoreWait, Lo
 
     @Query("SELECT MAX(u.waiting) FROM UserStoreWait u WHERE u.storeCode = :storeCode")
     Integer findMaxWaitingByStoreCode(Integer storeCode);
+
+    UserStoreWait findByWaiting(Integer waiting);
+
 }
 
