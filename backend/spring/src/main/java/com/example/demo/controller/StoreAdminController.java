@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.DTO.ToClient.EmptySeat;
 import com.example.demo.DTO.ToClient.StoreDynamicQueue;
 import com.example.demo.DTO.ToClient.BooleanResponse;
+import com.example.demo.DTO.ToClient.UserCallResponse;
+import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.DTO.ToServer.AdminNoShowRequest;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +38,25 @@ public class StoreAdminController {
     private final LoginService loginService; // AdminLoginService 주입
     private final StoreDynamicQueueService storeDynamicQueueService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final UserCallService userCallService;
 
     private final NoShowService noShowService;
     private EmptySeatService emptySeatService;
 
 
     @Autowired
-    public StoreAdminController(LoginService loginService, StoreDynamicQueueService storeDynamicQueueService, SimpMessagingTemplate messagingTemplate, EmptySeatService emptySeatService, NoShowService noShowService) {
+    public StoreAdminController(LoginService loginService,
+                                StoreDynamicQueueService storeDynamicQueueService,
+                                SimpMessagingTemplate messagingTemplate,
+                                EmptySeatService emptySeatService,
+                                NoShowService noShowService,
+                                UserCallService userCallService) {
         this.loginService = loginService;
         this.storeDynamicQueueService = storeDynamicQueueService;
         this.messagingTemplate = messagingTemplate;
         this.emptySeatService = emptySeatService;
         this.noShowService = noShowService;
+        this.userCallService = userCallService;
     }
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
@@ -101,6 +110,11 @@ public class StoreAdminController {
     public BooleanResponse handleNoShow(AdminNoShowRequest request, @DestinationVariable Integer storeCode) {
         // NoShowService를 사용하여 no-show 처리
         return noShowService.handleNoShowCustomers(request.getNoShowUserCode(), storeCode);
+    }
+    @MessageMapping("/admin/StoreAdmin/userCall/{storeCode}")
+    @SendTo("/topic/admin/StoreAdmin/userCall/{storeCode}")
+    public UserCallResponse userCall(@DestinationVariable Integer storeCode, UserCallRequest request) {
+        return userCallService.callUser(request);
     }
 
 }
