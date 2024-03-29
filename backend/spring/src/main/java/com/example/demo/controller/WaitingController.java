@@ -164,4 +164,7 @@ public class WaitingController {
         }
         return response;
     }
+
+    //@MessageMapping("/user/userCall/{storeCode}/{waitingNumber}") -admin에서 요청을 보낼 때 자동으로 작동 : 구독시 별도의 요청 필요 없음
+
 }
