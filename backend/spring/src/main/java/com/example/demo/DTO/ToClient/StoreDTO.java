@@ -9,6 +9,7 @@ public class StoreDTO {
     private int storeInfoVersion;
     private int numberOfTeamsWaiting;
     private int estimatedWaitingTime;
+    private String storeImageMain;
     private List<MenuInfo> menuInfo;
 
     // 기본 생성자
@@ -17,12 +18,13 @@ public class StoreDTO {
 
     // 모든 필드를 포함한 생성자
     public StoreDTO(int storeCode, String storeName, int storeInfoVersion,
-                    int numberOfTeamsWaiting, int estimatedWaitingTime, List<MenuInfo> menuInfo) {
+                    int numberOfTeamsWaiting, int estimatedWaitingTime, String storeImageMain, List<MenuInfo> menuInfo) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.storeInfoVersion = storeInfoVersion;
         this.numberOfTeamsWaiting = numberOfTeamsWaiting;
         this.estimatedWaitingTime = estimatedWaitingTime;
+        this.storeImageMain = storeImageMain;
         this.menuInfo = menuInfo;
     }
 
@@ -46,6 +48,8 @@ public class StoreDTO {
     public int getEstimatedWaitingTime() {
         return estimatedWaitingTime;
     }
+
+    public String getStoreImageMain() {return storeImageMain;}
 
     public List<MenuInfo> getMenuInfo() {
         return menuInfo;
@@ -71,6 +75,8 @@ public class StoreDTO {
     public void setEstimatedWaitingTime(int estimatedWaitingTime) {
         this.estimatedWaitingTime = estimatedWaitingTime;
     }
+
+    public void setStoreImageMain(String storeImageMain) {this.storeImageMain = storeImageMain;}
 
     public void setMenuInfo(List<MenuInfo> menuInfo) {
         this.menuInfo = menuInfo;
