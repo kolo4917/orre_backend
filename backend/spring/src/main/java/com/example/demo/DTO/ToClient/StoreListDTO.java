@@ -9,8 +9,10 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
     private double latitude; // Latitude field 추가
     private double longitude; // Longitude field 추가
     private String storeImageMain;
+    private String storeShortIntroduce;
+    private String storeCategory;
 
-    public StoreListDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude, String storeImageMain) {
+    public StoreListDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude, String storeImageMain,String storeShortIntroduce,String storeCategory) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
@@ -18,6 +20,8 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
         this.latitude = latitude; // Constructor에서 latitude 초기화
         this.longitude = longitude; // Constructor에서 longitude 초기화
         this.storeImageMain = storeImageMain;
+        this.storeShortIntroduce = storeShortIntroduce;
+        this.storeCategory = storeCategory;
     }
 
     // ID에 대한 getter
@@ -83,6 +87,14 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
     public String getStoreImageMain() {return storeImageMain;}
 
     public void setStoreImageMain(String storeImageMain) {this.storeImageMain = storeImageMain;}
+
+    public String getStoreShortIntroduce() {return storeShortIntroduce;}
+
+    public void setStoreShortIntroduce(String storeShortIntroduce) {this.storeShortIntroduce = storeShortIntroduce;}
+
+    public String getStoreCategory() {return storeCategory;}
+
+    public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
 
     // Comparable 인터페이스의 compareTo 메소드 구현
     @Override

@@ -10,6 +10,8 @@ public class StoreDTO {
     private int numberOfTeamsWaiting;
     private int estimatedWaitingTime;
     private String storeImageMain;
+    private String storeIntroduce;
+    private String storeCategory;
     private List<MenuInfo> menuInfo;
 
     // 기본 생성자
@@ -18,14 +20,17 @@ public class StoreDTO {
 
     // 모든 필드를 포함한 생성자
     public StoreDTO(int storeCode, String storeName, int storeInfoVersion,
-                    int numberOfTeamsWaiting, int estimatedWaitingTime, String storeImageMain, List<MenuInfo> menuInfo) {
+                    int numberOfTeamsWaiting, int estimatedWaitingTime, String storeImageMain, String storeIntroduce, String storeCategory,List<MenuInfo> menuInfo) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.storeInfoVersion = storeInfoVersion;
         this.numberOfTeamsWaiting = numberOfTeamsWaiting;
         this.estimatedWaitingTime = estimatedWaitingTime;
         this.storeImageMain = storeImageMain;
+        this.storeIntroduce = storeIntroduce;
+        this.storeCategory = storeCategory;
         this.menuInfo = menuInfo;
+
     }
 
     // Getters
@@ -50,6 +55,10 @@ public class StoreDTO {
     }
 
     public String getStoreImageMain() {return storeImageMain;}
+
+    public String getStoreIntroduce() {return storeIntroduce;}
+
+    public String getStoreCategory() {return storeCategory;}
 
     public List<MenuInfo> getMenuInfo() {
         return menuInfo;
@@ -77,6 +86,10 @@ public class StoreDTO {
     }
 
     public void setStoreImageMain(String storeImageMain) {this.storeImageMain = storeImageMain;}
+
+    public void setStoreIntroduce(String storeIntroduce) {this.storeIntroduce = storeIntroduce;}
+
+    public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
 
     public void setMenuInfo(List<MenuInfo> menuInfo) {
         this.menuInfo = menuInfo;
