@@ -26,18 +26,20 @@ public class StoreInfo {
 
     @Column(name = "location_info_latitude")
     private Double latitude;
-
+    @Column(name = "location_store_image_main")
+    private String storeImageMain;
     // 기본 생성자
     public StoreInfo() {
     }
 
     // 모든 필드를 포함하는 생성자
-    public StoreInfo(int storeCode, String storeName, String address, Double longitude, Double latitude) {
+    public StoreInfo(int storeCode, String storeName, String address, Double longitude, Double latitude, String storeImageMain) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.storeImageMain = storeImageMain;
     }
 
     public int getstoreCode() {return storeCode;}
@@ -59,4 +61,8 @@ public class StoreInfo {
     public Double getLatitude() {return latitude;}
 
     public void setLatitude(Double latitude) {this.latitude = latitude;}
+
+    public String getStoreImageMain() {return storeImageMain;}
+
+    public void setStoreImageMain(String storeImageMain) {this.storeImageMain = storeImageMain;}
 }

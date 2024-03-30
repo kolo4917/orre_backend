@@ -38,12 +38,13 @@ public class StoreService {
                 storeDTO.setStoreInfoVersion((Integer) innerArray[3]);
                 //예정시간 계산 알고리즘
                 storeDTO.setEstimatedWaitingTime(5*(Integer)innerArray[2]);
+                storeDTO.setStoreImageMain((String) innerArray[4]);
 
                 // 메뉴 정보 조회 및 설정
                 List<Object[]> menuDetails = menuInfoRepository.findMenuDetailsByStoreCodeAndTableNumber(storeCode);
                 List<StoreDTO.MenuInfo> menuInfos = new ArrayList<>(); //
                 for (Object[] menuDetail : menuDetails) {
-                    StoreDTO.MenuInfo menuInfo = new StoreDTO.MenuInfo(); // 정확한 클래스 이름을 사용하세요.
+                    StoreDTO.MenuInfo menuInfo = new StoreDTO.MenuInfo();
                     menuInfo.setMenu((String) menuDetail[0]);
                     menuInfo.setPrice((Integer) menuDetail[1]);
                     menuInfo.setRecommend((Integer) menuDetail[2]);
