@@ -29,10 +29,14 @@ public class Store {
     private Integer storeInfoVersion;
     @Column(name = "store_image_main")
     private String storeImageMain;
+    @Column(name = "store_introduce")
+    private String storeIntroduce;
+    @Column(name = "store_category")
+    private String storeCategory;
 
     public Store() {}
 
-    public Store(Integer storeCode, Integer storeWaitingAmount, Integer storeTableData, String storeName, Integer storeWaiting, Integer storeInfoVersion,String storeImageMain) {
+    public Store(Integer storeCode, Integer storeWaitingAmount, Integer storeTableData, String storeName, Integer storeWaiting, Integer storeInfoVersion,String storeImageMain, String storeIntroduce, String storeCategory) {
         this.storeCode = storeCode;
         this.storeWaitingAmount = storeWaitingAmount;
         this.storeTableData = storeTableData;
@@ -40,6 +44,8 @@ public class Store {
         this.storeWaiting = storeWaiting;
         this.storeInfoVersion = storeInfoVersion;
         this.storeImageMain = storeImageMain;
+        this.storeIntroduce = storeIntroduce;
+        this.storeCategory = storeCategory;
     }
 
     public Integer getStoreCode() { return storeCode; }
@@ -63,4 +69,12 @@ public class Store {
     public String getStoreImageMain() {return storeImageMain;}
 
     public void setStoreImageMain(String storeImageMain) {this.storeImageMain = storeImageMain;}
+
+    public String getStoreIntroduce() {return storeIntroduce;}
+
+    public void setStoreIntroduce(String storeIntroduce) {this.storeIntroduce = storeIntroduce;}
+
+    public String getStoreCategory() {return storeCategory;}
+
+    public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
 }

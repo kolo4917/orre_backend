@@ -39,6 +39,8 @@ public class StoreService {
                 //예정시간 계산 알고리즘
                 storeDTO.setEstimatedWaitingTime(5*(Integer)innerArray[2]);
                 storeDTO.setStoreImageMain((String) innerArray[4]);
+                storeDTO.setStoreIntroduce((String) innerArray[5]);
+                storeDTO.setStoreCategory((String) innerArray[6]);
 
                 // 메뉴 정보 조회 및 설정
                 List<Object[]> menuDetails = menuInfoRepository.findMenuDetailsByStoreCodeAndTableNumber(storeCode);
