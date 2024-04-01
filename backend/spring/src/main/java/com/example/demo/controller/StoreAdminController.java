@@ -6,6 +6,8 @@ import com.example.demo.DTO.ToClient.BooleanResponse;
 import com.example.demo.DTO.ToClient.UserCallResponse;
 import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.DTO.ToServer.AdminNoShowRequest;
+import com.example.demo.DTO.ToClient.TableUnlockResponse;
+import com.example.demo.DTO.ToServer.TableUnlockRequest;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -43,6 +45,40 @@ public class StoreAdminController {
     private final NoShowService noShowService;
     private EmptySeatService emptySeatService;
 
+    private String generateJwtTokenForAdmin(String adminPhoneNumber) {
+        long expirationTime = 86400000; // 24시간의 밀리초
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expirationTime);
+
+        // 보안 키 생성
+        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
+        return Jwts.builder()
+                .setSubject(adminPhoneNumber) // 관리자 전화번호를 주체로 설정
+                .claim("role", "admin") // 역할을 'admin'으로 설정
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    private String generateJwtTokenForUser(String userPhoneNumber) {
+        long expirationTime = 86400000; // 24시간의 밀리초
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expirationTime);
+
+        // 보안 키 생성
+        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
+        return Jwts.builder()
+                .setSubject(userPhoneNumber) // 사용자 전화번호를 주체로 설정
+                .claim("role", "user") // 역할을 'user'로 설정
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
 
     @Autowired
     public StoreAdminController(LoginService loginService,
@@ -66,7 +102,7 @@ public class StoreAdminController {
         Admin isValidUser = loginService.validateAdminCredentials(request.getAdminPhoneNumber(), request.getAdminPassword());
         if (isValidUser != null) {
             // JWT 발급
-            String token = generateJwtToken(adminPhoneNumber);
+            String token = generateJwtTokenForAdmin(adminPhoneNumber);
             // 인증된 사용자의 storeCode를 가져오는 로직 (가정)
             return new LoginResponse("success", token, isValidUser.getAdminStoreCode());
         } else {
@@ -76,21 +112,7 @@ public class StoreAdminController {
     }
 
     // JWT 토큰 생성 로직
-    private String generateJwtToken(String adminPhoneNumber) {
-        long expirationTime = 86400000; // 24시간의 밀리초
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expirationTime);
 
-        // 보안 키 생성
-        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
-        return Jwts.builder()
-                .setSubject(adminPhoneNumber)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
-    }
 
     @MessageMapping("/admin/dynamicStoreWaitingInfo/{storeCode}")
     @SendTo("/topic/admin/dynamicStoreWaitingInfo/{storeCode}")
@@ -115,6 +137,28 @@ public class StoreAdminController {
     @SendTo("/topic/admin/StoreAdmin/userCall/{storeCode}")
     public UserCallResponse userCall(@DestinationVariable Integer storeCode, UserCallRequest request) {
         return userCallService.callUser(request);
+    }
+    @MessageMapping("/admin/table/unlock/{storeCode}")
+    @SendTo("/topic/admin/table/unlock/{storeCode}")
+    public TableUnlockResponse unlockTable(@DestinationVariable Integer storeCode, TableUnlockRequest request) {
+        // 여기에 관리자 JWT 검증 로직
+        // 예: boolean isValidAdmin = jwtService.isValid(request.getJwtAdmin());
+
+        // 테이블 언락 로직
+        /*boolean success = tableService.unlockTable(request.getStoreCode(), request.getTableNumber(), request.getWaitingNumber());
+
+        // 테이블 언락 성공 시, 사용자에게 JWT 발급
+        String jwtUser = "";
+        if(success) {
+            jwtUser = jwtService.generateJwtTokenForUser(request.getUserPhoneNumber());
+            // 특정 사용자에게 메시지 전송
+            messagingTemplate.convertAndSend("/topic/user/table/unlock/" + storeCode + "/" + request.getUserPhoneNumber(),
+                    new TableUnlockResponse(true, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber()));
+        }
+
+        // 관리자에게 테이블 언락 결과 전송
+        return new TableUnlockResponse(success, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber());*/
+        return null;
     }
 
 }
