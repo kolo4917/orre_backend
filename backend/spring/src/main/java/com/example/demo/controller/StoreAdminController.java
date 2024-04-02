@@ -41,6 +41,7 @@ public class StoreAdminController {
     private final StoreDynamicQueueService storeDynamicQueueService;
     private final SimpMessagingTemplate messagingTemplate;
     private final UserCallService userCallService;
+    private final JwtService jwtService;
 
     private final NoShowService noShowService;
     private EmptySeatService emptySeatService;
@@ -86,13 +87,15 @@ public class StoreAdminController {
                                 SimpMessagingTemplate messagingTemplate,
                                 EmptySeatService emptySeatService,
                                 NoShowService noShowService,
-                                UserCallService userCallService) {
+                                UserCallService userCallService,
+                                JwtService jwtService) {
         this.loginService = loginService;
         this.storeDynamicQueueService = storeDynamicQueueService;
         this.messagingTemplate = messagingTemplate;
         this.emptySeatService = emptySeatService;
         this.noShowService = noShowService;
         this.userCallService = userCallService;
+        this.jwtService = jwtService;
     }
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
@@ -142,7 +145,7 @@ public class StoreAdminController {
     @SendTo("/topic/admin/table/unlock/{storeCode}")
     public TableUnlockResponse unlockTable(@DestinationVariable Integer storeCode, TableUnlockRequest request) {
         // 여기에 관리자 JWT 검증 로직
-        // 예: boolean isValidAdmin = jwtService.isValid(request.getJwtAdmin());
+        boolean isValidAdmin = jwtService.isValid(request.getJwtAdmin());
 
         // 테이블 언락 로직
         /*boolean success = tableService.unlockTable(request.getStoreCode(), request.getTableNumber(), request.getWaitingNumber());
