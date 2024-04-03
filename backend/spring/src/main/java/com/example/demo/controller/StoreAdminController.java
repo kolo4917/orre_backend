@@ -45,6 +45,7 @@ public class StoreAdminController {
 
     private final NoShowService noShowService;
     private EmptySeatService emptySeatService;
+    private final TableLockingService tableLockingService;
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
         long expirationTime = 86400000; // 24시간의 밀리초
@@ -88,7 +89,8 @@ public class StoreAdminController {
                                 EmptySeatService emptySeatService,
                                 NoShowService noShowService,
                                 UserCallService userCallService,
-                                JwtService jwtService) {
+                                JwtService jwtService,
+                                TableLockingService tableLockingService) {
         this.loginService = loginService;
         this.storeDynamicQueueService = storeDynamicQueueService;
         this.messagingTemplate = messagingTemplate;
@@ -96,6 +98,7 @@ public class StoreAdminController {
         this.noShowService = noShowService;
         this.userCallService = userCallService;
         this.jwtService = jwtService;
+        this.tableLockingService = tableLockingService;
     }
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
@@ -148,9 +151,9 @@ public class StoreAdminController {
         boolean isValidAdmin = jwtService.isValid(request.getJwtAdmin());
 
         // 테이블 언락 로직
-        /*boolean success = tableService.unlockTable(request.getStoreCode(), request.getTableNumber(), request.getWaitingNumber());
+        boolean success = tableLockingService.unlockTable(request.getStoreCode(), request.getTableNumber(), request.getWaitingNumber());
 
-        // 테이블 언락 성공 시, 사용자에게 JWT 발급
+        /* 테이블 언락 성공 시, 사용자에게 JWT 발급
         String jwtUser = "";
         if(success) {
             jwtUser = jwtService.generateJwtTokenForUser(request.getUserPhoneNumber());

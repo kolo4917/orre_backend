@@ -23,6 +23,8 @@ public class RestaurantTable {
 
     @Column(name = "table_available")
     private Integer tableAvailable;
+    @Column(name = "table_user_phone_number")
+    private String tablePhoneNumber;
 
     @OneToOne
     @JoinColumn(name = "store_code")
@@ -30,11 +32,12 @@ public class RestaurantTable {
 
     public RestaurantTable() {}
 
-    public RestaurantTable(Integer storeCode, Integer tableNumber, Integer tablePersonNumber, Integer tableAvailable, Store store) {
+    public RestaurantTable(Integer storeCode, Integer tableNumber, Integer tablePersonNumber, Integer tableAvailable, String tablePhoneNumber,Store store) {
         this.storeCode = storeCode;
         this.tableNumber = tableNumber;
         this.tablePersonNumber = tablePersonNumber;
         this.tableAvailable = tableAvailable;
+        this.tablePhoneNumber = tablePhoneNumber;
         this.store = store;
     }
 
@@ -50,8 +53,11 @@ public class RestaurantTable {
     public Integer getTableAvailable() { return tableAvailable; }
     public void setTableAvailable(Integer tableAvailable) { this.tableAvailable = tableAvailable; }
 
+    public String getTablePhoneNumber() {return tablePhoneNumber;}
+
+    public void setTablePhoneNumber(String tablePhoneNumber) {this.tablePhoneNumber = tablePhoneNumber;}
+
     public Store getStore() { return store; }
     public void setStore(Store store) { this.store = store; }
 
-    // toString, equals, hashCode 메소드는 필요에 따라 구현
 }
