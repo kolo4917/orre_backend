@@ -10,4 +10,6 @@ ARG JAR_FILE=backend/spring/build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 
 # 컨테이너가 시작될 때 실행할 명령을 설정합니다.
-ENTRYPOINT ["java","-jar","/app.jar"]
+#ENTRYPOINT ["java","-jar","/app.jar"]
+
+ENTRYPOINT ["java","-Duser.timezone=Asia/Seoul","-jar","/app.jar"]
