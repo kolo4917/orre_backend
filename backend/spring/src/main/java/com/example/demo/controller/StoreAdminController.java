@@ -8,6 +8,8 @@ import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.DTO.ToServer.AdminNoShowRequest;
 import com.example.demo.DTO.ToClient.TableUnlockResponse;
 import com.example.demo.DTO.ToServer.TableUnlockRequest;
+import com.example.demo.DTO.ToClient.TableLockResponse;
+import com.example.demo.DTO.ToServer.TableLockRequest;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -170,11 +172,9 @@ public class StoreAdminController {
 
         // 여기에 관리자 JWT 검증 로직
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
-        System.out.println(isValidAdmin);
 
         // 테이블 언락 로직
         String phoneNumber = tableLockingService.unlockTable(request.getStoreCode(), request.getTableNumber(), request.getWaitingNumber());
-        System.out.println(phoneNumber);
         // 테이블 언락 성공 시, 사용자에게 JWT 발급
         String jwtUser = "";
         if (phoneNumber != null && isValidAdmin) {
@@ -185,6 +185,21 @@ public class StoreAdminController {
         }
         // 관리자에게 테이블 언락 결과 전송
         return new TableUnlockResponse(true, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber());
+    }
+    @MessageMapping("/admin/table/lock/{storeCode}")
+    @SendTo("/topic/admin/table/lock/{storeCode}")
+    public TableLockResponse lockTable(@DestinationVariable Integer storeCode, TableLockRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+
+        if(isValidAdmin){
+            String lockedPhoneNumber = tableLockingService.lockTable(request.getStoreCode(),request.getTableNumber());
+            boolean expireUserJWT = jwtService.revokeUserJWT(lockedPhoneNumber);
+            if(expireUserJWT){
+                return new TableLockResponse(true,request.getStoreCode(),request.getTableNumber());
+            }
+        }
+        return new TableLockResponse(false,request.getStoreCode(),request.getTableNumber());
     }
 
 }
