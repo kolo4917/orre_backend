@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.annotation.PostConstruct;
 import java.util.Base64;
+import java.util.Date;
 
 @Service
 public class JwtService {
@@ -50,6 +51,24 @@ public class JwtService {
             // 예외 발생 시 로그를 출력
             logger.error("JWT validation error", e);
             return false;
+        }
+    }
+    public boolean revokeUserJWT(String phoneNumber) {
+        try {
+            Date now = new Date();
+            String revokedToken = Jwts.builder()
+                    .setSubject(phoneNumber) // 사용자 전화번호를 주체로 설정
+                    .claim("role", "user")
+                    .setIssuedAt(now)
+                    .setExpiration(now) // 현재 시간으로 설정하여 토큰을 즉시 만료시킵니다.
+                    .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
+                    .compact();
+
+
+            return true; // JWT 폐기가 성공한 경우
+        } catch (Exception e) {
+            logger.error("Error revoking user JWT", e);
+            return false; // JWT 폐기가 실패한 경우
         }
     }
 }
