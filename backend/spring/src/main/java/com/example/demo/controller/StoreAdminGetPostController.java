@@ -23,7 +23,7 @@ public class StoreAdminGetPostController {
     public StoreAdminGetPostController(EmptySeatService emptySeatService) {
         this.emptySeatService = emptySeatService;
     }
-        @PostMapping("/api/admin/StoreAdmin/available")
+    @PostMapping("/api/admin/StoreAdmin/available")
     public List<EmptySeat> emptySeat(@RequestBody StoreInfoRequest request) {
         // EmptySeatService를 사용하여 storeCode에 해당하는 비어 있는 자리 정보 조회
         return emptySeatService.findEmptySeats(request.getStoreCode());
