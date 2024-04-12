@@ -24,7 +24,7 @@ public class NoShowService {
     @Transactional
     public BooleanResponse handleNoShowCustomers(Integer noShowUserCode, Integer storeCode) {
         // 특정 유저의 status를 0으로 업데이트
-        UserStoreWait userStoreWait = userStoreWaitRepository.findByWaiting(noShowUserCode);
+        UserStoreWait userStoreWait = userStoreWaitRepository.findByStoreCodeAndWaitingNumber(storeCode,noShowUserCode);
         if (userStoreWait != null && userStoreWait.getStoreCode().equals(storeCode)) {
             userStoreWait.setStatus(0);
             userStoreWaitRepository.save(userStoreWait);

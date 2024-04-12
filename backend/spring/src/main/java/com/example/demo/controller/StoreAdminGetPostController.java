@@ -1,28 +1,25 @@
 package com.example.demo.controller;
 
 import com.example.demo.DTO.ToClient.EmptySeat;
-import com.example.demo.DTO.ToClient.StoreDTO;
+import com.example.demo.DTO.ToClient.LoginResponse;
+import com.example.demo.DTO.ToClient.BooleanResponse;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
+import com.example.demo.DTO.ToServer.AdminLoginRequest;
+import com.example.demo.DTO.ToServer.AdminNoShowRequest;
+import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
+import com.example.demo.service.NoShowService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.DTO.ToServer.AdminLoginRequest;
-import com.example.demo.DTO.ToClient.LoginResponse;
-import com.example.demo.model.DataBase.Admin;
-import org.springframework.web.bind.annotation.PathVariable;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-
 import javax.crypto.SecretKey;
-
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -37,11 +34,19 @@ public class StoreAdminGetPostController {
     @Autowired
     private final EmptySeatService emptySeatService;
     private final LoginService loginService;
+    private final NoShowService noShowService;
+
 
     @PostConstruct
     public void init() {
         byte[] keyBytes = Base64.getDecoder().decode(secret);
         this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
+    }
+    @Autowired
+    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService) {
+        this.emptySeatService = emptySeatService;
+        this.loginService = loginService;
+        this.noShowService = noShowService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -59,10 +64,7 @@ public class StoreAdminGetPostController {
     }
 
     // 생성자를 통한 EmptySeatService 의존성 주입
-    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService) {
-        this.emptySeatService = emptySeatService;
-        this.loginService = loginService;
-    }
+
     @PostMapping("/api/admin/StoreAdmin/available")
     public List<EmptySeat> emptySeat(@RequestBody StoreInfoRequest request) {
         // EmptySeatService를 사용하여 storeCode에 해당하는 비어 있는 자리 정보 조회
@@ -82,5 +84,10 @@ public class StoreAdminGetPostController {
             // 인증 실패 시
             return new LoginResponse("failure", null, 0);
         }
+    }
+    @PostMapping("/api/admin/StoreAdmin/noShow")
+    public BooleanResponse handleNoShow(@RequestBody AdminNoShowRequest request) {
+        // NoShowService를 사용하여 no-show 처리
+        return noShowService.handleNoShowCustomers(request.getNoShowUserCode(), request.getStoreCode());
     }
 }
