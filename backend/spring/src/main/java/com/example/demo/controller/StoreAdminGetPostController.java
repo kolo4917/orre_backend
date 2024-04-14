@@ -3,13 +3,16 @@ package com.example.demo.controller;
 import com.example.demo.DTO.ToClient.EmptySeat;
 import com.example.demo.DTO.ToClient.LoginResponse;
 import com.example.demo.DTO.ToClient.BooleanResponse;
+import com.example.demo.DTO.ToClient.UserCallResponse;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.DTO.ToServer.AdminLoginRequest;
 import com.example.demo.DTO.ToServer.AdminNoShowRequest;
+import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
 import com.example.demo.service.NoShowService;
+import com.example.demo.service.UserCallService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -35,6 +38,8 @@ public class StoreAdminGetPostController {
     private final EmptySeatService emptySeatService;
     private final LoginService loginService;
     private final NoShowService noShowService;
+    private final UserCallService userCallService;
+
 
 
     @PostConstruct
@@ -43,10 +48,11 @@ public class StoreAdminGetPostController {
         this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
     }
     @Autowired
-    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService) {
+    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,UserCallService userCallService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
+        this.userCallService = userCallService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -89,5 +95,9 @@ public class StoreAdminGetPostController {
     public BooleanResponse handleNoShow(@RequestBody AdminNoShowRequest request) {
         // NoShowService를 사용하여 no-show 처리
         return noShowService.handleNoShowCustomers(request.getNoShowUserCode(), request.getStoreCode());
+    }
+    @PostMapping("/api/admin/userCall")
+    public UserCallResponse userCall(@RequestBody UserCallRequest request) {
+        return userCallService.callUser(request);
     }
 }
