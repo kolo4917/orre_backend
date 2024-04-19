@@ -184,7 +184,12 @@ public class StoreAdminController {
                     new TableUnlockResponse(true, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber()));
         }
         // 관리자에게 테이블 언락 결과 전송
-        return new TableUnlockResponse(true, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber());
+        if (jwtUser != null){
+            return new TableUnlockResponse(true, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber());
+        }
+        else {
+            return new TableUnlockResponse(false, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber());
+        }
     }
     @MessageMapping("/admin/table/lock/{storeCode}")
     @SendTo("/topic/admin/table/lock/{storeCode}")
