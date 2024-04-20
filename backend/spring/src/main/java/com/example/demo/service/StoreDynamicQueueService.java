@@ -71,10 +71,10 @@ public class StoreDynamicQueueService {
         // 조회된 데이터를 기반으로 teamInfoList를 채웁니다.
         for (Object[] data : dynamicQueueData) {
             Integer waitingTeam = (Integer) data[1];
-            Integer enteringTeam = (Integer) data[2]; // 가정: 입장 팀 번호도 데이터로부터 얻는다.
+            Integer status = (Integer) data[2]; // 가정: 입장 팀 번호도 데이터로부터 얻는다.
             String phoneNumber = (String) data[3];
             Integer personNumber = (Integer) data[4];
-            teamInfoList.add(new ExtendedStoreDynamicQueueTeamInfo(waitingTeam, enteringTeam, phoneNumber, personNumber));
+            teamInfoList.add(new ExtendedStoreDynamicQueueTeamInfo(waitingTeam, status, phoneNumber, personNumber));
         }
 
         // 예상 대기 시간을 계산
