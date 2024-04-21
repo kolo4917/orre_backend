@@ -165,10 +165,7 @@ public class StoreAdminController {
     @MessageMapping("/admin/table/unlock/{storeCode}")
     @SendTo("/topic/admin/table/unlock/{storeCode}")
     public TableUnlockResponse unlockTable(@DestinationVariable Integer storeCode, TableUnlockRequest request) {
-        // Authorization 헤더에서 JWT 추출
         String jwtAdmin = request.getJwtAdmin();
-        //APIC header send 불가 문제로 테스트 불가
-        //String jwtAdmin = extractJwtToken(authorizationHeader);
 
         // 여기에 관리자 JWT 검증 로직
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);

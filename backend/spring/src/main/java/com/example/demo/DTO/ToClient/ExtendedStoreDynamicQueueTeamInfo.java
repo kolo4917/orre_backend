@@ -2,13 +2,13 @@ package com.example.demo.DTO.ToClient;
 
 public class ExtendedStoreDynamicQueueTeamInfo {
     private Integer waitingTeam;
-    private Integer enteringTeam;
+    private Integer status;
     private String phoneNumber;
     private Integer personNumber;
 
-    public ExtendedStoreDynamicQueueTeamInfo(Integer waitingTeam, Integer enteringTeam, String phoneNumber, Integer personNumber) {
+    public ExtendedStoreDynamicQueueTeamInfo(Integer waitingTeam, Integer status, String phoneNumber, Integer personNumber) {
         this.waitingTeam = waitingTeam;
-        this.enteringTeam = enteringTeam;
+        this.status = status;
         this.phoneNumber = phoneNumber;
         this.personNumber = personNumber;
     }
@@ -22,12 +22,12 @@ public class ExtendedStoreDynamicQueueTeamInfo {
         this.waitingTeam = waitingTeam;
     }
 
-    public Integer getEnteringTeam() {
-        return enteringTeam;
+    public Integer getstatus() {
+        return status;
     }
 
-    public void setEnteringTeam(Integer enteringTeam) {
-        this.enteringTeam = enteringTeam;
+    public void setstatus(Integer status) {
+        this.status = status;
     }
 
     public String getPhoneNumber() {
