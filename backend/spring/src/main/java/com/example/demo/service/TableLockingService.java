@@ -28,7 +28,7 @@ public class TableLockingService {
     public String unlockTable(Integer storeCode, Integer tableNumber, Integer waitingNumber) {
         // 조건에 맞는 user_store_wait 레코드 찾기
         UserStoreWait userStoreWait = userStoreWaitRepository.findByStoreCodeAndWaitingNumber(storeCode, waitingNumber);
-        if (userStoreWait != null) {
+        if (userStoreWait.getStatus() == 1) {
             // 해당 가게 코드와 테이블 번호로 restaurant_table 레코드 찾기
             userStoreWait.setStatus(0);
             userStoreWaitRepository.save(userStoreWait);
