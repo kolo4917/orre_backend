@@ -181,7 +181,7 @@ public class StoreAdminController {
                     new TableUnlockResponse(true, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber()));
         }
         // 관리자에게 테이블 언락 결과 전송
-        if (jwtUser != null){
+        if (jwtUser != ""){
             return new TableUnlockResponse(true, jwtUser, storeCode, request.getTableNumber(), request.getWaitingNumber());
         }
         else {
