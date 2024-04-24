@@ -36,4 +36,9 @@ public class WaitingGetPostController {
         List<StoreListDTO> basicStores = waitingService.findBasicStore(locationData);
         return basicStores;
     }
+    @GetMapping("/api/user/storeList/nearestStores")
+    public List<StoreListDTO> getNearestStores(@RequestBody LocationData locationData) {
+        List<StoreListDTO> nearestStores = waitingService.findNearestStores(locationData);
+        return nearestStores;
+    }
 }
