@@ -32,12 +32,14 @@ public class StoreInfo {
     private String storeShortIntroduce;
     @Column(name = "location_store_category")
     private String storeCategory;
+    @Column(name = "location_store_info_version")
+    private int storeInfoVersion;
     // 기본 생성자
     public StoreInfo() {
     }
 
     // 모든 필드를 포함하는 생성자
-    public StoreInfo(int storeCode, String storeName, String address, Double longitude, Double latitude, String storeImageMain, String storeShortIntroduce, String storeCategory) {
+    public StoreInfo(int storeCode, String storeName, String address, Double longitude, Double latitude, String storeImageMain, String storeShortIntroduce, String storeCategory,int storeInfoVersion) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
@@ -46,6 +48,7 @@ public class StoreInfo {
         this.storeImageMain = storeImageMain;
         this.storeShortIntroduce = storeShortIntroduce;
         this.storeCategory = storeCategory;
+        this.storeInfoVersion = storeInfoVersion;
     }
 
     public int getstoreCode() {return storeCode;}
@@ -79,4 +82,12 @@ public class StoreInfo {
     public String getStoreCategory() {return storeCategory;}
 
     public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
+
+    public int getStoreInfoVersion() {
+        return storeInfoVersion;
+    }
+
+    public void setStoreInfoVersion(int storeInfoVersion) {
+        this.storeInfoVersion = storeInfoVersion;
+    }
 }
