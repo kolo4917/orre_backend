@@ -11,8 +11,9 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
     private String storeImageMain;
     private String storeShortIntroduce;
     private String storeCategory;
+    private int storeInfoVersion;
 
-    public StoreListDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude, String storeImageMain,String storeShortIntroduce,String storeCategory) {
+    public StoreListDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude, String storeImageMain, String storeShortIntroduce, String storeCategory, Integer storeInfoVersion) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
@@ -22,6 +23,7 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
         this.storeImageMain = storeImageMain;
         this.storeShortIntroduce = storeShortIntroduce;
         this.storeCategory = storeCategory;
+        this.storeInfoVersion = storeInfoVersion;
     }
 
     // ID에 대한 getter
@@ -95,6 +97,14 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
     public String getStoreCategory() {return storeCategory;}
 
     public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
+
+    public int getStoreInfoVersion() {
+        return storeInfoVersion;
+    }
+
+    public void setStoreInfoVersion(int storeInfoVersion) {
+        this.storeInfoVersion = storeInfoVersion;
+    }
 
     // Comparable 인터페이스의 compareTo 메소드 구현
     @Override
