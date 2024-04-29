@@ -6,9 +6,6 @@ public class UserSignupRequest {
     private String phoneNumber;
     private String verificationCode;
     private String password;
-
-
-
     private String username;
 
     public UserSignupRequest(String phoneNumber, String verificationCode, String password,String username) {

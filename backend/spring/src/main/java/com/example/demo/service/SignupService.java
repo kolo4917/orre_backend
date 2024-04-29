@@ -46,7 +46,7 @@ public class SignupService {
         String verificationCode = generateVerificationCode();
 
 // 전화번호에서 중괄호 제거
-        phoneNumber = phoneNumber.replaceAll("[{}]", "");
+        //phoneNumber = phoneNumber.replaceAll("[{}]", "");
 
         // 메시지 객체 생성
         Message message = new Message();
@@ -82,6 +82,7 @@ public class SignupService {
     public boolean registerUser(String phoneNumber, String verificationCode, String password, String userName) {
         // 맵에서 유저의 인증번호 가져오기
         String storedVerificationCode = verificationCodeMap.get(phoneNumber);
+        System.out.println(storedVerificationCode+"////////"+verificationCode);
         // 맵에 저장된 인증번호와 유저가 입력한 인증번호 비교
         if (storedVerificationCode != null && storedVerificationCode.equals(verificationCode)) {
             User newUser = new User();
