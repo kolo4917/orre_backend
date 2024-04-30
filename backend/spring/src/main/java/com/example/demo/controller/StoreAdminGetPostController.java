@@ -8,11 +8,14 @@ import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.DTO.ToServer.AdminLoginRequest;
 import com.example.demo.DTO.ToServer.AdminNoShowRequest;
 import com.example.demo.DTO.ToServer.UserCallRequest;
+import com.example.demo.DTO.ToServer.TableAddRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
 import com.example.demo.service.NoShowService;
 import com.example.demo.service.UserCallService;
+import com.example.demo.service.JwtService;
+import com.example.demo.service.TableFixService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -39,6 +42,8 @@ public class StoreAdminGetPostController {
     private final LoginService loginService;
     private final NoShowService noShowService;
     private final UserCallService userCallService;
+    private final JwtService jwtService;
+    private final TableFixService tableFixService;
 
 
 
@@ -48,11 +53,13 @@ public class StoreAdminGetPostController {
         this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
     }
     @Autowired
-    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,UserCallService userCallService) {
+    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,UserCallService userCallService, JwtService jwtService, TableFixService tableFixService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
         this.userCallService = userCallService;
+        this.jwtService = jwtService;
+        this.tableFixService = tableFixService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -96,8 +103,20 @@ public class StoreAdminGetPostController {
         // NoShowService를 사용하여 no-show 처리
         return noShowService.handleNoShowCustomers(request.getNoShowUserCode(), request.getStoreCode());
     }
-    @PostMapping("/api/admin/userCall")
+    @PostMapping("/api/admin/StoreAdmin/userCall")
     public UserCallResponse userCall(@RequestBody UserCallRequest request) {
         return userCallService.callUser(request);
+    }
+
+    @PostMapping("/api/admin/StoreAdmin/table/add")
+    public BooleanResponse handleTableAdd(@RequestBody TableAddRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if(isValidAdmin){
+            return tableFixService.addTable(request);
+        }
+        else {
+            return new BooleanResponse(false);
+        }
     }
 }
