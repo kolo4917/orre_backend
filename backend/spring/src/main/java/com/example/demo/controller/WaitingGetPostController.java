@@ -33,24 +33,12 @@ public class WaitingGetPostController {
         return storeService.getStoreDetailsByStoreCode(request.getStoreCode());
     }
 
-    /*@GetMapping("/api/user/storeList/basicStores")
-    public List<StoreListDTO> getBasicStores(@RequestBody LocationData locationData) {
-        List<StoreListDTO> basicStores = waitingService.findBasicStore(locationData);
-        return basicStores;
-    }*/
-
     @GetMapping("/api/user/storeList/basicStores")
     public List<StoreListDTO> getBasicStores(@RequestParam(name = "latitude") double latitude, @RequestParam(name = "longitude") double longitude){
         LocationData locationData = new LocationData(latitude, longitude);
         List<StoreListDTO> basicStores = waitingService.findBasicStore(locationData);
         return basicStores;
     }
-
-    /*@GetMapping("/api/user/storeList/nearestStores")
-    public List<StoreListDTO> getNearestStores(@RequestBody LocationData locationData) {
-        List<StoreListDTO> nearestStores = waitingService.findNearestStores(locationData);
-        return nearestStores;
-    }*/
 
     @GetMapping("/api/user/storeList/nearestStores")
     public List<StoreListDTO> getNearestStores(@RequestParam(name = "latitude") double latitude, @RequestParam(name = "longitude") double longitude){
