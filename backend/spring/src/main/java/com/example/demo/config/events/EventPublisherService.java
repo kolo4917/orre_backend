@@ -30,4 +30,13 @@ public class EventPublisherService {
         }
         eventPublisher.publishEvent(event); // 딜레이 후 이벤트 발행 //UserCallEvent가 발행되고 listener에서 실행됨
     }
+    @Async
+    public void publishNoShowUserEventAfterDelay(UserNoShowEvent event, long delayMillis) {
+        try {
+            Thread.sleep(delayMillis); // 딜레이 시간 만큼 대기
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        eventPublisher.publishEvent(event); // 딜레이 후 이벤트 발행
+    }
 }

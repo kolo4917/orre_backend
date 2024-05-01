@@ -7,6 +7,7 @@ public class UserStoreWaitResponse {
     private String message;
     private UserStoreWait waitingDetails;
 
+
     // Getters and Setters
     public boolean isSuccess() {
         return success;
