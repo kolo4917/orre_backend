@@ -20,4 +20,3 @@ public class DemoApplication {
 		System.out.println("Application started successfully! Visit http://localhost:8080 in your browser.");
 	}
 }
-git 
