@@ -9,6 +9,7 @@ import com.example.demo.DTO.ToServer.AdminLoginRequest;
 import com.example.demo.DTO.ToServer.AdminNoShowRequest;
 import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.DTO.ToServer.TableAddRequest;
+import com.example.demo.DTO.ToServer.TableRemoveRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
@@ -114,6 +115,17 @@ public class StoreAdminGetPostController {
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
         if(isValidAdmin){
             return tableFixService.addTable(request);
+        }
+        else {
+            return new BooleanResponse(false);
+        }
+    }
+    @PostMapping("/api/admin/StoreAdmin/table/remove")
+    public BooleanResponse handleTableRemove(@RequestBody TableRemoveRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if(isValidAdmin){
+            return tableFixService.removeTable(request);
         }
         else {
             return new BooleanResponse(false);
