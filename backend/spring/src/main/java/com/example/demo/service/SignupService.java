@@ -43,6 +43,11 @@ public class SignupService {
 
     // 전화번호를 입력받아 인증번호를 생성하고 전송하는 메서드
     public String sendVerificationSMS(String phoneNumber) {
+        // 이미 등록된 전화번호인지 확인
+        if (userSaveRepository.existsByPhoneNumber(phoneNumber)) {
+            System.out.println("인증 실패: 이미 등록된 전화번호입니다.");
+            return null; // 또는 적절한 에러 메시지 또는 코드 반환
+        }
         // 인증번호 생성
         String verificationCode = generateVerificationCode();
 
