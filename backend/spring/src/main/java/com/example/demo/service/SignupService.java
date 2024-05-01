@@ -15,6 +15,7 @@ import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.security.SecureRandom;
 
 @Service
 public class SignupService {
@@ -77,6 +78,23 @@ public class SignupService {
         }
         return sb.toString();
     }
+    // 토큰 생성 메서드
+    private String generateUniqueToken() {
+        String token;
+        SecureRandom random = new SecureRandom();
+        int maxAttempts = 10;
+        for (int attempts = 0; attempts < maxAttempts; attempts++) {
+            token = random.ints(48, 122 + 1) //아스키 코드를 활용한 난수 생성
+                    .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                    .limit(8)
+                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                    .toString();
+            if (!userSaveRepository.existsByToken(token)) {
+                return token;
+            }
+        }
+        throw new IllegalStateException("Unable to generate a unique token after " + maxAttempts + " attempts.");
+    }
 
     // 인증번호 확인 및 사용자 정보 DB 저장
     public boolean registerUser(String phoneNumber, String verificationCode, String password, String userName) {
@@ -90,7 +108,7 @@ public class SignupService {
             newUser.setPassword(password); // 실제 서비스에서는 비밀번호를 해시하여 저장
             newUser.setName(userName);
             newUser.setStoreCode(1);
-            newUser.setToken("token9999");
+            newUser.setToken(generateUniqueToken()); // 중복되지 않는 토큰 생성
             userSaveRepository.save(newUser);
 
             // 인증번호 맵에서 해당 전화번호 삭제
