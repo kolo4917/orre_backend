@@ -49,9 +49,11 @@ public class StoreService {
                     StoreDTO.MenuInfo menuInfo = new StoreDTO.MenuInfo();
                     menuInfo.setMenu((String) menuDetail[0]);
                     menuInfo.setPrice((Integer) menuDetail[1]);
-                    menuInfo.setRecommend((Integer) menuDetail[2]);
-                    menuInfo.setImg((String) menuDetail[3]);
-                    menuInfo.setIntroduce((String) menuDetail[4]);
+                    menuInfo.setMenuCode((String) menuDetail[2]);
+                    menuInfo.setAvailable((Integer) menuDetail[3]);
+                    menuInfo.setRecommend((Integer) menuDetail[4]);
+                    menuInfo.setImg((String) menuDetail[5]);
+                    menuInfo.setIntroduce((String) menuDetail[6]);
                     menuInfos.add(menuInfo);
                 }
                 storeDTO.setMenuInfo(menuInfos);

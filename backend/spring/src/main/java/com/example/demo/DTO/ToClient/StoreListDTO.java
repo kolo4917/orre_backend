@@ -18,8 +18,8 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
         this.storeName = storeName;
         this.address = address;
         this.distance = distance;
-        this.latitude = latitude; // Constructor에서 latitude 초기화
-        this.longitude = longitude; // Constructor에서 longitude 초기화
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.storeImageMain = storeImageMain;
         this.storeShortIntroduce = storeShortIntroduce;
         this.storeCategory = storeCategory;

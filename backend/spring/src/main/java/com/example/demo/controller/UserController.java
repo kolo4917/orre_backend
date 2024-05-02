@@ -24,7 +24,7 @@ public class UserController {
         this.signupService = signupService;
     }
 
-    @MessageMapping("/user/login/{userPhoneNumber}")
+    /*@MessageMapping("/user/login/{userPhoneNumber}")
     @SendTo("/topic/user/login/{userPhoneNumber}")
     public LoginResponse login(UserLoginRequest request, @DestinationVariable String userPhoneNumber) {
         // 전화번호와 비밀번호를 받아 서비스를 통해 인증
@@ -67,6 +67,6 @@ public class UserController {
             // 인증번호 불일치 또는 기타 오류로 인한 실패 응답
             return new LoginResponse("failure", "회원가입에 실패했습니다. 인증번호나 비밀번호가 잘못되었습니다.", 0);
         }
-    }
+    }*/
 
 }

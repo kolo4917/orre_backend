@@ -1,15 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.ToClient.EmptySeat;
-import com.example.demo.DTO.ToClient.LoginResponse;
-import com.example.demo.DTO.ToClient.BooleanResponse;
-import com.example.demo.DTO.ToClient.UserCallResponse;
+import com.example.demo.DTO.ToClient.*;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.DTO.ToServer.AdminLoginRequest;
 import com.example.demo.DTO.ToServer.AdminNoShowRequest;
 import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.DTO.ToServer.TableAddRequest;
 import com.example.demo.DTO.ToServer.TableRemoveRequest;
+import com.example.demo.DTO.ToServer.StoreMenuAvailableRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
@@ -17,6 +15,8 @@ import com.example.demo.service.NoShowService;
 import com.example.demo.service.UserCallService;
 import com.example.demo.service.JwtService;
 import com.example.demo.service.TableFixService;
+import com.example.demo.service.StoreMenuAvailableService;
+import com.example.demo.service.StoreService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -45,6 +45,8 @@ public class StoreAdminGetPostController {
     private final UserCallService userCallService;
     private final JwtService jwtService;
     private final TableFixService tableFixService;
+    private final StoreMenuAvailableService storeMenuAvailableService;
+    private final StoreService storeService;
 
 
 
@@ -54,13 +56,15 @@ public class StoreAdminGetPostController {
         this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
     }
     @Autowired
-    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,UserCallService userCallService, JwtService jwtService, TableFixService tableFixService) {
+    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,UserCallService userCallService, JwtService jwtService, TableFixService tableFixService, StoreMenuAvailableService storeMenuAvailableService, StoreService storeService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
         this.userCallService = userCallService;
         this.jwtService = jwtService;
         this.tableFixService = tableFixService;
+        this.storeMenuAvailableService =storeMenuAvailableService;
+        this.storeService = storeService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -78,7 +82,10 @@ public class StoreAdminGetPostController {
     }
 
     // 생성자를 통한 EmptySeatService 의존성 주입
-
+    @PostMapping("/api/admin/storeInfo")
+    public StoreDTO getStoreInfo(@RequestBody StoreInfoRequest request) {
+        return storeService.getStoreDetailsByStoreCode(request.getStoreCode());
+    }
     @PostMapping("/api/admin/StoreAdmin/available")
     public List<EmptySeat> emptySeat(@RequestBody StoreInfoRequest request) {
         // EmptySeatService를 사용하여 storeCode에 해당하는 비어 있는 자리 정보 조회
@@ -131,4 +138,19 @@ public class StoreAdminGetPostController {
             return new BooleanResponse(false);
         }
     }
+    @PostMapping("/api/admin/StoreAdmin/menu/order/available")
+    public BooleanResponse handleOrderAvailable(@RequestBody StoreMenuAvailableRequest request) {
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            storeMenuAvailableService.updateMenuAvailability(request);
+            return new BooleanResponse(true);
+        } else {
+            return new BooleanResponse(false);
+        }
+    }
+
+    //@PostMapping("/api/admin/StoreAdmin/menu/order/add")
+    //public BooleanResponse handleMenuAdd(@RequestBody )
+
 }
