@@ -27,6 +27,10 @@ public class MenuInfo implements Serializable {
 
     @Column(name = "menu_info_amount")
     private Integer amount;
+    @Column(name = "menu_info_menu_code")
+    private String menuCode;
+    @Column(name = "menu_info_available")
+    private Integer available;
 
     @Column(name = "menu_info_recommend")
     private Integer recommend;
@@ -44,12 +48,14 @@ public class MenuInfo implements Serializable {
 
     public MenuInfo() {}
 
-    public MenuInfo(Integer storeCode, Integer tableNumber, String menu, Integer price, Integer amount, Integer recommend, String img, String introduce, RestaurantTable restaurantTable) {
+    public MenuInfo(Integer storeCode, Integer tableNumber, String menu, Integer price, Integer amount, String menuCode, Integer available , Integer recommend, String img, String introduce, RestaurantTable restaurantTable) {
         this.storeCode = storeCode;
         this.tableNumber = tableNumber;
         this.menu = menu;
         this.price = price;
         this.amount = amount;
+        this.menuCode = menuCode;
+        this.available = available;
         this.recommend = recommend;
         this.img = img;
         this.introduce = introduce;
@@ -70,6 +76,22 @@ public class MenuInfo implements Serializable {
 
     public Integer getAmount() { return amount; }
     public void setAmount(Integer amount) { this.amount = amount; }
+
+    public String getMenuCode() {
+        return menuCode;
+    }
+
+    public void setMenuCode(String menuCode) {
+        this.menuCode = menuCode;
+    }
+
+    public Integer getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Integer available) {
+        this.available = available;
+    }
 
     public Integer getRecommend() { return recommend; }
     public void setRecommend(Integer recommend) { this.recommend = recommend; }

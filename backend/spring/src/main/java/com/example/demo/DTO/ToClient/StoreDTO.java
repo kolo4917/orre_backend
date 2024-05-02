@@ -99,6 +99,8 @@ public class StoreDTO {
     public static class MenuInfo {
         private String menu;
         private int price;
+        private String menuCode;
+        private int available;
         private int recommend;
         private String img;
         private String introduce;
@@ -108,10 +110,12 @@ public class StoreDTO {
         }
 
         // 모든 필드를 포함한 생성자
-        public MenuInfo(int storeCode, String menu, int price, int amount,
+        public MenuInfo(int storeCode, String menu, int price, String menuCode, int available, int amount,
                         int recommend, String img, String introduce) {
             this.menu = menu;
             this.price = price;
+            this.menuCode = menuCode;
+            this.available = available;
             this.recommend = recommend;
             this.img = img;
             this.introduce = introduce;
@@ -124,6 +128,14 @@ public class StoreDTO {
 
         public int getPrice() {
             return price;
+        }
+
+        public String getMenuCode() {
+            return menuCode;
+        }
+
+        public int getAvailable() {
+            return available;
         }
 
         public int getRecommend() {
@@ -146,6 +158,14 @@ public class StoreDTO {
 
         public void setPrice(int price) {
             this.price = price;
+        }
+
+        public void setMenuCode(String menuCode) {
+            this.menuCode = menuCode;
+        }
+
+        public void setAvailable(int available) {
+            this.available = available;
         }
 
         public void setRecommend(int recommend) {
