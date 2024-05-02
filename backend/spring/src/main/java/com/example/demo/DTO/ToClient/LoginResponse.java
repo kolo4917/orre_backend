@@ -3,9 +3,6 @@ package com.example.demo.DTO.ToClient;
 public class LoginResponse {
     private String status;
     private String token;
-
-
-
     private int storeCode;
 
     public LoginResponse(String status, String token, int storeCode) {

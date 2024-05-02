@@ -1,16 +1,15 @@
     package com.example.demo.controller;
 
+    import com.example.demo.DTO.ToClient.BooleanResponse;
     import com.example.demo.DTO.ToClient.EmptySeat;
     import com.example.demo.DTO.ToClient.LoginResponse;
     import com.example.demo.DTO.ToClient.StoreDTO;
-    import com.example.demo.DTO.ToServer.StoreInfoRequest;
-    import com.example.demo.DTO.ToServer.UserLoginRequest;
-    import com.example.demo.DTO.ToServer.UserSignupRequest;
-    import com.example.demo.DTO.ToServer.UserPhoneNumberRequest;
+    import com.example.demo.DTO.ToServer.*;
     import com.example.demo.model.DataBase.User;
     import com.example.demo.service.EmptySeatService;
     import com.example.demo.service.LoginService;
     import com.example.demo.service.SignupService;
+    import com.example.demo.service.SignupRemoveService;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.messaging.handler.annotation.DestinationVariable;
     import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -29,10 +28,13 @@
         private final LoginService loginService; // AdminLoginService 주입
         @Autowired
         private final SignupService signupService;
+        private final SignupRemoveService signupRemoveService;
 
-        public UserGetPostController(LoginService loginService, SignupService signupService) {
+
+        public UserGetPostController(LoginService loginService, SignupService signupService, SignupRemoveService signupRemoveService) {
             this.loginService = loginService;
             this.signupService = signupService;
+            this.signupRemoveService = signupRemoveService;
         }
 
         @PostMapping("/api/user/login")
@@ -42,7 +44,7 @@
             User isValidUser = loginService.validateUserCredentials(request.getUserPhoneNumber(), request.getUserPassword());
             if (isValidUser != null) {
                 // 인증된 사용자면 success 반환
-                return new LoginResponse("success", null, 0);
+                return new LoginResponse("success", isValidUser.getName(), 0);
             } else {
                 // 인증 실패 시
                 return new LoginResponse("failure", null, 0);
@@ -76,4 +78,10 @@
                 return new LoginResponse("failure", "회원가입에 실패했습니다. 인증번호나 비밀번호가 잘못되었습니다.", 0);
             }
         }
+        @PostMapping("/api/user/signup/remove")
+        public BooleanResponse removeSignup(@RequestBody UserSignupRemoveRequest request) {
+            boolean isRemoved = signupRemoveService.removeSignup(request);
+            return new BooleanResponse(isRemoved);
+        }
+
     }

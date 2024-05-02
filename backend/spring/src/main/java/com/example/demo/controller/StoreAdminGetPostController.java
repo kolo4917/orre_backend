@@ -92,7 +92,7 @@ public class StoreAdminGetPostController {
         if (isValidUser != null) {
             // JWT 발급
             String token = generateJwtTokenForAdmin(request.getAdminPhoneNumber());
-            // 인증된 사용자의 storeCode를 가져오는 로직 (가정)
+            // 인증된 사용자의 storeCode를 가져오는 로직
             return new LoginResponse("success", token, isValidUser.getAdminStoreCode());
         } else {
             // 인증 실패 시
