@@ -18,6 +18,7 @@ import com.example.demo.service.JwtService;
 import com.example.demo.service.TableFixService;
 import com.example.demo.service.StoreMenuAvailableService;
 import com.example.demo.service.StoreService;
+import com.example.demo.service.StoreMenuOrderService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -48,6 +49,7 @@ public class StoreAdminGetPostController {
     private final TableFixService tableFixService;
     private final StoreMenuAvailableService storeMenuAvailableService;
     private final StoreService storeService;
+    private final StoreMenuOrderService storeMenuOrderService;
 
 
 
@@ -57,7 +59,10 @@ public class StoreAdminGetPostController {
         this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
     }
     @Autowired
-    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,UserCallService userCallService, JwtService jwtService, TableFixService tableFixService, StoreMenuAvailableService storeMenuAvailableService, StoreService storeService) {
+    public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,
+                                       UserCallService userCallService, JwtService jwtService, TableFixService tableFixService,
+                                       StoreMenuAvailableService storeMenuAvailableService, StoreService storeService,
+                                       StoreMenuOrderService storeMenuOrderService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -66,6 +71,7 @@ public class StoreAdminGetPostController {
         this.tableFixService = tableFixService;
         this.storeMenuAvailableService =storeMenuAvailableService;
         this.storeService = storeService;
+        this.storeMenuOrderService = storeMenuOrderService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -151,17 +157,16 @@ public class StoreAdminGetPostController {
         }
     }
 
-    @PostMapping("/api/admin/StoreAdmin/menu/order/add")
-    public BooleanResponse handleMenuAdd(@RequestBody StoreMenuAvailableRequest request){
-        String jwtAdmin = request.getJwtAdmin();
+    @PostMapping("/api/admin/StoreAdmin/menu/order/amount")
+    public BooleanResponse handleMenuAdd(@RequestBody StoreMenuOrderRequest request){
+        String jwtAdmin = request.getJwt();
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
         if (isValidAdmin) {
-            storeMenuAvailableService.updateMenuAvailability(request);
+            storeMenuOrderService.ModifyMenuAmount(request);
             return new BooleanResponse(true);
         } else {
             return new BooleanResponse(false);
         }
-
     }
 
 }

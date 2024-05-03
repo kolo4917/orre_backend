@@ -32,6 +32,14 @@ public interface MenuInfoRepository extends JpaRepository<MenuInfo, Integer> {
     @Modifying
     @Query("UPDATE MenuInfo m SET m.available = :available WHERE m.storeCode = :storeCode")
     void updateAvailableByStoreCode(@Param("storeCode") Integer storeCode, @Param("available") Integer availableCode);
+    @Transactional
+    @Modifying
+    @Query("UPDATE MenuInfo m SET m.amount = m.amount + :amountToAdd " +
+            "WHERE m.storeCode = :storeCode AND m.tableNumber = :tableNumber AND m.menuCode = :menuCode")
+    void updateAmountByStoreCodeAndTableNumberAndMenuCode(@Param("storeCode") int storeCode,
+                                                          @Param("tableNumber") int tableNumber,
+                                                          @Param("menuCode") String menuCode,
+                                                          @Param("amountToAdd") int amountToAdd);
 
 
 }
