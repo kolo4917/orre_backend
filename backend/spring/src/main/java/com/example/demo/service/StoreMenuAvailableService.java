@@ -21,9 +21,6 @@ public class StoreMenuAvailableService {
     public void updateMenuAvailability(StoreMenuAvailableRequest request) {
         String menuCode = request.getMenuCode();
 
-        // MenuCode로 메뉴 정보 조회
-        List<MenuInfo> menuInfos = null;
-
         // MenuCode가 '*'이면 해당 StoreCode를 가진 모든 테이블의 가용성을 업데이트
         if (menuCode.equals("*")) {
             updateAllTablesAvailability(request.getStoreCode(), request.getAvailableCode());
