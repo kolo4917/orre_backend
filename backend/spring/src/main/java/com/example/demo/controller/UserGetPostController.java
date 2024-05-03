@@ -1,9 +1,6 @@
     package com.example.demo.controller;
 
-    import com.example.demo.DTO.ToClient.BooleanResponse;
-    import com.example.demo.DTO.ToClient.EmptySeat;
-    import com.example.demo.DTO.ToClient.LoginResponse;
-    import com.example.demo.DTO.ToClient.StoreDTO;
+    import com.example.demo.DTO.ToClient.*;
     import com.example.demo.DTO.ToServer.*;
     import com.example.demo.model.DataBase.User;
     import com.example.demo.service.EmptySeatService;
@@ -52,19 +49,19 @@
         }
 
         @PostMapping("/api/user/signup/generate-verification-code")
-        public LoginResponse generateVerificationCode(@RequestBody UserPhoneNumberRequest request) {
+        public StatusResponse generateVerificationCode(@RequestBody UserPhoneNumberRequest request) {
             String userPhoneNumber = request.getUserPhoneNumber();
             String generatedVerificationCode = signupService.sendVerificationSMS(userPhoneNumber);
 
             if (generatedVerificationCode != null) {
-                return new LoginResponse("200", null, 0);
+                return new StatusResponse("200");
             } else {
-                return new LoginResponse("701", null, 0);
+                return new StatusResponse("701");
             }
         }
 
         @PostMapping("/api/user/signup/complete")
-        public LoginResponse completeSignup(@RequestBody UserSignupRequest request) {
+        public StatusResponse completeSignup(@RequestBody UserSignupRequest request) {
             String userPhoneNumber = request.getPhoneNumber();
             String userVerificationCode = request.getVerificationCode();
             String userPassword = request.getPassword();
@@ -73,35 +70,35 @@
 
             boolean isRegistered = signupService.registerUser(userPhoneNumber, userVerificationCode, userPassword, userName);
             if (isRegistered) {
-                return new LoginResponse("200", null, 0);
+                return new StatusResponse("200");
             } else {
-                return new LoginResponse("702", null, 0);
+                return new StatusResponse("702");
             }
         }
 
         @PostMapping("/api/user/signup/remove")
-        public LoginResponse removeSignup(@RequestBody UserSignupRemoveRequest request) {
+        public StatusResponse removeSignup(@RequestBody UserSignupRemoveRequest request) {
             boolean isRemoved = signupRemoveService.removeSignup(request);
             if (isRemoved) {
-                return new LoginResponse("200", null, 0);
+                return new StatusResponse("200");
             } else {
-                return new LoginResponse("801", null, 0);
+                return new StatusResponse("801");
             }
         }
 
         @PostMapping("/api/user/signup/find/generate-verification-code")
-        public LoginResponse findSignupPassword(@RequestBody UserPhoneNumberRequest request) {
+        public StatusResponse findSignupPassword(@RequestBody UserPhoneNumberRequest request) {
             String userPhoneNumber = request.getUserPhoneNumber();
             String generatedVerificationCode = signupService.sendVerificationSMSForFindPassword(userPhoneNumber);
 
             if (generatedVerificationCode != null) {
-                return new LoginResponse("200", null, 0);
+                return new StatusResponse("200");
             } else {
-                return new LoginResponse("703", null, 0);
+                return new StatusResponse("703");
             }
         }
         @PostMapping("/api/user/signup/find/reset-password")
-        public LoginResponse resetpassword(@RequestBody UserSignupRequest request) {
+        public StatusResponse resetpassword(@RequestBody UserSignupRequest request) {
             String userPhoneNumber = request.getPhoneNumber();
             String userVerificationCode = request.getVerificationCode();
             String userPassword = request.getPassword();
@@ -109,9 +106,9 @@
 
             boolean resetsucess = signupService.resetUser(userPhoneNumber, userVerificationCode, userPassword);
             if (resetsucess) {
-                return new LoginResponse("200", null, 0);
+                return new StatusResponse("200");
             } else {
-                return new LoginResponse("704", null, 0);
+                return new StatusResponse("704");
             }
         }
 
