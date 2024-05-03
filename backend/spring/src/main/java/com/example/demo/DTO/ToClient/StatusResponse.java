@@ -2,18 +2,19 @@ package com.example.demo.DTO.ToClient;
 
 public class StatusResponse {
 
-    private String success;
+    private String status;
 
-    public StatusResponse(String success) {
-        this.success = success;
+    public StatusResponse(String status) {
+        this.status = status;
     }
 
-    public String getSuccess() {
-        return success;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSuccess(String success) {
-        this.success = success;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
+
 
