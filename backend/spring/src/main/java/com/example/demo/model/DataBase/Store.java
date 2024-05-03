@@ -5,6 +5,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "store")
 public class Store {
@@ -33,10 +35,18 @@ public class Store {
     private String storeIntroduce;
     @Column(name = "store_category")
     private String storeCategory;
+    @Column(name = "store_opening_time")
+    private LocalTime openingTime;
+    @Column(name = "store_closing_time")
+    private LocalTime closingTime;
+    @Column(name = "store_last_order_time")
+    private LocalTime lastOrderTime;
 
     public Store() {}
 
-    public Store(Integer storeCode, Integer storeWaitingAmount, Integer storeTableData, String storeName, Integer storeWaiting, Integer storeInfoVersion,String storeImageMain, String storeIntroduce, String storeCategory) {
+    public Store(Integer storeCode, Integer storeWaitingAmount, Integer storeTableData, String storeName,
+                 Integer storeWaiting, Integer storeInfoVersion, String storeImageMain, String storeIntroduce, String storeCategory,
+                 LocalTime openingTime, LocalTime closingTime, LocalTime lastOrderTime) {
         this.storeCode = storeCode;
         this.storeWaitingAmount = storeWaitingAmount;
         this.storeTableData = storeTableData;
@@ -46,6 +56,9 @@ public class Store {
         this.storeImageMain = storeImageMain;
         this.storeIntroduce = storeIntroduce;
         this.storeCategory = storeCategory;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.lastOrderTime = lastOrderTime;
     }
 
     public Integer getStoreCode() { return storeCode; }
@@ -77,4 +90,28 @@ public class Store {
     public String getStoreCategory() {return storeCategory;}
 
     public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
+
+    public LocalTime getOpeningTime() {
+        return openingTime;
+    }
+
+    public void setOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
+    }
+
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
+    }
+
+    public LocalTime getLastOrderTime() {
+        return lastOrderTime;
+    }
+
+    public void setLastOrderTime(LocalTime lastOrderTime) {
+        this.lastOrderTime = lastOrderTime;
+    }
 }
