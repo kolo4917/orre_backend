@@ -4,13 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "menu_info")
-public class MenuInfo implements Serializable {
+public class MenuInfo{
 
     @Id
     @Column(name = "menu_info_store_code")
@@ -41,14 +39,10 @@ public class MenuInfo implements Serializable {
     @Column(name = "menu_info_introduce")
     private String introduce;
 
-    @OneToOne
-    @JoinColumn(name = "menu_info_store_code", referencedColumnName = "store_code", insertable = false, updatable = false)
-    @JoinColumn(name = "menu_info_table_number", referencedColumnName = "table_number", insertable = false, updatable = false)
-    private RestaurantTable restaurantTable;
 
     public MenuInfo() {}
 
-    public MenuInfo(Integer storeCode, Integer tableNumber, String menu, Integer price, Integer amount, String menuCode, Integer available , Integer recommend, String img, String introduce, RestaurantTable restaurantTable) {
+    public MenuInfo(Integer storeCode, Integer tableNumber, String menu, Integer price, Integer amount, String menuCode, Integer available , Integer recommend, String img, String introduce) {
         this.storeCode = storeCode;
         this.tableNumber = tableNumber;
         this.menu = menu;
@@ -59,7 +53,6 @@ public class MenuInfo implements Serializable {
         this.recommend = recommend;
         this.img = img;
         this.introduce = introduce;
-        this.restaurantTable = restaurantTable;
     }
 
     public Integer getStoreCode() { return storeCode; }
@@ -102,8 +95,4 @@ public class MenuInfo implements Serializable {
     public String getIntroduce() { return introduce; }
     public void setIntroduce(String introduce) { this.introduce = introduce; }
 
-    public RestaurantTable getRestaurantTable() { return restaurantTable; }
-    public void setRestaurantTable(RestaurantTable restaurantTable) { this.restaurantTable = restaurantTable; }
-
-    // toString, equals, hashCode 메소드는 필요에 따라 구현
 }

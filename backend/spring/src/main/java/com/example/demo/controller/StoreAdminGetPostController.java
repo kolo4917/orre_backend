@@ -9,6 +9,7 @@ import com.example.demo.DTO.ToServer.TableAddRequest;
 import com.example.demo.DTO.ToServer.TableRemoveRequest;
 import com.example.demo.DTO.ToServer.StoreMenuAvailableRequest;
 import com.example.demo.DTO.ToServer.StoreMenuOrderRequest;
+import com.example.demo.DTO.ToServer.StoreMenuOrderedCheckRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
@@ -19,6 +20,7 @@ import com.example.demo.service.TableFixService;
 import com.example.demo.service.StoreMenuAvailableService;
 import com.example.demo.service.StoreService;
 import com.example.demo.service.StoreMenuOrderService;
+import com.example.demo.service.StoreMenuOrderedCheckService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -50,6 +52,7 @@ public class StoreAdminGetPostController {
     private final StoreMenuAvailableService storeMenuAvailableService;
     private final StoreService storeService;
     private final StoreMenuOrderService storeMenuOrderService;
+    private final StoreMenuOrderedCheckService storeMenuOrderedCheckService;
 
 
 
@@ -62,7 +65,7 @@ public class StoreAdminGetPostController {
     public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,
                                        UserCallService userCallService, JwtService jwtService, TableFixService tableFixService,
                                        StoreMenuAvailableService storeMenuAvailableService, StoreService storeService,
-                                       StoreMenuOrderService storeMenuOrderService) {
+                                       StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -72,6 +75,7 @@ public class StoreAdminGetPostController {
         this.storeMenuAvailableService =storeMenuAvailableService;
         this.storeService = storeService;
         this.storeMenuOrderService = storeMenuOrderService;
+        this.storeMenuOrderedCheckService = storeMenuOrderedCheckService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -166,6 +170,14 @@ public class StoreAdminGetPostController {
             return new BooleanResponse(true);
         } else {
             return new BooleanResponse(false);
+        }
+    }
+    @PostMapping("/api/admin/StoreAdmin/menu/order/check")
+    public StoreMenuOrderedCheck handleMenuCheck(@RequestBody StoreMenuOrderedCheckRequest request){
+        try {
+            return storeMenuOrderedCheckService.getStoreMenuOrderedCheck(request);
+        } catch (Exception e) {
+            return new StoreMenuOrderedCheck("1001",-1,-1,-1, null);
         }
     }
 

@@ -41,5 +41,10 @@ public interface MenuInfoRepository extends JpaRepository<MenuInfo, Integer> {
                                                           @Param("menuCode") String menuCode,
                                                           @Param("amountToAdd") int amountToAdd);
 
+    @Query("SELECT m.menu, m.price, m.amount " +
+            "FROM MenuInfo m " +
+            "WHERE m.storeCode = :storeCode AND m.tableNumber = :tableNumber AND m.amount > :amount")
+    List<Object[]> findMenuDetailsByStoreCodeAndTableNumber(@Param("storeCode") Integer storeCode, @Param("tableNumber") Integer tableNumber, @Param("amount") Integer amount);
+
 
 }
