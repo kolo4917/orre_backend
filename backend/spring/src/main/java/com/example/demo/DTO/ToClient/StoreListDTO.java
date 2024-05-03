@@ -1,4 +1,6 @@
 package com.example.demo.DTO.ToClient;
+import java.time.LocalTime;
+
 
 // LOCATION_INFO 테이블 정보를 담고 비교해서 클라이언트에게 보내줄 정보
 public class StoreListDTO implements Comparable<StoreListDTO> {
@@ -12,8 +14,14 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
     private String storeShortIntroduce;
     private String storeCategory;
     private int storeInfoVersion;
+    private LocalTime openingTime;
+    private LocalTime closingTime;
+    private LocalTime lastOrderTime;
 
-    public StoreListDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude, String storeImageMain, String storeShortIntroduce, String storeCategory, Integer storeInfoVersion) {
+
+    public StoreListDTO(int storeCode, String storeName, String address, double distance, double latitude, double longitude,
+                        String storeImageMain, String storeShortIntroduce, String storeCategory, int storeInfoVersion,
+                        LocalTime openingTime, LocalTime closingTime, LocalTime lastOrderTime) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.address = address;
@@ -24,6 +32,9 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
         this.storeShortIntroduce = storeShortIntroduce;
         this.storeCategory = storeCategory;
         this.storeInfoVersion = storeInfoVersion;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.lastOrderTime = lastOrderTime;
     }
 
     // ID에 대한 getter
@@ -104,6 +115,30 @@ public class StoreListDTO implements Comparable<StoreListDTO> {
 
     public void setStoreInfoVersion(int storeInfoVersion) {
         this.storeInfoVersion = storeInfoVersion;
+    }
+
+    public LocalTime getOpeningTime() {
+        return openingTime;
+    }
+
+    public void setOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
+    }
+
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
+    }
+
+    public LocalTime getLastOrderTime() {
+        return lastOrderTime;
+    }
+
+    public void setLastOrderTime(LocalTime lastOrderTime) {
+        this.lastOrderTime = lastOrderTime;
     }
 
     // Comparable 인터페이스의 compareTo 메소드 구현

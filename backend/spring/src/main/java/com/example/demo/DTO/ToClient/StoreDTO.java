@@ -1,5 +1,6 @@
 package com.example.demo.DTO.ToClient;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public class StoreDTO {
@@ -12,15 +13,21 @@ public class StoreDTO {
     private String storeImageMain;
     private String storeIntroduce;
     private String storeCategory;
+    private LocalTime openingTime;
+    private LocalTime closingTime;
+    private LocalTime lastOrderTime;
     private List<MenuInfo> menuInfo;
 
     // 기본 생성자
     public StoreDTO() {
     }
-
     // 모든 필드를 포함한 생성자
-    public StoreDTO(int storeCode, String storeName, int storeInfoVersion,
-                    int numberOfTeamsWaiting, int estimatedWaitingTime, String storeImageMain, String storeIntroduce, String storeCategory,List<MenuInfo> menuInfo) {
+
+
+    public StoreDTO(int storeCode, String storeName, int storeInfoVersion, int numberOfTeamsWaiting, int estimatedWaitingTime,
+                    String storeImageMain, String storeIntroduce, String storeCategory,
+                    LocalTime openingTime, LocalTime closingTime, LocalTime lastOrderTime,
+                    List<MenuInfo> menuInfo) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.storeInfoVersion = storeInfoVersion;
@@ -29,8 +36,10 @@ public class StoreDTO {
         this.storeImageMain = storeImageMain;
         this.storeIntroduce = storeIntroduce;
         this.storeCategory = storeCategory;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.lastOrderTime = lastOrderTime;
         this.menuInfo = menuInfo;
-
     }
 
     // Getters
@@ -59,6 +68,18 @@ public class StoreDTO {
     public String getStoreIntroduce() {return storeIntroduce;}
 
     public String getStoreCategory() {return storeCategory;}
+
+    public LocalTime getOpeningTime() {
+        return openingTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
+    }
+
+    public LocalTime getLastOrderTime() {
+        return lastOrderTime;
+    }
 
     public List<MenuInfo> getMenuInfo() {
         return menuInfo;
@@ -90,6 +111,18 @@ public class StoreDTO {
     public void setStoreIntroduce(String storeIntroduce) {this.storeIntroduce = storeIntroduce;}
 
     public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
+
+    public void setOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
+    }
+
+    public void setLastOrderTime(LocalTime lastOrderTime) {
+        this.lastOrderTime = lastOrderTime;
+    }
 
     public void setMenuInfo(List<MenuInfo> menuInfo) {
         this.menuInfo = menuInfo;
