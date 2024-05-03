@@ -56,6 +56,7 @@ public class WaitingGetPostController {
         List<StoreListDTO> nearestStores = waitingService.findNearestStores(locationData);
         return nearestStores;
     }
+
     @PostMapping("/api/user/menu/order/amount")
     public StatusResponse handleMenuAdd(@RequestBody StoreMenuOrderRequest request){
         String jwtUser = request.getJwt();
