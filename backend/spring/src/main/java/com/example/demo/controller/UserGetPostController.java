@@ -78,6 +78,7 @@
                 return new LoginResponse("702", null, 0);
             }
         }
+
         @PostMapping("/api/user/signup/remove")
         public LoginResponse removeSignup(@RequestBody UserSignupRemoveRequest request) {
             boolean isRemoved = signupRemoveService.removeSignup(request);
@@ -85,6 +86,33 @@
                 return new LoginResponse("200", null, 0);
             } else {
                 return new LoginResponse("801", null, 0);
-            }        }
+            }
+        }
+
+        @PostMapping("/api/user/signup/find/generate-verification-code")
+        public LoginResponse findSignupPassword(@RequestBody UserPhoneNumberRequest request) {
+            String userPhoneNumber = request.getUserPhoneNumber();
+            String generatedVerificationCode = signupService.sendVerificationSMSForFindPassword(userPhoneNumber);
+
+            if (generatedVerificationCode != null) {
+                return new LoginResponse("200", null, 0);
+            } else {
+                return new LoginResponse("703", null, 0);
+            }
+        }
+        @PostMapping("/api/user/signup/find/reset-password")
+        public LoginResponse resetpassword(@RequestBody UserSignupRequest request) {
+            String userPhoneNumber = request.getPhoneNumber();
+            String userVerificationCode = request.getVerificationCode();
+            String userPassword = request.getPassword();
+            System.out.println(userPhoneNumber);
+
+            boolean resetsucess = signupService.resetUser(userPhoneNumber, userVerificationCode, userPassword);
+            if (resetsucess) {
+                return new LoginResponse("200", null, 0);
+            } else {
+                return new LoginResponse("704", null, 0);
+            }
+        }
 
     }
