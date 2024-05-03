@@ -44,10 +44,10 @@
             User isValidUser = loginService.validateUserCredentials(request.getUserPhoneNumber(), request.getUserPassword());
             if (isValidUser != null) {
                 // 인증된 사용자면 success 반환
-                return new LoginResponse("success", isValidUser.getName(), 0);
+                return new LoginResponse("200", isValidUser.getName(), 0);
             } else {
                 // 인증 실패 시
-                return new LoginResponse("failure", "601", 0);
+                return new LoginResponse("601", null, 0);
             }
         }
 
@@ -57,9 +57,9 @@
             String generatedVerificationCode = signupService.sendVerificationSMS(userPhoneNumber);
 
             if (generatedVerificationCode != null) {
-                return new LoginResponse("success", "200", 0);
+                return new LoginResponse("200", null, 0);
             } else {
-                return new LoginResponse("failure", "701", 0);
+                return new LoginResponse("701", null, 0);
             }
         }
 
@@ -73,15 +73,18 @@
 
             boolean isRegistered = signupService.registerUser(userPhoneNumber, userVerificationCode, userPassword, userName);
             if (isRegistered) {
-                return new LoginResponse("success", "200", 0);
+                return new LoginResponse("200", null, 0);
             } else {
-                return new LoginResponse("failure", "702", 0);
+                return new LoginResponse("702", null, 0);
             }
         }
         @PostMapping("/api/user/signup/remove")
-        public BooleanResponse removeSignup(@RequestBody UserSignupRemoveRequest request) {
+        public LoginResponse removeSignup(@RequestBody UserSignupRemoveRequest request) {
             boolean isRemoved = signupRemoveService.removeSignup(request);
-            return new BooleanResponse(isRemoved);
-        }
+            if (isRemoved) {
+                return new LoginResponse("200", null, 0);
+            } else {
+                return new LoginResponse("801", null, 0);
+            }        }
 
     }
