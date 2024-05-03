@@ -8,6 +8,7 @@ import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.DTO.ToServer.TableAddRequest;
 import com.example.demo.DTO.ToServer.TableRemoveRequest;
 import com.example.demo.DTO.ToServer.StoreMenuAvailableRequest;
+import com.example.demo.DTO.ToServer.StoreMenuOrderRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
@@ -150,7 +151,17 @@ public class StoreAdminGetPostController {
         }
     }
 
-    //@PostMapping("/api/admin/StoreAdmin/menu/order/add")
-    //public BooleanResponse handleMenuAdd(@RequestBody )
+    @PostMapping("/api/admin/StoreAdmin/menu/order/add")
+    public BooleanResponse handleMenuAdd(@RequestBody StoreMenuAvailableRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            storeMenuAvailableService.updateMenuAvailability(request);
+            return new BooleanResponse(true);
+        } else {
+            return new BooleanResponse(false);
+        }
+
+    }
 
 }
