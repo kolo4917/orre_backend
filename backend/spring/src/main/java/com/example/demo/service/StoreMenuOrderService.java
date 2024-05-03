@@ -27,4 +27,16 @@ public class StoreMenuOrderService {
         // MenuInfo 엔터티를 업데이트하는 쿼리 실행
         menuInfoRepository.updateAmountByStoreCodeAndTableNumberAndMenuCode(storeCode, tableNumber, menuCode, amountToAdd);
     }
+    @Transactional
+    public void ModifyMenuAmountForUser(StoreMenuOrderRequest request) {
+        int storeCode = request.getStoreCode();
+        int tableNumber = request.getTableNumber();
+        String menuCode = request.getMenuCode();
+        int amountToAdd = request.getAmount();
+        if (amountToAdd <= 0) {
+            throw new IllegalArgumentException("Amount to add must be greater than 0");
+        }
+        menuInfoRepository.updateAmountByStoreCodeAndTableNumberAndMenuCode(storeCode, tableNumber, menuCode, amountToAdd);
+
+    }
 }
