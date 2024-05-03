@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalTime;
+
 
 
 @Service
@@ -36,11 +38,15 @@ public class StoreService {
                 storeDTO.setStoreName((String) innerArray[1]);
                 storeDTO.setNumberOfTeamsWaiting((Integer) innerArray[2]);
                 storeDTO.setStoreInfoVersion((Integer) innerArray[3]);
-                //예정시간 계산 알고리즘
+                //예정시간 계산 알고리즘 아래 코드에서는 5분 가정
                 storeDTO.setEstimatedWaitingTime(5*(Integer)innerArray[2]);
                 storeDTO.setStoreImageMain((String) innerArray[4]);
                 storeDTO.setStoreIntroduce((String) innerArray[5]);
                 storeDTO.setStoreCategory((String) innerArray[6]);
+                storeDTO.setOpeningTime((LocalTime) innerArray[7]);
+                storeDTO.setClosingTime((LocalTime) innerArray[8]);
+                storeDTO.setLastOrderTime((LocalTime) innerArray[9]);
+
 
                 // 메뉴 정보 조회 및 설정
                 List<Object[]> menuDetails = menuInfoRepository.findMenuDetailsByStoreCodeAndTableNumber(storeCode);

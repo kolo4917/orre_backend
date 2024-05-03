@@ -32,7 +32,9 @@ public class WaitingService {
         for (StoreInfo store : allStores) {
             double distance = calculateDistance(locationData.getLatitude(), locationData.getLongitude(), //클라이언트로 부터 받은 위도 경도
                     store.getLatitude(), store.getLongitude()); // 테이블 한 행에 있는 위도 경도
-            nearestStoresWithDistance.add(new StoreListDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(), distance,store.getLatitude(), store.getLongitude(),store.getStoreImageMain(),store.getStoreShortIntroduce(),store.getStoreCategory(),store.getStoreInfoVersion())); //distance를 추가해서 저장
+            nearestStoresWithDistance.add(new StoreListDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(),
+                    distance,store.getLatitude(), store.getLongitude(),store.getStoreImageMain(),store.getStoreShortIntroduce(),
+                    store.getStoreCategory(),store.getStoreInfoVersion(),store.getOpeningTime(),store.getClosingTime(),store.getLastOrderTime())); //distance를 추가해서 저장
         }
 
         // distance 따라 정렬
@@ -64,7 +66,9 @@ public class WaitingService {
         for (StoreInfo store : allStores) {
             double distance = calculateDistance(locationData.getLatitude(), locationData.getLongitude(), //클라이언트로 부터 받은 위도 경도
                     store.getLatitude(), store.getLongitude()); // 테이블 한 행에 있는 위도 경도
-            basicStoresWithStoreCode.add(new StoreListDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(), distance,store.getLatitude(), store.getLongitude(),store.getStoreImageMain(),store.getStoreShortIntroduce(),store.getStoreCategory(),store.getStoreInfoVersion())); //distance를 추가해서 저장
+            basicStoresWithStoreCode.add(new StoreListDTO(store.getstoreCode(), store.getStoreName(), store.getAddress(),
+                    distance,store.getLatitude(), store.getLongitude(),store.getStoreImageMain(),store.getStoreShortIntroduce(),
+                    store.getStoreCategory(),store.getStoreInfoVersion(),store.getOpeningTime(),store.getClosingTime(),store.getLastOrderTime())); //distance를 추가해서 저장
         }
 
         return basicStoresWithStoreCode;

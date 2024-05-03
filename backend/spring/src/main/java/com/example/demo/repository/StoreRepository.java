@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Integer> {
-    @Query("SELECT s.storeCode, s.storeName, s.storeWaitingAmount, s.storeInfoVersion, s.storeImageMain, s.storeIntroduce, s.storeCategory FROM Store s WHERE s.storeCode = :storeCode")
+    @Query("SELECT s.storeCode, s.storeName, s.storeWaitingAmount, s.storeInfoVersion, s.storeImageMain, s.storeIntroduce, s.storeCategory, s.openingTime, s.closingTime, s.lastOrderTime FROM Store s WHERE s.storeCode = :storeCode")
     Object[] findStoreDetailsByStoreCode(@Param("storeCode") Integer storeCode);
 }
