@@ -3,24 +3,24 @@ package com.example.demo.DTO.ToServer;
 public class UserSignupRequest {
 
 
-    private String phoneNumber;
+    private String userPhoneNumber;
     private String verificationCode;
-    private String password;
+    private String userPassword;
     private String username;
 
-    public UserSignupRequest(String phoneNumber, String verificationCode, String password,String username) {
-        this.phoneNumber = phoneNumber;
+    public UserSignupRequest(String userPhoneNumber, String verificationCode, String userPassword, String username) {
+        this.userPhoneNumber = userPhoneNumber;
         this.verificationCode = verificationCode;
-        this.password = password;
+        this.userPassword = userPassword;
         this.username = username;
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return userPhoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.userPhoneNumber = userPhoneNumber;
     }
 
     public String getVerificationCode() {
@@ -32,11 +32,11 @@ public class UserSignupRequest {
     }
 
     public String getPassword() {
-        return password;
+        return userPassword;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.userPassword = userPassword;
     }
     public String getUsername() {
         return username;
