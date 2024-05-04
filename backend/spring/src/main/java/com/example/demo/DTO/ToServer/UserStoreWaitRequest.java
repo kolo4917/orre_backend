@@ -2,23 +2,23 @@ package com.example.demo.DTO.ToServer;
 
 public class UserStoreWaitRequest {
 
-    private String phoneNumber;
+    private String userPhoneNumber;
     private Integer storeCode;
     private Integer personNumber;
 
-    public UserStoreWaitRequest(String phoneNumber, Integer storeCode, Integer personNumber) {
-        this.phoneNumber = phoneNumber;
+    public UserStoreWaitRequest(String userPhoneNumber, Integer storeCode, Integer personNumber) {
+        this.userPhoneNumber = userPhoneNumber;
         this.storeCode = storeCode;
         this.personNumber = personNumber;
     }
 
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return userPhoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.userPhoneNumber = phoneNumber;
     }
 
     public Integer getStoreCode() {

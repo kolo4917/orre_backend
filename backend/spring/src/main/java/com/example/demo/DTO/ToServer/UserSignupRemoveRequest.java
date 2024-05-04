@@ -1,30 +1,30 @@
 package com.example.demo.DTO.ToServer;
 
 public class UserSignupRemoveRequest {
-    private String phoneNumber;
-    private String password;
+    private String userPhoneNumber;
+    private String userPassword;
     private String username;
 
-    public UserSignupRemoveRequest(String phoneNumber, String password, String username) {
-        this.phoneNumber = phoneNumber;
-        this.password = password;
+    public UserSignupRemoveRequest(String userPhoneNumber, String userPassword, String username) {
+        this.userPhoneNumber = userPhoneNumber;
+        this.userPassword = userPassword;
         this.username = username;
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return userPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
     }
 
     public String getPassword() {
-        return password;
+        return userPassword;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.userPassword = userPassword;
     }
 
     public String getUsername() {
