@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.ToClient.BooleanResponse;
 import com.example.demo.DTO.ToClient.StatusResponse;
 import com.example.demo.DTO.ToClient.StoreDTO;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
