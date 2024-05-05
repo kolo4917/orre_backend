@@ -23,9 +23,13 @@ public class Store {
 
     @Column(name = "store_name")
     private String storeName;
+    @Column(name = "store_phone_number")
+    private String storePhoneNumber;
 
     @Column(name = "store_waiting")
     private Integer storeWaiting;
+    @Column(name = "store_waiting_available")
+    private Integer storeWaitingAvailable;
 
     @Column(name = "store_info_version")
     private Integer storeInfoVersion;
@@ -41,17 +45,25 @@ public class Store {
     private LocalTime closingTime;
     @Column(name = "store_last_order_time")
     private LocalTime lastOrderTime;
+    @Column(name = "store_start_breaktime")
+    private LocalTime startBreakTime;
+    @Column(name = "store_end_breaktime")
+    private LocalTime endBreakTime;
+
 
     public Store() {}
 
-    public Store(Integer storeCode, Integer storeWaitingAmount, Integer storeTableData, String storeName,
-                 Integer storeWaiting, Integer storeInfoVersion, String storeImageMain, String storeIntroduce, String storeCategory,
-                 LocalTime openingTime, LocalTime closingTime, LocalTime lastOrderTime) {
+    public Store(Integer storeCode, Integer storeWaitingAmount, Integer storeTableData, String storeName, String storePhoneNumber,
+                 Integer storeWaiting, Integer storeWaitingAvailable, Integer storeInfoVersion, String storeImageMain, String storeIntroduce,
+                 String storeCategory, LocalTime openingTime, LocalTime closingTime, LocalTime lastOrderTime,
+                 LocalTime startBreakTime, LocalTime endBreakTime) {
         this.storeCode = storeCode;
         this.storeWaitingAmount = storeWaitingAmount;
         this.storeTableData = storeTableData;
         this.storeName = storeName;
+        this.storePhoneNumber = storePhoneNumber;
         this.storeWaiting = storeWaiting;
+        this.storeWaitingAvailable = storeWaitingAvailable;
         this.storeInfoVersion = storeInfoVersion;
         this.storeImageMain = storeImageMain;
         this.storeIntroduce = storeIntroduce;
@@ -59,37 +71,97 @@ public class Store {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.lastOrderTime = lastOrderTime;
+        this.startBreakTime = startBreakTime;
+        this.endBreakTime = endBreakTime;
     }
 
-    public Integer getStoreCode() { return storeCode; }
-    public void setStoreCode(Integer storeCode) { this.storeCode = storeCode; }
+    public Integer getStoreCode() {
+        return storeCode;
+    }
 
-    public Integer getStoreWaitingAmount() { return storeWaitingAmount; }
-    public void setStoreWaitingAmount(Integer storeWaitingAmount) { this.storeWaitingAmount = storeWaitingAmount; }
+    public void setStoreCode(Integer storeCode) {
+        this.storeCode = storeCode;
+    }
 
-    public Integer getStoreTableData() { return storeTableData; }
-    public void setStoreTableData(Integer storeTableData) { this.storeTableData = storeTableData; }
+    public Integer getStoreWaitingAmount() {
+        return storeWaitingAmount;
+    }
 
-    public String getStoreName() { return storeName; }
-    public void setStoreName(String storeName) { this.storeName = storeName; }
+    public void setStoreWaitingAmount(Integer storeWaitingAmount) {
+        this.storeWaitingAmount = storeWaitingAmount;
+    }
 
-    public Integer getStoreWaiting() { return storeWaiting; }
-    public void setStoreWaiting(Integer storeWaiting) { this.storeWaiting = storeWaiting; }
+    public Integer getStoreTableData() {
+        return storeTableData;
+    }
 
-    public Integer getStoreInfoVersion() { return storeInfoVersion; }
-    public void setStoreInfoVersion(Integer storeInfoVersion) { this.storeInfoVersion = storeInfoVersion; }
+    public void setStoreTableData(Integer storeTableData) {
+        this.storeTableData = storeTableData;
+    }
 
-    public String getStoreImageMain() {return storeImageMain;}
+    public String getStoreName() {
+        return storeName;
+    }
 
-    public void setStoreImageMain(String storeImageMain) {this.storeImageMain = storeImageMain;}
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
-    public String getStoreIntroduce() {return storeIntroduce;}
+    public String getStorePhoneNumber() {
+        return storePhoneNumber;
+    }
 
-    public void setStoreIntroduce(String storeIntroduce) {this.storeIntroduce = storeIntroduce;}
+    public void setStorePhoneNumber(String storePhoneNumber) {
+        this.storePhoneNumber = storePhoneNumber;
+    }
 
-    public String getStoreCategory() {return storeCategory;}
+    public Integer getStoreWaiting() {
+        return storeWaiting;
+    }
 
-    public void setStoreCategory(String storeCategory) {this.storeCategory = storeCategory;}
+    public void setStoreWaiting(Integer storeWaiting) {
+        this.storeWaiting = storeWaiting;
+    }
+
+    public Integer getStoreWaitingAvailable() {
+        return storeWaitingAvailable;
+    }
+
+    public void setStoreWaitingAvailable(Integer storeWaitingAvailable) {
+        this.storeWaitingAvailable = storeWaitingAvailable;
+    }
+
+    public Integer getStoreInfoVersion() {
+        return storeInfoVersion;
+    }
+
+    public void setStoreInfoVersion(Integer storeInfoVersion) {
+        this.storeInfoVersion = storeInfoVersion;
+    }
+
+    public String getStoreImageMain() {
+        return storeImageMain;
+    }
+
+    public void setStoreImageMain(String storeImageMain) {
+        this.storeImageMain = storeImageMain;
+    }
+
+    public String getStoreIntroduce() {
+        return storeIntroduce;
+    }
+
+    public void setStoreIntroduce(String storeIntroduce) {
+        this.storeIntroduce = storeIntroduce;
+    }
+
+    public String getStoreCategory() {
+        return storeCategory;
+    }
+
+    public void setStoreCategory(String storeCategory) {
+        this.storeCategory = storeCategory;
+    }
 
     public LocalTime getOpeningTime() {
         return openingTime;
@@ -113,5 +185,21 @@ public class Store {
 
     public void setLastOrderTime(LocalTime lastOrderTime) {
         this.lastOrderTime = lastOrderTime;
+    }
+
+    public LocalTime getStartBreakTime() {
+        return startBreakTime;
+    }
+
+    public void setStartBreakTime(LocalTime startBreakTime) {
+        this.startBreakTime = startBreakTime;
+    }
+
+    public LocalTime getEndBreakTime() {
+        return endBreakTime;
+    }
+
+    public void setEndBreakTime(LocalTime endBreakTime) {
+        this.endBreakTime = endBreakTime;
     }
 }
