@@ -80,6 +80,7 @@ public class StoreService {
                     locationInfo.setStoreName((String) locationDetail[0]);
                     locationInfo.setLatitude((Double) locationDetail[1]);
                     locationInfo.setLongitude((Double) locationDetail[2]);
+                    locationInfo.setAddress((String) locationDetail[3]);
                     locationInfos.add(locationInfo);
                 }
                 storeDTO.setLocationInfo(locationInfos);
