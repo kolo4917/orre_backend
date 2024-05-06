@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface StoreInfoRepository extends JpaRepository<StoreInfo, Long> {
-    @Query("SELECT s.storeName, s.latitude, s.longitude FROM StoreInfo s WHERE s.storeCode = :storeCode")
+    @Query("SELECT s.storeName, s.latitude, s.longitude, s.address FROM StoreInfo s WHERE s.storeCode = :storeCode")
     List<Object[]> findLocationDetailsByStoreCode(Integer storeCode);
 }
