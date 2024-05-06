@@ -281,11 +281,13 @@ public class StoreDTO {
         private String storeName;
         private double latitude;
         private double longitude;
+        private String address;
 
-        public LocationInfo(String storeName, double latitude, double longitude) {
+        public LocationInfo(String storeName, double latitude, double longitude, String address) {
             this.storeName = storeName;
             this.latitude = latitude;
             this.longitude = longitude;
+            this.address = address;
         }
 
         public String getStoreName() {
@@ -310,6 +312,14 @@ public class StoreDTO {
 
         public void setLongitude(double longitude) {
             this.longitude = longitude;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
         }
     }
 }
