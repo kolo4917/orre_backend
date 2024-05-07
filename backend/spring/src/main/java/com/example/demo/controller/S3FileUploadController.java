@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.ToClient.S3Response;
+import com.example.demo.DTO.ToClient.StatusResponse;
 import com.example.demo.DTO.ToServer.S3UploadRequest;
 import com.example.demo.service.S3FileUploadService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +23,7 @@ public class S3FileUploadController {
     }
 
     @PostMapping("/api/admin/StoreAdmin/menu/upload")
-    public S3Response uploadFile(@RequestPart(name = "file") MultipartFile file,
+    public StatusResponse uploadFile(@RequestPart(name = "file") MultipartFile file,
                                  @RequestPart (name = "request") S3UploadRequest request) {
         int storeCode = request.getStoreCode();
         String singleMenuCode = request.getSingleMenuCode();
@@ -31,9 +31,9 @@ public class S3FileUploadController {
 
         if(!fileUrl.equals("1201")){
             String uploadToDatabase = s3FileUploadService.uploadToDatabase(request, fileUrl);
-            return new S3Response(uploadToDatabase ,fileUrl);
+            return new StatusResponse(uploadToDatabase);
         }
-        return new S3Response("1201",fileUrl);
+        return new StatusResponse("1201");
     }
 
 }
