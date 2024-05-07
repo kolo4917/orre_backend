@@ -5,6 +5,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.example.demo.service.S3FileUploadService;
+import com.example.demo.repository.MenuInfoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,9 @@ public class S3Config {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Autowired
+    private MenuInfoRepository menuInfoRepository;
+
 
     @Bean
     public AmazonS3 amazonS3Client() {
@@ -33,9 +38,9 @@ public class S3Config {
                 .build();
     }
 
-   @Bean
+    @Bean
     public S3FileUploadService s3FileUploadService(AmazonS3 amazonS3Client) {
-        return new S3FileUploadService(amazonS3Client, bucket);
+        return new S3FileUploadService(amazonS3Client, bucket, region, menuInfoRepository);
     }
 }
 
