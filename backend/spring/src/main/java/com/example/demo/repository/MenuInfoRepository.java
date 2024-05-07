@@ -46,5 +46,10 @@ public interface MenuInfoRepository extends JpaRepository<MenuInfo, Integer> {
             "WHERE m.storeCode = :storeCode AND m.tableNumber = :tableNumber AND m.amount > :amount")
     List<Object[]> findMenuDetailsByStoreCodeAndTableNumber(@Param("storeCode") Integer storeCode, @Param("tableNumber") Integer tableNumber, @Param("amount") Integer amount);
 
+    // 특정 가게 코드에 대한 테이블 번호를 조회하는 메서드
+    @Query("SELECT DISTINCT m.tableNumber FROM MenuInfo m WHERE m.storeCode = ?1")
+    List<Integer> findTableNumbersByStoreCode(Integer storeCode);
+    // 특정 가게의 테이블을 전부 가져오는 메서드
+
 
 }

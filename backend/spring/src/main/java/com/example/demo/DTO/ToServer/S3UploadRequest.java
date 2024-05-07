@@ -4,14 +4,16 @@ public class S3UploadRequest {
     private int storeCode;
     private String menu;
     private int price;
+    private String singleMenuCode;
     private String menuCode;
     private String introduce;
     private String jwtAdmin;
 
-    public S3UploadRequest(int storeCode, String menu, int price, String menuCode, String introduce, String jwtAdmin) {
+    public S3UploadRequest(int storeCode, String menu, int price, String singleMenuCode, String menuCode, String introduce, String jwtAdmin) {
         this.storeCode = storeCode;
         this.menu = menu;
         this.price = price;
+        this.singleMenuCode = singleMenuCode;
         this.menuCode = menuCode;
         this.introduce = introduce;
         this.jwtAdmin = jwtAdmin;
@@ -39,6 +41,14 @@ public class S3UploadRequest {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getSingleMenuCode() {
+        return singleMenuCode;
+    }
+
+    public void setSingleMenuCode(String singleMenuCode) {
+        this.singleMenuCode = singleMenuCode;
     }
 
     public String getMenuCode() {
