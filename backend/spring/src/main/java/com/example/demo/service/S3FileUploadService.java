@@ -39,7 +39,7 @@ public class S3FileUploadService {
         } catch (IOException e) {
             // IOException 발생 시 예외 처리
             e.printStackTrace();
-            return "1201"; // 또는 예외를 상위로 전파하거나 다른 방식으로 처리할 수 있음
+            return "5001"; // 또는 예외를 상위로 전파하거나 다른 방식으로 처리할 수 있음
         }
     }
     @Transactional
@@ -69,7 +69,7 @@ public class S3FileUploadService {
         } catch (Exception e) {
             // 예외 발생 시 예외 처리
             e.printStackTrace();
-            return "1202";
+            return "5002";
         }
     }
 
