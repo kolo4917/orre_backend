@@ -10,6 +10,7 @@ import com.example.demo.DTO.ToServer.TableRemoveRequest;
 import com.example.demo.DTO.ToServer.StoreMenuAvailableRequest;
 import com.example.demo.DTO.ToServer.StoreMenuOrderRequest;
 import com.example.demo.DTO.ToServer.StoreMenuOrderedCheckRequest;
+import com.example.demo.DTO.ToServer.StoreWaitingAvailableRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
@@ -21,6 +22,7 @@ import com.example.demo.service.StoreMenuAvailableService;
 import com.example.demo.service.StoreService;
 import com.example.demo.service.StoreMenuOrderService;
 import com.example.demo.service.StoreMenuOrderedCheckService;
+import com.example.demo.service.StoreWaitingAvailableService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -53,6 +55,7 @@ public class StoreAdminGetPostController {
     private final StoreService storeService;
     private final StoreMenuOrderService storeMenuOrderService;
     private final StoreMenuOrderedCheckService storeMenuOrderedCheckService;
+    private final StoreWaitingAvailableService storeWaitingAvailableService;
 
 
 
@@ -65,7 +68,8 @@ public class StoreAdminGetPostController {
     public StoreAdminGetPostController(EmptySeatService emptySeatService, LoginService loginService, NoShowService noShowService,
                                        UserCallService userCallService, JwtService jwtService, TableFixService tableFixService,
                                        StoreMenuAvailableService storeMenuAvailableService, StoreService storeService,
-                                       StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService) {
+                                       StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService ,
+                                       StoreWaitingAvailableService storeWaitingAvailableService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -76,6 +80,7 @@ public class StoreAdminGetPostController {
         this.storeService = storeService;
         this.storeMenuOrderService = storeMenuOrderService;
         this.storeMenuOrderedCheckService = storeMenuOrderedCheckService;
+        this.storeWaitingAvailableService = storeWaitingAvailableService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -92,31 +97,43 @@ public class StoreAdminGetPostController {
                 .compact();
     }
 
-    // 생성자를 통한 EmptySeatService 의존성 주입
-    @PostMapping("/api/admin/storeInfo")
-    public StoreDTO getStoreInfo(@RequestBody StoreInfoRequest request) {
-        return storeService.getStoreDetailsByStoreCode(request.getStoreCode());
-    }
-    @PostMapping("/api/admin/StoreAdmin/available")
-    public List<EmptySeat> emptySeat(@RequestBody StoreInfoRequest request) {
-        // EmptySeatService를 사용하여 storeCode에 해당하는 비어 있는 자리 정보 조회
-        return emptySeatService.findEmptySeats(request.getStoreCode());
-    }
-
     @PostMapping("/api/admin/StoreAdmin/login")
     public LoginResponse login(@RequestBody AdminLoginRequest request) {
-        // 전화번호와 비밀번호를 받아 서비스를 통해 인증
         Admin isValidUser = loginService.validateAdminCredentials(request.getAdminPhoneNumber(), request.getAdminPassword());
         if (isValidUser != null) {
             // JWT 발급
             String token = generateJwtTokenForAdmin(request.getAdminPhoneNumber());
-            // 인증된 사용자의 storeCode를 가져오는 로직
             return new LoginResponse("success", token, isValidUser.getAdminStoreCode());
         } else {
             // 인증 실패 시
             return new LoginResponse("failure", null, 0);
         }
     }
+    @PostMapping("/api/admin/storeInfo")
+    public StoreDTO getStoreInfo(@RequestBody StoreInfoRequest request) {
+        return storeService.getStoreDetailsByStoreCode(request.getStoreCode());
+    }
+    @PostMapping("/api/admin/StoreAdmin/available/waiting")
+    public StatusResponse waitingAvailable(@RequestBody StoreWaitingAvailableRequest request){
+
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            String status =storeWaitingAvailableService.updateStoreWaitingAvailable(request);
+            return new StatusResponse(status);
+        } else {
+            return new StatusResponse("400");
+        }
+    }
+
+
+    @PostMapping("/api/admin/StoreAdmin/available")
+    public List<EmptySeat> emptySeat(@RequestBody StoreInfoRequest request) {
+        // EmptySeatService를 사용하여 storeCode에 해당하는 비어 있는 자리 정보 조회
+        return emptySeatService.findEmptySeats(request.getStoreCode());
+    }
+
+
     @PostMapping("/api/admin/StoreAdmin/noShow")
     public BooleanResponse handleNoShow(@RequestBody AdminNoShowRequest request) {
         // NoShowService를 사용하여 no-show 처리
