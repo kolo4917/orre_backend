@@ -11,7 +11,7 @@ public class UserStoreWait {
 
     @Id
     @Column(name = "user_store_wait_phone_number")
-    private String phoneNumber;
+    private String userPhoneNumber;
 
     @Column(name = "user_store_wait_store_code")
     private Integer storeCode;
@@ -29,16 +29,16 @@ public class UserStoreWait {
 
     public UserStoreWait() {}
 
-    public UserStoreWait(String phoneNumber, Integer storeCode, Integer waiting, Integer status, Integer personNumber) {
-        this.phoneNumber = phoneNumber;
+    public UserStoreWait(String userPhoneNumber, Integer storeCode, Integer waiting, Integer status, Integer personNumber) {
+        this.userPhoneNumber = userPhoneNumber;
         this.storeCode = storeCode;
         this.waiting = waiting;
         this.status = status;
         this.personNumber = personNumber;
     }
 
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getUserPhoneNumber() { return userPhoneNumber; }
+    public void setUserPhoneNumber(String PhoneNumber) { this.userPhoneNumber = PhoneNumber; }
 
     public Integer getStoreCode() { return storeCode; }
     public void setStoreCode(Integer storeCode) { this.storeCode = storeCode; }

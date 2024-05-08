@@ -13,7 +13,7 @@ public interface StoreDynamicQueueRepository extends JpaRepository<UserStoreWait
     @Query("SELECT uw.storeCode, uw.waiting, uw.status FROM UserStoreWait uw WHERE uw.storeCode = :storeCode AND uw.status = 1 ORDER BY uw.waiting ASC")
     List<Object[]> findStoreDynamicQueue(@Param("storeCode") Integer storeCode);
 
-    @Query("SELECT uw.storeCode, uw.waiting, uw.status, uw.phoneNumber, uw.personNumber FROM UserStoreWait uw WHERE uw.storeCode = :storeCode AND uw.status = 1 ORDER BY uw.waiting ASC")
+    @Query("SELECT uw.storeCode, uw.waiting, uw.status, uw.userPhoneNumber, uw.personNumber FROM UserStoreWait uw WHERE uw.storeCode = :storeCode AND uw.status = 1 ORDER BY uw.waiting ASC")
     List<Object[]> findStoreByExtendedQueue(@Param("storeCode") Integer storeCode);
 
 }
