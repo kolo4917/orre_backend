@@ -12,13 +12,12 @@ public class UserStoreWaitRequest {
         this.personNumber = personNumber;
     }
 
-
-    public String getPhoneNumber() {
+    public String getUserPhoneNumber() {
         return userPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.userPhoneNumber = phoneNumber;
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
     }
 
     public Integer getStoreCode() {
@@ -37,4 +36,3 @@ public class UserStoreWaitRequest {
         this.personNumber = personNumber;
     }
 }
-

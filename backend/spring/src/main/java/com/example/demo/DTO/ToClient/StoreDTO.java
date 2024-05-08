@@ -1,5 +1,6 @@
 package com.example.demo.DTO.ToClient;
 
+import com.example.demo.model.DataBase.MenuCategory;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class StoreDTO {
     private LocalTime endBreakTime;
     private List<MenuInfo> menuInfo;
     private List<LocationInfo> locationInfo;
+    private MenuCategory menuCategories;
 
     // 기본 생성자
     public StoreDTO() {
@@ -32,7 +34,7 @@ public class StoreDTO {
     public StoreDTO(int storeCode, String storeName, String storePhoneNumber, int storeInfoVersion, int waitingAvailable,
                     int numberOfTeamsWaiting, int estimatedWaitingTime, String storeImageMain, String storeIntroduce, String storeCategory,
                     LocalTime openingTime, LocalTime closingTime, LocalTime lastOrderTime, LocalTime startBreakTime, LocalTime endBreakTime,
-                    List<MenuInfo> menuInfo, List<LocationInfo> locationInfo) {
+                    List<MenuInfo> menuInfo, List<LocationInfo> locationInfo, MenuCategory menuCategories) {
         this.storeCode = storeCode;
         this.storeName = storeName;
         this.storePhoneNumber = storePhoneNumber;
@@ -50,6 +52,7 @@ public class StoreDTO {
         this.endBreakTime = endBreakTime;
         this.menuInfo = menuInfo;
         this.locationInfo = locationInfo;
+        this.menuCategories = menuCategories;
     }
 
     // Getters
@@ -191,6 +194,14 @@ public class StoreDTO {
         this.locationInfo = locationInfo;
     }
 
+    public MenuCategory getMenuCategories() {
+        return menuCategories;
+    }
+
+    public void setMenuCategories(MenuCategory menuCategories) {
+        this.menuCategories = menuCategories;
+    }
+
     // 정적 중첩 클래스
     public static class MenuInfo {
         private String menu;
@@ -323,3 +334,5 @@ public class StoreDTO {
         }
     }
 }
+
+

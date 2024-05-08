@@ -2,7 +2,6 @@ package com.example.demo.DTO.ToServer;
 
 public class UserSignupRequest {
 
-
     private String userPhoneNumber;
     private String verificationCode;
     private String userPassword;
@@ -19,7 +18,7 @@ public class UserSignupRequest {
         return userPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String userPhoneNumber) {
         this.userPhoneNumber = userPhoneNumber;
     }
 
