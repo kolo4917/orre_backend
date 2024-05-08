@@ -51,5 +51,8 @@ public interface MenuInfoRepository extends JpaRepository<MenuInfo, Integer> {
     List<Integer> findTableNumbersByStoreCode(Integer storeCode);
     // 특정 가게의 테이블을 전부 가져오는 메서드
 
+    List<MenuInfo> findByStoreCodeAndMenuAndMenuCode(Integer storeCode, String menu, String menuCode);
+
+
 
 }
