@@ -1,9 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.DTO.ToClient.StoreDTO;
+import com.example.demo.model.DataBase.MenuCategory;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.repository.MenuInfoRepository;
 import com.example.demo.repository.StoreInfoRepository;
+import com.example.demo.repository.MenuCategoryRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +22,14 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final MenuInfoRepository menuInfoRepository; // MenuInfoRepository 주입
     private final StoreInfoRepository storeInfoRepository;
-
+    private final MenuCategoryRepository menuCategoryRepository;
 
     @Autowired
-    public StoreService(StoreRepository storeRepository, MenuInfoRepository menuInfoRepository, StoreInfoRepository storeInfoRepository) {
+    public StoreService(StoreRepository storeRepository, MenuInfoRepository menuInfoRepository, StoreInfoRepository storeInfoRepository, MenuCategoryRepository menuCategoryRepository) {
         this.storeRepository = storeRepository;
         this.menuInfoRepository = menuInfoRepository;
         this.storeInfoRepository = storeInfoRepository;
+        this.menuCategoryRepository = menuCategoryRepository;
     }
 
     public StoreDTO getStoreDetailsByStoreCode(Integer storeCode) {
@@ -84,6 +88,11 @@ public class StoreService {
                     locationInfos.add(locationInfo);
                 }
                 storeDTO.setLocationInfo(locationInfos);
+                MenuCategory menuCategory = menuCategoryRepository.findByStoreCode(storeCode);
+                if (menuCategory != null) {
+                    storeDTO.setMenuCategories(menuCategory);
+                }
+
 
 
                 return storeDTO; // 첫 번째 상점 상세 정보에 대한 DTO 반환

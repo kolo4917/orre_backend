@@ -25,7 +25,7 @@ public class UserStoreMakeWaitingService {
         Integer maxWaiting = userStoreWaitRepository.findMaxWaitingByStoreCode(request.getStoreCode());
         Integer nextWaiting = (maxWaiting == null) ? 1 : maxWaiting + 1;
 
-        UserStoreWait userStoreWait = userStoreWaitRepository.findByPhoneNumberAndStoreCode(request.getPhoneNumber(), request.getStoreCode());
+        UserStoreWait userStoreWait = userStoreWaitRepository.findByPhoneNumberAndStoreCode(request.getUserPhoneNumber(), request.getStoreCode());
 
         if (userStoreWait != null) {
             // 이미 존재하는 경우, 상태와 인원 수 업데이트
@@ -35,7 +35,7 @@ public class UserStoreMakeWaitingService {
         } else {
             // 새로운 대기열 추가
             userStoreWait = new UserStoreWait(
-                    request.getPhoneNumber(),
+                    request.getUserPhoneNumber(),
                     request.getStoreCode(),
                     nextWaiting,
                     1, // 1 - 대기중
@@ -51,7 +51,7 @@ public class UserStoreMakeWaitingService {
     }
 
     public boolean deactivateUserStoreWaitByPhoneNumber(UserStoreWaitRequest request) {
-        UserStoreWait userStoreWait = userStoreWaitRepository.findByPhoneNumberAndStoreCode(request.getPhoneNumber(), request.getStoreCode());
+        UserStoreWait userStoreWait = userStoreWaitRepository.findByPhoneNumberAndStoreCode(request.getUserPhoneNumber(), request.getStoreCode());
         if (userStoreWait != null) {
             userStoreWait.setStatus(0); // 상태를 비활성화로 변경
             userStoreWaitRepository.save(userStoreWait);
