@@ -90,12 +90,10 @@ public class WaitingController {
         // 생성 결과를 클라이언트에 전송할 응답 객체 생성
         UserStoreWaitResponse response = new UserStoreWaitResponse();
         if (newUserStoreWait != null) {
-            response.setMessage("대기열 생성 성공");
-            response.setSuccess(true);
-            response.setWaitingDetails(newUserStoreWait); // 응답에 대기열 상세 정보 포함
+            response.setStatus("200");
+            response.setToken(newUserStoreWait); // 응답에 대기열 상세 정보 포함
         } else {
-            response.setMessage("대기열 생성 실패");
-            response.setSuccess(false);
+            response.setStatus("1101");
         }
         return response;
     }
@@ -111,13 +109,11 @@ public class WaitingController {
         // 응답 객체 생성
         UserStoreWaitResponse response = new UserStoreWaitResponse();
         if (isCancelled) {
-            response.setMessage("대기열 삭제 성공");
-            response.setSuccess(true);
-            response.setWaitingDetails(null);
+            response.setStatus("200");
+            response.setToken(null);
         } else {
-            response.setMessage("대기열 삭제 실패");
-            response.setSuccess(false);
-            response.setWaitingDetails(null);
+            response.setStatus("1102");
+            response.setToken(null);
         }
         return response;
     }

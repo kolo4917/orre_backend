@@ -35,9 +35,8 @@ public class NoShowService {
             eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
 
             UserStoreWaitResponse userStoreWaitResponse = new UserStoreWaitResponse();
-            userStoreWaitResponse.setSuccess(false);
-            userStoreWaitResponse.setMessage("점주 웨이팅 거부");
-            userStoreWaitResponse.setWaitingDetails(null); // 필요하다면 여기에 상세 정보를 설정할 수 있습니다.
+            userStoreWaitResponse.setStatus("1103");
+            userStoreWaitResponse.setToken(null); // 필요하다면 여기에 상세 정보를 설정할 수 있습니다.
             eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, noShowUserPhoneNumber, storeCode, userStoreWaitResponse), 1000);
             return new BooleanResponse(true); // 성공 시 true 반환
         } else {
