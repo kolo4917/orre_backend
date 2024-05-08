@@ -7,7 +7,7 @@ import com.example.demo.model.DataBase.UserStoreWait;
 
 public interface UserStoreWaitRepository extends JpaRepository<UserStoreWait, Long> {
 
-    @Query("SELECT u FROM UserStoreWait u WHERE u.phoneNumber = :phoneNumber AND u.storeCode = :storeCode")
+    @Query("SELECT u FROM UserStoreWait u WHERE u.userPhoneNumber = :phoneNumber AND u.storeCode = :storeCode")
     UserStoreWait findByPhoneNumberAndStoreCode(String phoneNumber, Integer storeCode);
 
     @Query("SELECT MAX(u.waiting) FROM UserStoreWait u WHERE u.storeCode = :storeCode")

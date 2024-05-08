@@ -29,7 +29,7 @@ public class NoShowService {
         // 특정 유저의 status를 0으로 업데이트
         UserStoreWait userStoreWait = userStoreWaitRepository.findByStoreCodeAndWaitingNumber(storeCode,noShowUserCode);
         if (userStoreWait != null && userStoreWait.getStoreCode().equals(storeCode)) {
-            String noShowUserPhoneNumber = userStoreWait.getPhoneNumber();
+            String noShowUserPhoneNumber = userStoreWait.getUserPhoneNumber();
             userStoreWaitRepository.delete(userStoreWait); // 특정 행을 삭제합니다.
             eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
 
