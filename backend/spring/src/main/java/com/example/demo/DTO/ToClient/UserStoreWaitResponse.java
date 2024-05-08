@@ -3,34 +3,27 @@ package com.example.demo.DTO.ToClient;
 import com.example.demo.model.DataBase.UserStoreWait;
 
 public class UserStoreWaitResponse {
-    private boolean success;
-    private String message;
-    private UserStoreWait waitingDetails;
+    private String status;
+    private UserStoreWait token;
 
 
     // Getters and Setters
-    public boolean isSuccess() {
-        return success;
+
+
+    public String getStatus() {
+        return status;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getMessage() {
-        return message;
+    public UserStoreWait getToken() {
+        return token;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public UserStoreWait getWaitingDetails() {
-        return waitingDetails;
-    }
-
-    public void setWaitingDetails(UserStoreWait waitingDetails) {
-        this.waitingDetails = waitingDetails;
+    public void setToken(UserStoreWait token) {
+        this.token = token;
     }
 }
 
