@@ -36,9 +36,9 @@ public class TableLockingService {
             RestaurantTable table = tableLockingRepository.findByStoreCodeAndTableNumber(storeCode, tableNumber);
             if ((table != null) && (table.getTableAvailable() != 1)) {
                 table.setTableAvailable(1); // 테이블 사용 불가능으로 변경
-                table.setTablePhoneNumber(userStoreWait.getPhoneNumber()); // 전화번호 할당
+                table.setTablePhoneNumber(userStoreWait.getUserPhoneNumber()); // 전화번호 할당
                 tableLockingRepository.save(table); // 변경 사항 저장
-                return userStoreWait.getPhoneNumber(); // 전화번호 반환
+                return userStoreWait.getUserPhoneNumber(); // 전화번호 반환
             }
         }
         return null; // 언락 실패 또는 전화번호 없음
