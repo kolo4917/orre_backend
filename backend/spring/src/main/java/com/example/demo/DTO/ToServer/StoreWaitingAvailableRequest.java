@@ -2,10 +2,10 @@ package com.example.demo.DTO.ToServer;
 
 public class StoreWaitingAvailableRequest {
     private int storeCode;
-    private int storeWaitingAvailable;
-    private int jwtAdmin;
+    private int storeWaitingAvailable; // 1 불가, 0 가능
+    private String jwtAdmin;
 
-    public StoreWaitingAvailableRequest(int storeCode, int storeWaitingAvailable, int jwtAdmin) {
+    public StoreWaitingAvailableRequest(int storeCode, int storeWaitingAvailable, String jwtAdmin) {
         this.storeCode = storeCode;
         this.storeWaitingAvailable = storeWaitingAvailable;
         this.jwtAdmin = jwtAdmin;
@@ -27,11 +27,11 @@ public class StoreWaitingAvailableRequest {
         this.storeWaitingAvailable = storeWaitingAvailable;
     }
 
-    public int getJwtAdmin() {
+    public String getJwtAdmin() {
         return jwtAdmin;
     }
 
-    public void setJwtAdmin(int jwtAdmin) {
+    public void setJwtAdmin(String jwtAdmin) {
         this.jwtAdmin = jwtAdmin;
     }
 }
