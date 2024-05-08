@@ -1,17 +1,16 @@
 package com.example.demo.service;
 
+import com.example.demo.DTO.ToServer.S3ModifyRequest;
 import com.example.demo.DTO.ToServer.S3UploadRequest;
 import com.example.demo.model.DataBase.MenuInfo;
 import com.example.demo.repository.MenuInfoRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
-public class S3FileUploadService {
+public class S3FileService {
 
     private final AmazonS3 amazonS3Client;
     private final String bucket;
@@ -19,7 +18,7 @@ public class S3FileUploadService {
     private final MenuInfoRepository menuInfoRepository;
     // 생성자 직접 정의
 
-    public S3FileUploadService(AmazonS3 amazonS3Client, String bucket, String region, MenuInfoRepository menuInfoRepository) {
+    public S3FileService(AmazonS3 amazonS3Client, String bucket, String region, MenuInfoRepository menuInfoRepository) {
         this.amazonS3Client = amazonS3Client;
         this.bucket = bucket;
         this.region = region;
@@ -92,7 +91,31 @@ public class S3FileUploadService {
             return "5005"; // 예외 발생 시
         }
     }
+    @Transactional
+    public String modifyToDatabase(S3ModifyRequest request) {
+        try {
+            // 특정 가게 코드와 메뉴 코드를 기반으로 메뉴 정보를 조회합니다.
+            List<MenuInfo> menuInfos = menuInfoRepository.findByStoreCodeAndMenuAndMenuCode(request.getStoreCode(), request.getMenu(),request.getMenuCode());
 
+            // 조회된 메뉴 정보가 없을 경우
+            if (menuInfos == null || menuInfos.isEmpty()) {
+                return "5004";
+            }
 
+            // 모든 조회된 메뉴 정보에 대해 업데이트 수행
+            for (MenuInfo menuInfo : menuInfos) {
+                menuInfo.setMenu(request.getMenu());
+                menuInfo.setPrice(request.getPrice());
+                menuInfo.setIntroduce(request.getIntroduce());
+                menuInfoRepository.save(menuInfo);
+            }
+
+            return "200";
+        } catch (Exception e) {
+            // 예외 발생 시 예외 처리
+            e.printStackTrace();
+            return "5006";
+        }
+    }
 
 }

@@ -1,29 +1,25 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.ToClient.BooleanResponse;
 import com.example.demo.DTO.ToClient.StatusResponse;
 import com.example.demo.DTO.ToServer.S3UploadRequest;
 import com.example.demo.DTO.ToServer.S3RemoveRequest;
-import com.example.demo.service.S3FileUploadService;
+import com.example.demo.DTO.ToServer.S3ModifyRequest;
+import com.example.demo.service.S3FileService;
 import com.example.demo.service.JwtService;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.IOException;
-
 @RestController
-public class S3FileUploadController {
+public class S3FileController {
 
-    private final S3FileUploadService s3FileUploadService;
+    private final S3FileService s3FileService;
     private final JwtService jwtService;
 
-    public S3FileUploadController(S3FileUploadService s3FileUploadService, JwtService jwtService) {
-        this.s3FileUploadService = s3FileUploadService;
+    public S3FileController(S3FileService s3FileService, JwtService jwtService) {
+        this.s3FileService = s3FileService;
         this.jwtService = jwtService;
     }
 
@@ -36,9 +32,9 @@ public class S3FileUploadController {
 
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
         if (isValidAdmin) {
-            String fileUrl = s3FileUploadService.uploadFile(file, storeCode, singleMenuCode);
+            String fileUrl = s3FileService.uploadFile(file, storeCode, singleMenuCode);
             if(!fileUrl.equals("5001")){
-                String uploadToDatabase = s3FileUploadService.uploadToDatabase(request, fileUrl);
+                String uploadToDatabase = s3FileService.uploadToDatabase(request, fileUrl);
                 return new StatusResponse(uploadToDatabase);
             }
             return new StatusResponse("5002");
@@ -58,9 +54,21 @@ public class S3FileUploadController {
 
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
         if (isValidAdmin) {
-            String status = s3FileUploadService.removeToDatabase(storeCode, menu, menuCode);
+            String status = s3FileService.removeToDatabase(storeCode, menu, menuCode);
             return new StatusResponse(status);
             }
+        else {
+            return new StatusResponse("5001");
+        }
+    }
+    @PostMapping("/api/admin/StoreAdmin/menu/s3/modify")
+    public StatusResponse modifyFile(@RequestBody S3ModifyRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            String status = s3FileService.modifyToDatabase(request);
+            return new StatusResponse(status);
+        }
         else {
             return new StatusResponse("5001");
         }

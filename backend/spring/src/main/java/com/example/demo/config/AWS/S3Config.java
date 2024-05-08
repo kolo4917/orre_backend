@@ -4,7 +4,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.example.demo.service.S3FileUploadService;
+import com.example.demo.service.S3FileService;
 import com.example.demo.repository.MenuInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,8 +39,8 @@ public class S3Config {
     }
 
     @Bean
-    public S3FileUploadService s3FileUploadService(AmazonS3 amazonS3Client) {
-        return new S3FileUploadService(amazonS3Client, bucket, region, menuInfoRepository);
+    public S3FileService s3FileUploadService(AmazonS3 amazonS3Client) {
+        return new S3FileService(amazonS3Client, bucket, region, menuInfoRepository);
     }
 }
 
