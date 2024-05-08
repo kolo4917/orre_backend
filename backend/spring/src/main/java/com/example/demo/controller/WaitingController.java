@@ -82,7 +82,7 @@ public class WaitingController {
             @DestinationVariable String userPhoneNumber,
             UserStoreWaitRequest request) {
         request.setStoreCode(storeCode);
-        request.setPhoneNumber(userPhoneNumber);
+        request.setUserPhoneNumber(userPhoneNumber);
 
         // 대기열 생성 서비스 호출
         UserStoreWait newUserStoreWait = userStoreMakeWaitingService.createUserStoreWait(request);
@@ -101,7 +101,7 @@ public class WaitingController {
     @SendTo("/topic/user/waiting/cancel/{storeCode}/{userPhoneNumber}")
     public UserStoreWaitResponse cancelWaiting(@DestinationVariable Integer storeCode, @DestinationVariable String userPhoneNumber, UserStoreWaitRequest request) {
         request.setStoreCode(storeCode);
-        request.setPhoneNumber(userPhoneNumber);
+        request.setUserPhoneNumber(userPhoneNumber);
         request.setPersonNumber(0);
         // 대기열 비활성화 서비스 호출
         boolean isCancelled = userStoreMakeWaitingService.deactivateUserStoreWaitByPhoneNumber(request);
