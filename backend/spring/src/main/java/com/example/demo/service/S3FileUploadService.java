@@ -30,7 +30,7 @@ public class S3FileUploadService {
         try {
             String fileName = file.getOriginalFilename();
             String directory = "storeCode/" + storeCode + "/" + singleMenuCode;
-            String fileUrl = "https://" + bucket + "." + region + ".amazonaws.com/" + directory + "/" + fileName;
+            String fileUrl = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + directory + "/" + fileName;
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
@@ -64,12 +64,32 @@ public class S3FileUploadService {
                 );
                 menuInfoRepository.save(menuInfo);
             }
-
             return "200";
         } catch (Exception e) {
             // 예외 발생 시 예외 처리
             e.printStackTrace();
-            return "5002";
+            return "5003";
+        }
+    }
+    @Transactional
+    public String removeToDatabase(int storeCode, String menuName, String menuCode) {
+        try {
+            // 해당 storeCode와 menuCode를 가진 메뉴 정보를 조회
+            List<MenuInfo> menus = menuInfoRepository.findByStoreCodeAndMenuAndMenuCode(storeCode, menuName, menuCode);
+
+            if (menus.isEmpty()) {
+                return "5004"; // 메뉴 정보가 없는 경우
+            }
+
+            // 조회된 메뉴 정보를 모두 삭제
+            for (MenuInfo menu : menus) {
+                menuInfoRepository.delete(menu);
+            }
+
+            return "200"; // 성공적으로 삭제 완료
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "5005"; // 예외 발생 시
         }
     }
 
