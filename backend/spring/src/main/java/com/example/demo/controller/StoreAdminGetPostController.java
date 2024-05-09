@@ -109,7 +109,7 @@ public class StoreAdminGetPostController {
             return new LoginResponse("failure", null, 0);
         }
     }
-    @PostMapping("/api/admin/storeInfo")
+    @PostMapping("/api/admin/StoreAdmin/storeInfo")
     public StoreDTO getStoreInfo(@RequestBody StoreInfoRequest request) {
         return storeService.getStoreDetailsByStoreCode(request.getStoreCode());
     }
