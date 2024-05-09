@@ -1,10 +1,14 @@
 package com.example.demo.service;
 
 import com.example.demo.DTO.ToServer.StoreMenuAvailableRequest;
+import com.example.demo.config.events.StoreQueueUpdatedEvent;
 import com.example.demo.model.DataBase.MenuInfo;
 import com.example.demo.repository.MenuInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.config.events.EventPublisherService;
+import org.springframework.context.ApplicationEventPublisher;
+import com.example.demo.config.events.StoreInfoUpdatedEvent;
 
 import java.util.List;
 
@@ -12,6 +16,8 @@ import java.util.List;
 public class StoreMenuAvailableService {
 
     private final MenuInfoRepository menuInfoRepository;
+    @Autowired
+    private EventPublisherService eventPublisherService;
 
     @Autowired
     public StoreMenuAvailableService(MenuInfoRepository menuInfoRepository) {
@@ -24,7 +30,6 @@ public class StoreMenuAvailableService {
         // MenuCode가 '*'이면 해당 StoreCode를 가진 모든 테이블의 가용성을 업데이트
         if (menuCode.equals("*")) {
             updateAllTablesAvailability(request.getStoreCode(), request.getAvailableCode());
-            return;
         }
 
         // MenuCode가 알파벳 하나만 포함된 경우
@@ -40,8 +45,9 @@ public class StoreMenuAvailableService {
                 menuInfoRepository.updateAvailableByStoreCodeAndMenuCode(request.getStoreCode(), menuCode, request.getAvailableCode());
             }
         }
-
         // 이벤트 발생시키는 메소드
+        eventPublisherService.publishStoreInfoUpdate(new StoreInfoUpdatedEvent(this, request.getStoreCode()),1000);
+
     }
 
     private void updateAllTablesAvailability(Integer storeCode, Integer availableCode) {
