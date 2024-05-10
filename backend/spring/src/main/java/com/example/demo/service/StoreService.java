@@ -89,6 +89,7 @@ public class StoreService {
                 }
                 storeDTO.setLocationInfo(locationInfos);
                 MenuCategory menuCategory = menuCategoryRepository.findByStoreCode(storeCode);
+                System.out.println(menuCategory);
                 if (menuCategory != null) {
                     storeDTO.setMenuCategories(menuCategory);
                 }
