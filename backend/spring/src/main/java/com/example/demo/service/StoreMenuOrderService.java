@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.DTO.ToServer.StoreMenuOrderRequest;
-import com.example.demo.model.DataBase.MenuInfo;
 import com.example.demo.repository.MenuInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
