@@ -53,6 +53,9 @@ public interface MenuInfoRepository extends JpaRepository<MenuInfo, Integer> {
 
     List<MenuInfo> findByStoreCodeAndMenuAndMenuCode(Integer storeCode, String menu, String menuCode);
 
+    List<MenuInfo> findByStoreCodeAndTableNumber(Integer storeCode, Integer tableNumber);
+
+
 
 
 }

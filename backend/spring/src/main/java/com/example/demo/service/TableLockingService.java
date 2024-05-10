@@ -4,25 +4,34 @@ import com.example.demo.config.events.StoreQueueUpdatedEvent;
 import com.example.demo.model.DataBase.RestaurantTable;
 import com.example.demo.repository.TableLockingRepository;
 import com.example.demo.config.events.EventPublisherService;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.example.demo.model.DataBase.MenuInfo;
+import com.example.demo.repository.MenuInfoRepository;
 import com.example.demo.model.DataBase.UserStoreWait;
 import com.example.demo.repository.UserStoreWaitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+
 @Service
 public class TableLockingService {
     @Autowired
-    private UserStoreWaitRepository userStoreWaitRepository;
+    private final UserStoreWaitRepository userStoreWaitRepository;
     private final TableLockingRepository tableLockingRepository;
     private final EventPublisherService eventPublisherService;
-
+    private final MenuInfoRepository menuInfoRepository;
     @Autowired
-    public TableLockingService(TableLockingRepository tableLockingRepository, EventPublisherService eventPublisherService) {
+    public TableLockingService(UserStoreWaitRepository userStoreWaitRepository, TableLockingRepository tableLockingRepository,
+                               EventPublisherService eventPublisherService, MenuInfoRepository menuInfoRepository) {
+        this.userStoreWaitRepository = userStoreWaitRepository;
         this.tableLockingRepository = tableLockingRepository;
         this.eventPublisherService = eventPublisherService;
+        this.menuInfoRepository = menuInfoRepository;
     }
+
+
 
     @Transactional // 테이블 이용 상태 변화
     public String unlockTable(Integer storeCode, Integer tableNumber, Integer waitingNumber) {
@@ -51,6 +60,14 @@ public class TableLockingService {
             RestaurantTable table = tableLockingRepository.findByStoreCodeAndTableNumber(storeCode, tableNumber);
             if ((table != null) && (table.getTableAvailable() != 0)) {
                 lockedPhoneNumeber = table.getTablePhoneNumber();
+
+                // 메뉴 정보 갱신
+                List<MenuInfo> menuInfoList = menuInfoRepository.findByStoreCodeAndTableNumber(storeCode, tableNumber);
+                for (MenuInfo menuInfo : menuInfoList) {
+                    menuInfo.setAmount(0); // amount를 0으로 설정
+                    menuInfoRepository.save(menuInfo); // 변경 사항 저장
+                }
+
                 table.setTableAvailable(0); // 테이블 사용 가능으로 변경
                 table.setTablePhoneNumber(null); // 전화번호 할당
                 tableLockingRepository.save(table); // 변경 사항 저장
