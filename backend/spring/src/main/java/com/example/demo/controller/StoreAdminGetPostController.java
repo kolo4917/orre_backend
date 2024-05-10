@@ -11,6 +11,7 @@ import com.example.demo.DTO.ToServer.StoreMenuAvailableRequest;
 import com.example.demo.DTO.ToServer.StoreMenuOrderRequest;
 import com.example.demo.DTO.ToServer.StoreMenuOrderedCheckRequest;
 import com.example.demo.DTO.ToServer.StoreWaitingAvailableRequest;
+import com.example.demo.DTO.ToServer.StoreMenuCategoryRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
@@ -23,6 +24,7 @@ import com.example.demo.service.StoreService;
 import com.example.demo.service.StoreMenuOrderService;
 import com.example.demo.service.StoreMenuOrderedCheckService;
 import com.example.demo.service.StoreWaitingAvailableService;
+import com.example.demo.service.StoreCategoriesService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -56,6 +58,7 @@ public class StoreAdminGetPostController {
     private final StoreMenuOrderService storeMenuOrderService;
     private final StoreMenuOrderedCheckService storeMenuOrderedCheckService;
     private final StoreWaitingAvailableService storeWaitingAvailableService;
+    private final StoreCategoriesService storeCategoriesService;
 
 
 
@@ -69,7 +72,7 @@ public class StoreAdminGetPostController {
                                        UserCallService userCallService, JwtService jwtService, TableFixService tableFixService,
                                        StoreMenuAvailableService storeMenuAvailableService, StoreService storeService,
                                        StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService ,
-                                       StoreWaitingAvailableService storeWaitingAvailableService) {
+                                       StoreWaitingAvailableService storeWaitingAvailableService, StoreCategoriesService storeCategoriesService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -81,6 +84,7 @@ public class StoreAdminGetPostController {
         this.storeMenuOrderService = storeMenuOrderService;
         this.storeMenuOrderedCheckService = storeMenuOrderedCheckService;
         this.storeWaitingAvailableService = storeWaitingAvailableService;
+        this.storeCategoriesService = storeCategoriesService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -119,13 +123,12 @@ public class StoreAdminGetPostController {
         String jwtAdmin = request.getJwtAdmin();
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
         if (isValidAdmin) {
-            String status =storeWaitingAvailableService.updateStoreWaitingAvailable(request);
+            String status = storeWaitingAvailableService.updateStoreWaitingAvailable(request);
             return new StatusResponse(status);
         } else {
             return new StatusResponse("400");
         }
     }
-
 
     @PostMapping("/api/admin/StoreAdmin/available")
     public List<EmptySeat> emptySeat(@RequestBody StoreInfoRequest request) {
@@ -197,5 +200,17 @@ public class StoreAdminGetPostController {
             return new StoreMenuOrderedCheck("1001",-1,-1,-1, null);
         }
     }
+    @PostMapping("/api/admin/StoreAdmin/menu/category/add")
+    public StatusResponse handleCategoryAdd(@RequestBody StoreMenuCategoryRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            String status = storeCategoriesService.updateMenuCategory(request);
+            return new StatusResponse(status);
+        } else {
+            return new StatusResponse("400");
+        }
+    }
+
 
 }
