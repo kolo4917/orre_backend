@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity
 @Table(name = "menu_category")
@@ -80,7 +82,7 @@ public class MenuCategory {
     private String V;
 
     @Column(name = "W")
-    private String W;
+    private String wow;
 
     @Column(name = "X")
     private String X;
@@ -104,7 +106,7 @@ public class MenuCategory {
     }
 
     public void setA(String a) {
-        A = A;
+        A = a;
     }
 
     public String getB() {
@@ -112,7 +114,7 @@ public class MenuCategory {
     }
 
     public void setB(String b) {
-        B = B;
+        B = b;
     }
 
     public String getC() {
@@ -120,7 +122,7 @@ public class MenuCategory {
     }
 
     public void setC(String c) {
-        C = C;
+        C = c;
     }
 
     public String getD() {
@@ -128,7 +130,7 @@ public class MenuCategory {
     }
 
     public void setD(String d) {
-        D = D;
+        D = d;
     }
 
     public String getE() {
@@ -136,21 +138,23 @@ public class MenuCategory {
     }
 
     public void setE(String e) {
-        E = E;
+        E = e;
     }
 
     public String getF() {
         return F;
     }
 
-    public void setF(String f) {F = F;}
+    public void setF(String f) {
+        F = f;
+    }
 
     public String getG() {
         return G;
     }
 
     public void setG(String g) {
-        G = G;
+        G = g;
     }
 
     public String getH() {
@@ -158,7 +162,7 @@ public class MenuCategory {
     }
 
     public void setH(String h) {
-        H = H;
+        H = h;
     }
 
     public String getI() {
@@ -166,7 +170,7 @@ public class MenuCategory {
     }
 
     public void setI(String i) {
-        I = I;
+        I = i;
     }
 
     public String getJ() {
@@ -174,7 +178,7 @@ public class MenuCategory {
     }
 
     public void setJ(String j) {
-        J = J;
+        J = j;
     }
 
     public String getK() {
@@ -182,7 +186,7 @@ public class MenuCategory {
     }
 
     public void setK(String k) {
-        K = K;
+        K = k;
     }
 
     public String getL() {
@@ -190,7 +194,7 @@ public class MenuCategory {
     }
 
     public void setL(String l) {
-        L = L;
+        L = l;
     }
 
     public String getM() {
@@ -198,7 +202,7 @@ public class MenuCategory {
     }
 
     public void setM(String m) {
-        M = M;
+        M = m;
     }
 
     public String getN() {
@@ -206,7 +210,7 @@ public class MenuCategory {
     }
 
     public void setN(String n) {
-        N = N;
+        N = n;
     }
 
     public String getO() {
@@ -214,7 +218,7 @@ public class MenuCategory {
     }
 
     public void setO(String o) {
-        O = O;
+        O = o;
     }
 
     public String getP() {
@@ -222,7 +226,7 @@ public class MenuCategory {
     }
 
     public void setP(String p) {
-        P = P;
+        P = p;
     }
 
     public String getQ() {
@@ -230,7 +234,7 @@ public class MenuCategory {
     }
 
     public void setQ(String q) {
-        Q = Q;
+        Q = q;
     }
 
     public String getR() {
@@ -238,21 +242,23 @@ public class MenuCategory {
     }
 
     public void setR(String r) {
-        R = R;
+        R = r;
     }
 
     public String getS() {
         return S;
     }
 
-    public void setS(String s) {S = S;}
+    public void setS(String s) {
+        S = s;
+    }
 
     public String getT() {
         return T;
     }
 
     public void setT(String t) {
-        T = T;
+        T = t;
     }
 
     public String getU() {
@@ -260,7 +266,7 @@ public class MenuCategory {
     }
 
     public void setU(String u) {
-        U = U;
+        U = u;
     }
 
     public String getV() {
@@ -268,15 +274,15 @@ public class MenuCategory {
     }
 
     public void setV(String v) {
-        V = V;
+        V = v;
     }
 
     public String getW() {
-        return W;
+        return wow;
     }
 
     public void setW(String w) {
-        W = W;
+        wow = w;
     }
 
     public String getX() {
@@ -284,7 +290,7 @@ public class MenuCategory {
     }
 
     public void setX(String x) {
-        X = X;
+        X = x;
     }
 
     public String getY() {
@@ -292,14 +298,15 @@ public class MenuCategory {
     }
 
     public void setY(String y) {
-        Y = Y;
+        Y = y;
     }
 
     public String getZ() {
         return Z;
     }
 
-    public void setZ(String z) {Z = Z;}
-
+    public void setZ(String z) {
+        Z = z;
+    }
 }
 
