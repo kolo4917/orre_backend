@@ -200,7 +200,7 @@ public class StoreAdminGetPostController {
             return new StoreMenuOrderedCheck("1001",-1,-1,-1, null);
         }
     }
-    @PostMapping("/api/admin/StoreAdmin/menu/category/add")
+    @PostMapping("/api/admin/StoreAdmin/menu/category/modify")
     public StatusResponse handleCategoryAdd(@RequestBody StoreMenuCategoryRequest request){
         String jwtAdmin = request.getJwtAdmin();
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
