@@ -39,9 +39,7 @@ public class StoreMenuAvailableService {
         }
         else {
             // 해당 메뉴의 가용성을 업데이트
-            MenuInfo menuInfo = menuInfoRepository.findByStoreCodeAndMenuCode(request.getStoreCode(), menuCode);
-            if (menuInfo != null) {
-                // 가용성만 업데이트
+            if (!menuCode.equals("")) {
                 menuInfoRepository.updateAvailableByStoreCodeAndMenuCode(request.getStoreCode(), menuCode, request.getAvailableCode());
             }
         }
