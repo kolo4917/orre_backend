@@ -204,7 +204,7 @@ public class StoreAdminController {
         return new TableLockResponse(false,request.getStoreCode(),request.getTableNumber());
     }
 
-    //@MessageMapping("/admin/StoreAdmin/order/{storeCode}")
+    //@MessageMapping("/admin/StoreAdmin/order/{storeCode}") //구독해놓으면 별도의 요청 필요 없음
     //@@SendTo("/admin/StoreAdmin/order/{storeCode}")
 
 
