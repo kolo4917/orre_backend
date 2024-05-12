@@ -59,10 +59,10 @@ public class WaitingController {
         // 객체로 스토어 번호 오름차순으로 클라이언트에게 보내줌 // {"storeCode":3,"storeName":"단대골목","address":"경기도 용인시 죽전로 165","distance":45040.0},
         return basicStores;
     }
-    @MessageMapping("/user/storeInfo")
-    @SendTo("/topic/user/storeInfo")
-    public StoreDTO sendStoreInfo(StoreInfoRequest request) {
-        StoreDTO storeDTO = storeService.getStoreDetailsByStoreCode(request.getStoreCode());
+    @MessageMapping("/user/storeInfo/{storeCode}")
+    @SendTo("/topic/user/storeInfo/{storeCode}")
+    public StoreDTO sendStoreInfo(StoreInfoRequest request, @DestinationVariable Integer storeCode) {
+        StoreDTO storeDTO = storeService.getStoreDetailsByStoreCode(storeCode);
         // 조회된 스토어 정보를 객체로 클라이언트에게 보내줌
         return storeDTO;
     }
