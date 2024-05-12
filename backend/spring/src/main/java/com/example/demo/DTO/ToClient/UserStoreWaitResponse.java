@@ -7,9 +7,6 @@ public class UserStoreWaitResponse {
     private UserStoreWait token;
 
 
-    // Getters and Setters
-
-
     public String getStatus() {
         return status;
     }

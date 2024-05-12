@@ -1,17 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.DTO.ToClient.*;
-import com.example.demo.DTO.ToServer.StoreInfoRequest;
-import com.example.demo.DTO.ToServer.AdminLoginRequest;
-import com.example.demo.DTO.ToServer.AdminNoShowRequest;
-import com.example.demo.DTO.ToServer.UserCallRequest;
-import com.example.demo.DTO.ToServer.TableAddRequest;
-import com.example.demo.DTO.ToServer.TableRemoveRequest;
-import com.example.demo.DTO.ToServer.StoreMenuAvailableRequest;
-import com.example.demo.DTO.ToServer.StoreMenuOrderRequest;
-import com.example.demo.DTO.ToServer.StoreMenuOrderedCheckRequest;
-import com.example.demo.DTO.ToServer.StoreWaitingAvailableRequest;
-import com.example.demo.DTO.ToServer.StoreMenuCategoryRequest;
+import com.example.demo.DTO.ToServer.*;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.EmptySeatService;
 import com.example.demo.service.LoginService;
@@ -25,6 +15,7 @@ import com.example.demo.service.StoreMenuOrderService;
 import com.example.demo.service.StoreMenuOrderedCheckService;
 import com.example.demo.service.StoreWaitingAvailableService;
 import com.example.demo.service.StoreCategoriesService;
+import com.example.demo.service.StoreEnteringService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -59,6 +50,7 @@ public class StoreAdminGetPostController {
     private final StoreMenuOrderedCheckService storeMenuOrderedCheckService;
     private final StoreWaitingAvailableService storeWaitingAvailableService;
     private final StoreCategoriesService storeCategoriesService;
+    private final StoreEnteringService storeEnteringService;
 
 
 
@@ -72,7 +64,8 @@ public class StoreAdminGetPostController {
                                        UserCallService userCallService, JwtService jwtService, TableFixService tableFixService,
                                        StoreMenuAvailableService storeMenuAvailableService, StoreService storeService,
                                        StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService ,
-                                       StoreWaitingAvailableService storeWaitingAvailableService, StoreCategoriesService storeCategoriesService) {
+                                       StoreWaitingAvailableService storeWaitingAvailableService, StoreCategoriesService storeCategoriesService,
+                                       StoreEnteringService storeEnteringService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -85,6 +78,7 @@ public class StoreAdminGetPostController {
         this.storeMenuOrderedCheckService = storeMenuOrderedCheckService;
         this.storeWaitingAvailableService = storeWaitingAvailableService;
         this.storeCategoriesService = storeCategoriesService;
+        this.storeEnteringService = storeEnteringService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -211,6 +205,18 @@ public class StoreAdminGetPostController {
             return new StatusResponse("400");
         }
     }
+    @PostMapping("/api/admin/StoreAdmin/entering")
+    public StatusResponse handleEntering(@RequestBody StoreEnterRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            String status = storeEnteringService.handleEnteringService(request);
+            return new StatusResponse(status);
+        } else {
+            return new StatusResponse("400");
+        }
+    }
+
 
 
 }
