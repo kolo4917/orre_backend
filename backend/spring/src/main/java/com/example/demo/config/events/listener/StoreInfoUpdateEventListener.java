@@ -23,8 +23,8 @@ public class StoreInfoUpdateEventListener implements ApplicationListener<StoreIn
         StoreDTO storeDTO = storeService.getStoreDetailsByStoreCode(storeCode);
 
         //스토어 정보를 다른 경로로 전송
-        messagingTemplate.convertAndSend("/topic/user/storeInfo", storeDTO);
-        messagingTemplate.convertAndSend("/topic/admin/storeInfo", storeDTO);
+        messagingTemplate.convertAndSend("/topic/user/storeInfo/"+ storeCode, storeDTO);
+        messagingTemplate.convertAndSend("/topic/admin/storeInfo/"+ storeCode, storeDTO);
 
     }
 }
