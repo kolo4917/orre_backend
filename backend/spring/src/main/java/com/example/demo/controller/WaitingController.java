@@ -74,7 +74,6 @@ public class WaitingController {
         return dynamicQueue;
     }
 
-
     @MessageMapping("/user/waiting/make/{storeCode}/{userPhoneNumber}")
     @SendTo("/topic/user/waiting/make/{storeCode}/{userPhoneNumber}")
     public UserStoreWaitResponse makeWaiting(
@@ -92,11 +91,13 @@ public class WaitingController {
         if (newUserStoreWait != null) {
             response.setStatus("200");
             response.setToken(newUserStoreWait); // 응답에 대기열 상세 정보 포함
-        } else {
+        }
+        else {
             response.setStatus("1101");
         }
         return response;
     }
+
     @MessageMapping("/user/waiting/cancel/{storeCode}/{userPhoneNumber}")
     @SendTo("/topic/user/waiting/cancel/{storeCode}/{userPhoneNumber}")
     public UserStoreWaitResponse cancelWaiting(@DestinationVariable Integer storeCode, @DestinationVariable String userPhoneNumber, UserStoreWaitRequest request) {
