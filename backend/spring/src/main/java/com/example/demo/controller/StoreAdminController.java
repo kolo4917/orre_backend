@@ -1,15 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.ToClient.EmptySeat;
-import com.example.demo.DTO.ToClient.StoreDynamicQueue;
-import com.example.demo.DTO.ToClient.BooleanResponse;
-import com.example.demo.DTO.ToClient.UserCallResponse;
-import com.example.demo.DTO.ToServer.UserCallRequest;
-import com.example.demo.DTO.ToServer.AdminNoShowRequest;
-import com.example.demo.DTO.ToClient.TableUnlockResponse;
-import com.example.demo.DTO.ToServer.TableUnlockRequest;
-import com.example.demo.DTO.ToClient.TableLockResponse;
-import com.example.demo.DTO.ToServer.TableLockRequest;
+import com.example.demo.DTO.ToClient.*;
+import com.example.demo.DTO.ToServer.*;
+import com.example.demo.model.DataBase.UserStoreWait;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -22,10 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.DTO.ToClient.LoginResponse;
-import com.example.demo.DTO.ToClient.ExtendedStoreDynamicQueue;
-import com.example.demo.DTO.ToServer.AdminLoginRequest;
-import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.model.DataBase.Admin;
 import com.example.demo.service.StoreDynamicQueueService;
 
@@ -53,6 +42,7 @@ public class StoreAdminController {
     private final NoShowService noShowService;
     private EmptySeatService emptySeatService;
     private final TableLockingService tableLockingService;
+    private final UserStoreMakeWaitingService userStoreMakeWaitingService;
 
     private SecretKey SECRET_KEY;
     @Value("${jwt.secret}")
@@ -108,7 +98,8 @@ public class StoreAdminController {
                                 NoShowService noShowService,
                                 UserCallService userCallService,
                                 JwtService jwtService,
-                                TableLockingService tableLockingService) {
+                                TableLockingService tableLockingService,
+                                UserStoreMakeWaitingService userStoreMakeWaitingService) {
         this.loginService = loginService;
         this.storeDynamicQueueService = storeDynamicQueueService;
         this.messagingTemplate = messagingTemplate;
@@ -117,6 +108,8 @@ public class StoreAdminController {
         this.userCallService = userCallService;
         this.jwtService = jwtService;
         this.tableLockingService = tableLockingService;
+        this.userStoreMakeWaitingService = userStoreMakeWaitingService;
+
     }
 
     @MessageMapping("/admin/StoreAdmin/login/{adminPhoneNumber}")
@@ -206,6 +199,30 @@ public class StoreAdminController {
 
     //@MessageMapping("/admin/StoreAdmin/order/{storeCode}") //구독해놓으면 별도의 요청 필요 없음
     //@@SendTo("/admin/StoreAdmin/order/{storeCode}")
+
+    @MessageMapping("/admin/waiting/make/{storeCode}/{userPhoneNumber}")
+    @SendTo("/topic/admin/waiting/make/{storeCode}/{userPhoneNumber}")
+    public UserStoreWaitResponse makeWaiting(
+            @DestinationVariable Integer storeCode,
+            @DestinationVariable String userPhoneNumber,
+            UserStoreWaitRequest request) {
+        request.setStoreCode(storeCode);
+        request.setUserPhoneNumber(userPhoneNumber);
+
+        // 대기열 생성 서비스 호출
+        UserStoreWait newUserStoreWait = userStoreMakeWaitingService.createUserStoreWait(request);
+
+        // 생성 결과를 클라이언트에 전송할 응답 객체 생성
+        UserStoreWaitResponse response = new UserStoreWaitResponse();
+        if (newUserStoreWait != null) {
+            response.setStatus("200");
+            response.setToken(newUserStoreWait); // 응답에 대기열 상세 정보 포함
+        }
+        else {
+            response.setStatus("1101");
+        }
+        return response;
+    }
 
 
 }
