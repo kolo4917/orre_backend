@@ -10,6 +10,7 @@ import java.util.Date;
 @Service
 public class UserLogService {
 
+
     @Autowired
     private UserLogRepository userLogRepository;
 
@@ -21,7 +22,7 @@ public class UserLogService {
         int historyNum = calculateNewHistoryNumber(phoneNumber);
 
         // 새로운 UserLog 생성
-        UserLog userLog = new UserLog(phoneNumber, historyNum, "waiting", currentTime, storeCode, null, 0, "");
+        UserLog userLog = new UserLog(phoneNumber, historyNum, "waiting", currentTime, storeCode, currentTime, 0, "");
 
         // Repository를 통해 저장
         userLogRepository.save(userLog);
@@ -32,6 +33,7 @@ public class UserLogService {
 
         // 가장 최근의 UserLog 가져오기
         UserLog latestUserLog = userLogRepository.findByUserPhoneNumberAndStoreCodeOrderByHistoryNumDesc(phoneNumber, storeCode);
+
         Date currentTime = new Date();
         latestUserLog.setStatusChangeTime(currentTime);
         // 상태 및 매장 코드 수정

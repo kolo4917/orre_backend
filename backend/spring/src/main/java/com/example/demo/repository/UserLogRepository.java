@@ -18,4 +18,5 @@ public interface UserLogRepository extends JpaRepository<UserLog, Long> {
     List<UserLog> findByUserPhoneNumber(String phoneNumber);
 
     List<UserLog> findByStoreCode(int storeCode);
+
 }
