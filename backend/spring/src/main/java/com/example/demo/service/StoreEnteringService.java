@@ -18,6 +18,7 @@ public class StoreEnteringService {
 
     @Autowired
     private EventPublisherService eventPublisherService;
+    @Autowired UserLogService userLogService;
     private final UserStoreWaitRepository userStoreWaitRepository;
 
     @Autowired
@@ -39,6 +40,8 @@ public class StoreEnteringService {
             UserStoreWaitResponse userStoreWaitResponse = new UserStoreWaitResponse();
             userStoreWaitResponse.setStatus("1104");
             userStoreWaitResponse.setToken(null); // 필요하다면 여기에 상세 정보를 설정할 수 있습니다.
+            //로그 기록
+            userLogService.modifyWaiting(userStoreWait.getUserPhoneNumber(), userStoreWait.getStoreCode(), "entered");
             eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, enteringUserPhoneNumber, storeCode, userStoreWaitResponse), 1000);
             return "200";
         } else {

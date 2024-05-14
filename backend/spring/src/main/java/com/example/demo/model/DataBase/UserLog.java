@@ -1,5 +1,7 @@
 package com.example.demo.model.DataBase;
+
 import java.io.Serializable;
+
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -25,28 +27,27 @@ public class UserLog {
     @Column(name = "user_log_store_code")
     private int storeCode;
 
-    @Column(name = "user_log_store_name")
-    private String storeName;
 
-    @Column(name = "user_log_entry_time")
-    private Date entryTime;
+    @Column(name = "user_log_status_change_time")
+    private Date statusChangeTime;
 
     @Column(name = "user_log_paid_money")
     private int paidMoney;
 
-    @Column(name = "user_log_ordered_menu", columnDefinition = "JSON")
+    @Column(name = "user_log_ordered_menu")
     private String orderedMenu;
 
-    public UserLog(String userPhoneNumber, int historyNum, String status, Date makeWaitingTime, int storeCode, String storeName, Date entryTime, int paidMoney, String orderedMenu) {
+    public UserLog(String userPhoneNumber, int historyNum, String status, Date makeWaitingTime, int storeCode, Date statusChangeTime, int paidMoney, String orderedMenu) {
         this.userPhoneNumber = userPhoneNumber;
         this.historyNum = historyNum;
         this.status = status;
         this.makeWaitingTime = makeWaitingTime;
         this.storeCode = storeCode;
-        this.storeName = storeName;
-        this.entryTime = entryTime;
+        this.statusChangeTime = statusChangeTime;
         this.paidMoney = paidMoney;
         this.orderedMenu = orderedMenu;
+    }
+    public UserLog() {
     }
 
     public String getUserPhoneNumber() {
@@ -89,20 +90,12 @@ public class UserLog {
         this.storeCode = storeCode;
     }
 
-    public String getStoreName() {
-        return storeName;
+    public Date getStatusChangeTime() {
+        return statusChangeTime;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
-    public Date getEntryTime() {
-        return entryTime;
-    }
-
-    public void setEntryTime(Date entryTime) {
-        this.entryTime = entryTime;
+    public void setStatusChangeTime(Date statusChangeTime) {
+        this.statusChangeTime = statusChangeTime;
     }
 
     public int getPaidMoney() {
@@ -122,12 +115,14 @@ public class UserLog {
         this.orderedMenu = orderedMenu;
     }
 }
-    class UserLogId implements Serializable {
+
+class UserLogId implements Serializable {
     private String userPhoneNumber;
     private int historyNum;
 
     // 기본 생성자
-    public UserLogId() {}
+    public UserLogId() {
+    }
 
     // 매개변수 있는 생성자
     public UserLogId(String userPhoneNumber, int historyNum) {

@@ -19,6 +19,8 @@ public class UserStoreMakeWaitingService {
     private ApplicationEventPublisher eventPublisher;
     @Autowired
     private EventPublisherService eventPublisherService;
+    @Autowired
+    private UserLogService userLogService;
 
     @Transactional
     public UserStoreWait createUserStoreWait(UserStoreWaitRequest request) {
@@ -44,7 +46,8 @@ public class UserStoreMakeWaitingService {
         }
 
         UserStoreWait savedUserStoreWait = userStoreWaitRepository.save(userStoreWait);
-
+        // 로그 기록
+        userLogService.makeWaiting(request.getUserPhoneNumber(), request.getStoreCode());
         // 이벤트 발행
         eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, request.getStoreCode()), 1000); // 1초 딜레이
         return savedUserStoreWait;
@@ -55,6 +58,8 @@ public class UserStoreMakeWaitingService {
         if (userStoreWait != null) {
             userStoreWait.setStatus(0); // 상태를 비활성화로 변경
             userStoreWaitRepository.save(userStoreWait);
+            // 로그 기록
+            userLogService.modifyWaiting(request.getUserPhoneNumber(), request.getStoreCode(), "user canceled");
             // 이벤트 발행
             eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, request.getStoreCode()), 1000); // 1초 딜레이
             return true;
