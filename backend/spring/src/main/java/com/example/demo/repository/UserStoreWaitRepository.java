@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.example.demo.model.DataBase.UserStoreWait;
 
+import java.util.List;
+
 public interface UserStoreWaitRepository extends JpaRepository<UserStoreWait, Long> {
 
     @Query("SELECT u FROM UserStoreWait u WHERE u.userPhoneNumber = :phoneNumber AND u.storeCode = :storeCode")
@@ -19,6 +21,10 @@ public interface UserStoreWaitRepository extends JpaRepository<UserStoreWait, Lo
     // 추가할 메소드
     @Query("SELECT u FROM UserStoreWait u WHERE u.storeCode = :storeCode AND u.waiting = :waitingNumber")
     UserStoreWait findByStoreCodeAndWaitingNumber(@Param("storeCode") Integer storeCode, @Param("waitingNumber") Integer waitingNumber);
+
+    List<UserStoreWait> findByStoreCodeAndStatus(Integer storeCode, Integer status);
+
+
 
 }
 
