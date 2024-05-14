@@ -41,7 +41,6 @@ public class WaitingGetPostController {
     public StoreDTO getStoreInfo(@RequestBody StoreInfoRequest request) {
         return storeService.getStoreDetailsByStoreCode(request.getStoreCode());
     }
-    @PostMapping
 
     @GetMapping("/api/user/storeList/basicStores")
     public List<StoreListDTO> getBasicStores(@RequestParam(name = "latitude") double latitude, @RequestParam(name = "longitude") double longitude){
