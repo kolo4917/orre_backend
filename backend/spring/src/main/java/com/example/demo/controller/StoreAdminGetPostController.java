@@ -16,6 +16,7 @@ import com.example.demo.service.StoreMenuOrderedCheckService;
 import com.example.demo.service.StoreWaitingAvailableService;
 import com.example.demo.service.StoreCategoriesService;
 import com.example.demo.service.StoreEnteringService;
+import com.example.demo.service.LogQueryService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -51,6 +52,7 @@ public class StoreAdminGetPostController {
     private final StoreWaitingAvailableService storeWaitingAvailableService;
     private final StoreCategoriesService storeCategoriesService;
     private final StoreEnteringService storeEnteringService;
+    private final LogQueryService logQueryService;
 
 
 
@@ -65,7 +67,7 @@ public class StoreAdminGetPostController {
                                        StoreMenuAvailableService storeMenuAvailableService, StoreService storeService,
                                        StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService ,
                                        StoreWaitingAvailableService storeWaitingAvailableService, StoreCategoriesService storeCategoriesService,
-                                       StoreEnteringService storeEnteringService) {
+                                       StoreEnteringService storeEnteringService, LogQueryService logQueryService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -79,6 +81,7 @@ public class StoreAdminGetPostController {
         this.storeWaitingAvailableService = storeWaitingAvailableService;
         this.storeCategoriesService = storeCategoriesService;
         this.storeEnteringService = storeEnteringService;
+        this.logQueryService = logQueryService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -214,6 +217,18 @@ public class StoreAdminGetPostController {
             return new StatusResponse(status);
         } else {
             return new StatusResponse("400");
+        }
+    }
+
+    @PostMapping("/api/admin/StoreAdmin/log")
+    public LogResponse handleAdminLog(@RequestBody AdminLogRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            LogResponse logResponse = logQueryService.getStoreLogs(request.getStoreCode());
+            return logResponse;
+        } else {
+            return new LogResponse(null,"400");
         }
     }
 
