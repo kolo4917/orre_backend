@@ -3,10 +3,10 @@
     import com.example.demo.DTO.ToClient.*;
     import com.example.demo.DTO.ToServer.*;
     import com.example.demo.model.DataBase.User;
-    import com.example.demo.service.EmptySeatService;
     import com.example.demo.service.LoginService;
     import com.example.demo.service.SignupService;
     import com.example.demo.service.SignupRemoveService;
+    import com.example.demo.service.LogQueryService;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.messaging.handler.annotation.DestinationVariable;
     import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,12 +26,16 @@
         @Autowired
         private final SignupService signupService;
         private final SignupRemoveService signupRemoveService;
+        @Autowired
+        private final LogQueryService logQueryService;
 
 
-        public UserGetPostController(LoginService loginService, SignupService signupService, SignupRemoveService signupRemoveService) {
+        public UserGetPostController(LoginService loginService, SignupService signupService,
+                                     SignupRemoveService signupRemoveService, LogQueryService logQueryService) {
             this.loginService = loginService;
             this.signupService = signupService;
             this.signupRemoveService = signupRemoveService;
+            this.logQueryService = logQueryService;
         }
 
         @PostMapping("/api/user/login")
@@ -110,6 +114,12 @@
             } else {
                 return new StatusResponse("704");
             }
+        }
+
+        @PostMapping("/api/user/log")
+        public LogResponse handleAdminLog(@RequestBody UserLogRequest request){
+            LogResponse logResponse = logQueryService.getUserLogs(request.getUserPhoneNumber());
+            return logResponse;
         }
 
     }

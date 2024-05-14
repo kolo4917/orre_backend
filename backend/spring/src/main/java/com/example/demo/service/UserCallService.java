@@ -22,7 +22,7 @@ public class UserCallService {
         // 현재 시간
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // 5분 후 입장 예상 시간 계산
+        // n분 후 입장 예상 시간 계산
         LocalDateTime entryTime = currentTime.plusMinutes(minutesToAdd);
 
         // UserCallResponse 생성
