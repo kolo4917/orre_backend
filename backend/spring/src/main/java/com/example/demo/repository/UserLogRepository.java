@@ -13,7 +13,9 @@ public interface UserLogRepository extends JpaRepository<UserLog, Long> {
     @Query(value = "SELECT MAX(historyNum) FROM UserLog WHERE userPhoneNumber = :phoneNumber")
     Integer findLatestHistoryNumByUserPhoneNumber(String phoneNumber);
 
-    UserLog findByUserPhoneNumberAndStoreCodeOrderByHistoryNumDesc(String phoneNumber, int storeCode);
+    UserLog findFirstByUserPhoneNumberAndStoreCodeOrderByHistoryNumDesc(String phoneNumber, int storeCode);
+
+    UserLog findByUserPhoneNumberAndStatusAndStoreCode(String phoneNumber, String status, int storeCode); //순서 맞아야 함
 
     List<UserLog> findByUserPhoneNumber(String phoneNumber);
 
