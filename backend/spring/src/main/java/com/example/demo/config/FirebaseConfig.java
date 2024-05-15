@@ -8,9 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+
 
 @Configuration
 public class FirebaseConfig {
@@ -18,13 +17,14 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp initializeFirebaseApp() throws IOException {
         // 상대 경로를 사용하여 serviceAccount 파일 읽기
-        Path serviceAccountPath = Paths.get("src/main/resources/firebase/firebase_service_key.json");
-        byte[] serviceAccountBytes = Files.readAllBytes(serviceAccountPath);
+        InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream("firebase/firebase_service_key.json");
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream(serviceAccountBytes)))
+        if (serviceAccount == null) {
+            throw new IllegalStateException("firebase_service_key.json 파일을 찾을 수 없습니다.");
+        }
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
-
         return FirebaseApp.initializeApp(options);
     }
 }
