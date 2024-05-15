@@ -14,7 +14,7 @@ public class UserLogService {
     @Autowired
     private UserLogRepository userLogRepository;
 
-    public void makeWaiting(String phoneNumber, int storeCode) {
+    public void makeWaiting(String phoneNumber, int storeCode, int waitingNumber, int personNumber) {
         // 현재 시간 가져오기
         Date currentTime = new Date();
 
@@ -22,7 +22,7 @@ public class UserLogService {
         int historyNum = calculateNewHistoryNumber(phoneNumber);
 
         // 새로운 UserLog 생성
-        UserLog userLog = new UserLog(phoneNumber, historyNum, "waiting", currentTime, storeCode, currentTime, 0, "");
+        UserLog userLog = new UserLog(phoneNumber, historyNum, "waiting", currentTime, storeCode, currentTime, 0, "",waitingNumber, personNumber);
 
         // Repository를 통해 저장
         userLogRepository.save(userLog);
