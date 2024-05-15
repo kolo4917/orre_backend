@@ -31,10 +31,12 @@ public class User implements Serializable {
 
     @Column(name = "user_location")
     private String location;
+    @Column(name = "user_fcm_token")
+    private String userFcmToken;
 
     public User() {}
 
-    public User(String phoneNumber, Integer storeCode, String password, String name, String token, Integer creditInfo, String location) {
+    public User(String phoneNumber, Integer storeCode, String password, String name, String token, Integer creditInfo, String location, String fcmToken) {
         this.phoneNumber = phoneNumber;
         this.storeCode = storeCode;
         this.password = password;
@@ -42,6 +44,7 @@ public class User implements Serializable {
         this.token = token;
         this.creditInfo = creditInfo;
         this.location = location;
+        this.userFcmToken = userFcmToken;
     }
 
     public String getPhoneNumber() { return phoneNumber; }
@@ -65,5 +68,13 @@ public class User implements Serializable {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
-    // toString, equals, hashCode 메소드는 필요에 따라 구현
+    public String getUserFcmToken() {
+        return userFcmToken;
+    }
+
+    public void setUserFcmToken(String userFcmToken) {
+        this.userFcmToken = userFcmToken;
+    }
+
+// toString, equals, hashCode 메소드는 필요에 따라 구현
 }

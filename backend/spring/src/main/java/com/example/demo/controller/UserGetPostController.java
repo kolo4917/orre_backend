@@ -45,7 +45,8 @@
             User isValidUser = loginService.validateUserCredentials(request.getUserPhoneNumber(), request.getUserPassword());
             if (isValidUser != null) {
                 // 인증된 사용자면 success 반환
-                return new LoginResponse("200", isValidUser.getName(), 0);
+                String status = loginService.saveFcmToken(request.getUserPhoneNumber(),request.getUserFcmToken());
+                return new LoginResponse(status, isValidUser.getName(), 0);
             } else {
                 // 인증 실패 시
                 return new LoginResponse("601", null, 0);
