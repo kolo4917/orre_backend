@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.DTO.ToServer.UserStoreWaitRequest;
 import com.example.demo.model.DataBase.UserStoreWait;
+import com.example.demo.model.DataBase.Store;
 import com.example.demo.repository.UserStoreWaitRepository;
+import com.example.demo.repository.StoreRepository;
 import com.example.demo.config.events.StoreQueueUpdatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import com.example.demo.config.events.EventPublisherService;
@@ -21,9 +23,18 @@ public class UserStoreMakeWaitingService {
     private EventPublisherService eventPublisherService;
     @Autowired
     private UserLogService userLogService;
+    @Autowired
+    private StoreRepository storeRepository;
 
     @Transactional
     public UserStoreWait createUserStoreWait(UserStoreWaitRequest request) {
+
+        Integer storeCode = request.getStoreCode();
+        Store store = storeRepository.findByStoreCode(storeCode);
+        Integer available = store.getStoreWaitingAvailable();
+        if(available == 1){
+            return null;
+        }
         Integer maxWaiting = userStoreWaitRepository.findMaxWaitingByStoreCode(request.getStoreCode());
         Integer nextWaiting = (maxWaiting == null) ? 1 : maxWaiting + 1;
 
