@@ -58,7 +58,7 @@ public class UserStoreMakeWaitingService {
 
         UserStoreWait savedUserStoreWait = userStoreWaitRepository.save(userStoreWait);
         // 로그 기록
-        userLogService.makeWaiting(request.getUserPhoneNumber(), request.getStoreCode());
+        userLogService.makeWaiting(request.getUserPhoneNumber(), request.getStoreCode(),nextWaiting,request.getPersonNumber());
         // 이벤트 발행
         eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, request.getStoreCode()), 1000); // 1초 딜레이
         return savedUserStoreWait;
