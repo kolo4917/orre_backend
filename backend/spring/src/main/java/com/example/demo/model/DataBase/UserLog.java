@@ -36,8 +36,13 @@ public class UserLog {
 
     @Column(name = "user_log_ordered_menu")
     private String orderedMenu;
+    @Column(name = "user_log_waiting")
+    private Integer waiting;
+    @Column(name = "user_log_person_number")
+    private Integer personNumber;
 
-    public UserLog(String userPhoneNumber, int historyNum, String status, Date makeWaitingTime, int storeCode, Date statusChangeTime, int paidMoney, String orderedMenu) {
+    public UserLog(String userPhoneNumber, int historyNum, String status, Date makeWaitingTime, int storeCode,
+                   Date statusChangeTime, int paidMoney, String orderedMenu, Integer waiting, Integer personNumber) {
         this.userPhoneNumber = userPhoneNumber;
         this.historyNum = historyNum;
         this.status = status;
@@ -46,7 +51,10 @@ public class UserLog {
         this.statusChangeTime = statusChangeTime;
         this.paidMoney = paidMoney;
         this.orderedMenu = orderedMenu;
+        this.waiting = waiting;
+        this.personNumber = personNumber;
     }
+
     public UserLog() {
     }
 
@@ -113,6 +121,22 @@ public class UserLog {
 
     public void setOrderedMenu(String orderedMenu) {
         this.orderedMenu = orderedMenu;
+    }
+
+    public Integer getWaiting() {
+        return waiting;
+    }
+
+    public void setWaiting(Integer waiting) {
+        this.waiting = waiting;
+    }
+
+    public Integer getPersonNumber() {
+        return personNumber;
+    }
+
+    public void setPersonNumber(Integer personNumber) {
+        this.personNumber = personNumber;
     }
 }
 
