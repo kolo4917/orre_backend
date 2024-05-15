@@ -4,10 +4,14 @@ public class UserLoginRequest {
 
     private String userPhoneNumber;
     private String userPassword;
-    public UserLoginRequest(String userPhoneNumber, String userPassword) {
+    private String userFcmToken;
+
+    public UserLoginRequest(String userPhoneNumber, String userPassword, String userFcmToken) {
         this.userPhoneNumber = userPhoneNumber;
         this.userPassword = userPassword;
+        this.userFcmToken = userFcmToken;
     }
+
     public String getUserPhoneNumber() {
         return userPhoneNumber;
     }
@@ -22,5 +26,13 @@ public class UserLoginRequest {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getUserFcmToken() {
+        return userFcmToken;
+    }
+
+    public void setUserFcmToken(String userFcmToken) {
+        this.userFcmToken = userFcmToken;
     }
 }

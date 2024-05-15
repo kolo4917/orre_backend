@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserLoginRepository extends JpaRepository<User, String> { // ID의 타입을 String으로 변경
     User findByPhoneNumberAndPassword(String phoneNumber, String password);
+    User findByPhoneNumber(String phoneNumber);
 }

@@ -15,6 +15,16 @@ public class LoginService {
 
     @Autowired
     private UserLoginRepository userRepository;
+    public String saveFcmToken(String phoneNumber, String userFcmToken){
+        User user = userRepository.findByPhoneNumber(phoneNumber);
+        if (user != null) {
+            user.setUserFcmToken(userFcmToken);
+            userRepository.save(user);
+            return "200";
+        } else {
+            return "602";
+        }
+    }
 
     public Admin validateAdminCredentials(String phoneNumber, String password) {
         Admin admin = adminRepository.findByAdminPhoneNumberAndAdminPassword(phoneNumber, password);
@@ -25,4 +35,5 @@ public class LoginService {
         User user = userRepository.findByPhoneNumberAndPassword(phoneNumber, password);
         return user;
     }
+
 }
