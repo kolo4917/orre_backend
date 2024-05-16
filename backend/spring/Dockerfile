@@ -8,7 +8,7 @@ WORKDIR /app
 COPY backend/spring/build/libs/orre.jar app.jar
 
 # 필요한 디렉토리를 생성합니다.
-RUN mkdir -p src/main/resources/firebase
+RUN mkdir -p /app/src/main/resources/firebase
 
 # 비밀 파일을 복사합니다.
 COPY backend/spring/src/main/resources/firebase/firebase_service_key.json /app/src/main/resources/firebase/firebase_service_key.json
