@@ -61,19 +61,21 @@ public class UserCallService {
 
         // 이벤트 발행
         eventPublisherService.publishUserCallEventAfterDelay(new UserCallEvent(this, userCallResponse), 1000); // 1초 딜레이
+        if(userFcmToken != null){
+            // FcmRequest 객체 생성
+            FcmRequest.Notification notification = new FcmRequest.Notification("웨이팅 호출 알림", waitingTeam + "번 " + "오리님 " + storeName + " 가게로 " + minutesToAdd + "분 " + "안으로 방문해주세요!");
+            FcmRequest.Message message = new FcmRequest.Message(userFcmToken, notification);
+            FcmRequest fcmRequest = new FcmRequest(message);
 
-        // FcmRequest 객체 생성
-        FcmRequest.Notification notification = new FcmRequest.Notification("웨이팅 호출 알림", waitingTeam + "번 " + "오리님 " + storeName + " 가게로 " + minutesToAdd + "분 " + "안으로 방문해주세요!");
-        FcmRequest.Message message = new FcmRequest.Message(userFcmToken, notification);
-        FcmRequest fcmRequest = new FcmRequest(message);
-
-        // FCM 메시지 전송
-        try {
-            fcmService.sendMessage(fcmRequest);
-        } catch (Exception e) {
-            // 예외 처리
-            e.printStackTrace();
+            // FCM 메시지 전송
+            try {
+                fcmService.sendMessage(fcmRequest);
+            } catch (Exception e) {
+                // 예외 처리
+                e.printStackTrace();
+            }
         }
+
         System.out.println(7777);
         // 응답 생성
         return userCallResponse;
