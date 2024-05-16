@@ -32,7 +32,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t orre:${{ steps.datetime.outputs.tag }} -f backend/spring/Dockerfile .
+          cd backend/spring
+          docker build \
+            --build-arg FIREBASE_SERVICE_KEY="${{ secrets.FIREBASE_SERVICE_KEY }}" \
+            --build-arg APPLICATION_PROPERTIES="${{ secrets.APPLICATION_PROPERTIES }}" \
+            -t orre:${{ steps.datetime.outputs.tag }} \
+            -f Dockerfile .
       
       - name: Push Docker image to registry
         run: |
