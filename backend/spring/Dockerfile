@@ -2,7 +2,7 @@
 FROM openjdk:17
 
 # JAR_FILE 인자를 사용하여 JAR 파일의 경로를 받습니다.
-ARG JAR_FILE=backend/spring/build/libs/*.jar
+ARG JAR_FILE=build/libs/*.jar
 
 # 환경 변수로 중요한 파일의 내용을 받습니다.
 ARG FIREBASE_SERVICE_KEY

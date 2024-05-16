@@ -33,14 +33,11 @@ jobs:
       - name: Build Docker image
         run: |
           cd backend/spring
-          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > src/main/resources/firebase/firebase_service_key.json
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.properties
-          docker buildx build \
+          docker build \
             --build-arg FIREBASE_SERVICE_KEY="${{ secrets.FIREBASE_SERVICE_KEY }}" \
             --build-arg APPLICATION_PROPERTIES="${{ secrets.APPLICATION_PROPERTIES }}" \
             -t orre:${{ steps.datetime.outputs.tag }} \
-            -f Dockerfile \
-            .
+            -f Dockerfile .
       
       - name: Push Docker image to registry
         run: |
