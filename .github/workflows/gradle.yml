@@ -30,14 +30,14 @@ jobs:
         id: datetime
         run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')"
 
+      - name: Prepare secrets
+        run: |
+          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > backend/spring/src/main/resources/firebase/firebase_service_key.json
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" > backend/spring/src/main/resources/application.properties
+
       - name: Build Docker image
         run: |
-          cd backend/spring
-          docker build \
-            --build-arg FIREBASE_SERVICE_KEY="${{ secrets.FIREBASE_SERVICE_KEY }}" \
-            --build-arg APPLICATION_PROPERTIES="${{ secrets.APPLICATION_PROPERTIES }}" \
-            -t orre:${{ steps.datetime.outputs.tag }} \
-            -f Dockerfile .
+          docker build -t orre:${{ steps.datetime.outputs.tag }} -f backend/spring/Dockerfile .
       
       - name: Push Docker image to registry
         run: |
