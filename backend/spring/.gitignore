@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Firebase and Application Properties ###
+# Include important files in the Docker build context
+src/main/resources/firebase/firebase_service_key.json
+src/main/resources/application.properties
