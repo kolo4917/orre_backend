@@ -33,13 +33,15 @@ public class UserStoreMakeWaitingService {
         Store store = storeRepository.findByStoreCode(storeCode);
         Integer available = store.getStoreWaitingAvailable();
         if(available == 1){
-            return null;
+            return new UserStoreWait(request.getUserPhoneNumber(), request.getStoreCode(),-1,1101,-1);
         }
         Integer maxWaiting = userStoreWaitRepository.findMaxWaitingByStoreCode(request.getStoreCode());
         Integer nextWaiting = (maxWaiting == null) ? 1 : maxWaiting + 1;
 
         UserStoreWait userStoreWait = userStoreWaitRepository.findByPhoneNumberAndStoreCode(request.getUserPhoneNumber(), request.getStoreCode());
-
+        if(userStoreWait != null && userStoreWait.getStatus() == 1){
+            return new UserStoreWait(request.getUserPhoneNumber(), request.getStoreCode(),-1,1105,-1);
+        }
         if (userStoreWait != null) {
             // 이미 존재하는 경우, 상태와 인원 수 업데이트
             userStoreWait.setStatus(1); // 1 - 대기중

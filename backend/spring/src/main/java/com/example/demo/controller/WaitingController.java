@@ -88,12 +88,15 @@ public class WaitingController {
 
         // 생성 결과를 클라이언트에 전송할 응답 객체 생성
         UserStoreWaitResponse response = new UserStoreWaitResponse();
-        if (newUserStoreWait != null) {
+        if (newUserStoreWait.getStatus() == 1) {
             response.setStatus("200");
             response.setToken(newUserStoreWait); // 응답에 대기열 상세 정보 포함
         }
-        else {
+        else if(newUserStoreWait.getStatus() == 1101){
             response.setStatus("1101");
+        }
+        else if(newUserStoreWait.getStatus() == 1105){
+            response.setStatus("1105");
         }
         return response;
     }
