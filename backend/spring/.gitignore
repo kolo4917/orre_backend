@@ -38,6 +38,6 @@ out/
 
 ### Firebase and Application Properties ###
 # Exclude important files from version control
-**/src/main/resources/firebase/firebase_service_key.json
-**/src/main/resources/application.properties
+/src/main/resources/firebase/firebase_service_key.json
+/src/main/resources/application.properties
 

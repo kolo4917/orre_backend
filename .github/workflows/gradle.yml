@@ -21,6 +21,13 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x ./backend/spring/gradlew
 
+      - name: Prepare secrets
+        run: |
+          mkdir -p backend/spring/src/main/resources/firebase
+          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > backend/spring/src/main/resources/firebase/firebase_service_key.json
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" > backend/spring/src/main/resources/application.properties
+
+
       - name: Build with Gradle
         run: |
           cd backend/spring
@@ -31,12 +38,6 @@ jobs:
       - name: Generate tag based on date and time
         id: datetime
         run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')"
-
-      - name: Prepare secrets
-        run: |
-          mkdir -p backend/spring/src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > backend/spring/src/main/resources/firebase/firebase_service_key.json
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" > backend/spring/src/main/resources/application.properties
 
       - name: Build Docker image
         run: |
