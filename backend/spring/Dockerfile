@@ -8,11 +8,14 @@ WORKDIR /app
 COPY backend/spring/build/libs/orre.jar app.jar
 
 # 필요한 디렉토리를 생성합니다.
-RUN mkdir -p src/main/resources/firebase
+RUN mkdir -p /app/src/main/resources/firebase
 
 # 비밀 파일을 복사합니다.
 COPY backend/spring/src/main/resources/firebase/firebase_service_key.json /app/src/main/resources/firebase/firebase_service_key.json
 COPY backend/spring/src/main/resources/application.properties /app/src/main/resources/application.properties
+
+RUN chmod 644 /app/src/main/resources/application.properties /app/src/main/resources/firebase/firebase_service_key.json
+
 
 # 컨테이너가 시작될 때 실행할 명령을 설정합니다.
 ENTRYPOINT ["java","-Duser.timezone=Asia/Seoul","-jar","/app/app.jar"]
