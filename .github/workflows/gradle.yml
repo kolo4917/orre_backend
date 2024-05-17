@@ -24,7 +24,7 @@ jobs:
       - name: Prepare secrets
         run: |
           mkdir -p backend/spring/src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > backend/spring/src/main/resources/firebase/firebase_service_key.json
+          echo ${{ secrets.FIREBASE_SERVICE_KEY }} | base64 --decode > backend/spring/src/main/resources/firebase/firebase_service_key.json
           echo "${{ secrets.APPLICATION_PROPERTIES }}" > backend/spring/src/main/resources/application.properties
 
 
