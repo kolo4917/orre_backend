@@ -24,7 +24,7 @@ jobs:
       - name: Prepare secrets
         run: |
           mkdir -p backend/spring/src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > backend/spring/src/main/resources/firebase/firebase_service_key.json
+          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" | sed 's/\\n/\n/g' > backend/spring/src/main/resources/firebase/firebase_service_key.json
           echo "${{ secrets.APPLICATION_PROPERTIES }}" > backend/spring/src/main/resources/application.properties
 
 
@@ -33,7 +33,6 @@ jobs:
           cd backend/spring
           ./gradlew build -x test
           ls build/libs  # 빌드된 JAR 파일 확인
-
 
       - name: Generate tag based on date and time
         id: datetime
