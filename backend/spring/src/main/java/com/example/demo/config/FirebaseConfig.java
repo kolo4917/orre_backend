@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class FirebaseConfig {
@@ -22,9 +22,24 @@ public class FirebaseConfig {
         if (serviceAccount == null) {
             throw new IllegalStateException("firebase_service_key.json 파일을 찾을 수 없습니다.");
         }
+
+        // InputStream을 문자열로 읽기
+        StringBuilder jsonContent = new StringBuilder();
+        int ch;
+        while ((ch = serviceAccount.read()) != -1) {
+            jsonContent.append((char) ch);
+        }
+
+        // 개행 문자 변환
+        String modifiedJsonContent = jsonContent.toString().replace("\\n", "\n");
+
+        // 변환된 문자열을 ByteArrayInputStream으로 다시 읽기
+        ByteArrayInputStream correctedServiceAccount = new ByteArrayInputStream(modifiedJsonContent.getBytes(StandardCharsets.UTF_8));
+
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setCredentials(GoogleCredentials.fromStream(correctedServiceAccount))
                 .build();
+
         return FirebaseApp.initializeApp(options);
     }
 }
