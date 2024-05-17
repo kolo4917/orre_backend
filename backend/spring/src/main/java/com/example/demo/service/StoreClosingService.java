@@ -34,14 +34,20 @@ public class StoreClosingService {
             }
             for (UserStoreWait user : usersInQueue) {
                 userLogService.modifyWaitingByClosing(user.getUserPhoneNumber(), storeCode, "store canceled");
-                userStoreWaitRepository.delete(user); // 특정 행을 삭제합니다.
-
+                user.setStatus(0); // 상태를 비활성화로 변경
+                userStoreWaitRepository.save(user);
                 UserStoreWaitResponse userStoreWaitResponse = new UserStoreWaitResponse();
                 userStoreWaitResponse.setStatus("1103");
                 userStoreWaitResponse.setToken(null); // 필요하다면 여기에 상세 정보를 설정할 수 있습니다.
                 eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
 
             }
+            List<UserStoreWait> usersInQueueWith0 = userStoreWaitRepository.findByStoreCodeAndStatus(storeCode, 0);
+
+            for (UserStoreWait user: usersInQueueWith0){
+                userStoreWaitRepository.delete(user);
+            }
+
             eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
             return "200";
         } catch (EmptyResultDataAccessException e) {
