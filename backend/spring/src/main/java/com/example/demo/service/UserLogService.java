@@ -33,26 +33,32 @@ public class UserLogService {
         // 가장 최근의 UserLog 가져오기
         UserLog latestUserLog = userLogRepository.findFirstByUserPhoneNumberAndStoreCodeOrderByHistoryNumDesc(phoneNumber, storeCode);
 
-        Date currentTime = new Date();
-        latestUserLog.setStatusChangeTime(currentTime);
-        // 상태 및 매장 코드 수정
-        latestUserLog.setStatus(status);
+        if(latestUserLog != null){
+            Date currentTime = new Date();
+            latestUserLog.setStatusChangeTime(currentTime);
+            // 상태 및 매장 코드 수정
+            latestUserLog.setStatus(status);
 
-        // Repository를 통해 업데이트
-        userLogRepository.save(latestUserLog);
+            // Repository를 통해 업데이트
+            userLogRepository.save(latestUserLog);
+        }
+
     }
     public void modifyWaitingByClosing(String phoneNumber, int storeCode, String status) {
 
         // 가장 최근의 UserLog 가져오기
         UserLog latestUserLog = userLogRepository.findByUserPhoneNumberAndStatusAndStoreCode(phoneNumber, "waiting", storeCode);
 
-        Date currentTime = new Date();
-        latestUserLog.setStatusChangeTime(currentTime);
-        // 상태 및 매장 코드 수정
-        latestUserLog.setStatus(status);
+        if(latestUserLog != null){
+            Date currentTime = new Date();
+            latestUserLog.setStatusChangeTime(currentTime);
+            // 상태 및 매장 코드 수정
+            latestUserLog.setStatus(status);
 
-        // Repository를 통해 업데이트
-        userLogRepository.save(latestUserLog);
+            // Repository를 통해 업데이트
+            userLogRepository.save(latestUserLog);
+        }
+
     }
 
     private int calculateNewHistoryNumber(String phoneNumber) {
