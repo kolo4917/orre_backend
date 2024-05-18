@@ -50,7 +50,10 @@ public class UserCallService {
         //FCM 가져오는 로직
         String userPhoneNumber = userStoreWait.getUserPhoneNumber();
         User user = userSaveRepository.findByPhoneNumber(userPhoneNumber);
-        String userFcmToken = user.getUserFcmToken();
+        String userFcmToken = null;
+        if(user != null){
+            userFcmToken = user.getUserFcmToken();
+        }
 
         //스토어 코드로 가게 이름 조회
         Store store= storeRepository.findByStoreCode(storeCode);
