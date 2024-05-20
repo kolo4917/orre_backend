@@ -4,6 +4,8 @@ import com.example.demo.model.DataBase.UserLog;
 import com.example.demo.repository.UserLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 
 import java.util.Date;
 
@@ -13,6 +15,7 @@ public class UserLogService {
 
     @Autowired
     private UserLogRepository userLogRepository;
+    @Autowired SimpMessagingTemplate simpMessagingTemplate;
 
     public void makeWaiting(String phoneNumber, int storeCode, int waitingNumber, int personNumber) {
         // 현재 시간 가져오기
@@ -26,6 +29,9 @@ public class UserLogService {
 
         // Repository를 통해 저장
         userLogRepository.save(userLog);
+        //웹 소켓으로 정보 전송
+        simpMessagingTemplate.convertAndSend("/topic/admin/log/" + storeCode, userLog);
+        simpMessagingTemplate.convertAndSend("/topic/user/log/" + storeCode + "/"+ phoneNumber,userLog);
     }
 
     public void modifyWaiting(String phoneNumber, int storeCode, String status) {
@@ -41,6 +47,9 @@ public class UserLogService {
 
             // Repository를 통해 업데이트
             userLogRepository.save(latestUserLog);
+            // 웹소켓 전송
+            simpMessagingTemplate.convertAndSend("/topic/admin/log/" + storeCode, latestUserLog);
+            simpMessagingTemplate.convertAndSend("/topic/user/log/" + storeCode + "/"+ phoneNumber, latestUserLog);
         }
 
     }
@@ -57,6 +66,10 @@ public class UserLogService {
 
             // Repository를 통해 업데이트
             userLogRepository.save(latestUserLog);
+
+            // 웹소켓 전송
+            simpMessagingTemplate.convertAndSend("/topic/admin/log/" + storeCode, latestUserLog);
+            simpMessagingTemplate.convertAndSend("/topic/user/log/" + storeCode + "/"+ phoneNumber, latestUserLog);
         }
 
     }
