@@ -223,7 +223,7 @@ public class StoreAdminController {
         }
         return response;
     }
-    //@MessageMapping("/admin/log/{storeCode}") - 유저 로그 변동시 알림
 
+    //@MessageMapping("/admin/log/{storeCode}") - 유저 로그 변동시 알림
 
 }
