@@ -124,4 +124,6 @@ public class WaitingController {
 
     //@MessageMapping("/user/userCall/{storeCode}/{waitingNumber}") -admin에서 요청을 보낼 때 자동으로 작동 : 구독시 별도의 요청 필요 없음
 
+    //@MessageMapping("/user/log/{storeCode}/{userPhoneNumber}") - 유저 로그 변동시 알림
+
 }
