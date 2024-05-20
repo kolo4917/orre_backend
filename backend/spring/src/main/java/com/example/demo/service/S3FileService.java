@@ -36,7 +36,6 @@ public class S3FileService {
             amazonS3Client.putObject(bucket, directory + "/" + fileName, file.getInputStream(), metadata);
             return fileUrl;
         } catch (IOException e) {
-            // IOException 발생 시 예외 처리
             e.printStackTrace();
             return "5001"; // 또는 예외를 상위로 전파하거나 다른 방식으로 처리할 수 있음
         }
