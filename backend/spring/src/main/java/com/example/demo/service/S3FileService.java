@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import jakarta.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 public class S3FileService {
 
@@ -45,8 +46,12 @@ public class S3FileService {
     public String uploadToDatabase(S3UploadRequest request, String url) {
         try {
             // 특정 가게 코드에 대한 테이블 번호를 조회
+            // null 일경우 case 추가 해야 함
             List<Integer> tableNumbers = menuInfoRepository.findTableNumbersByStoreCode(request.getStoreCode());
-
+            // tableNumbers가 null이거나 비어 있으면 1로 설정
+            if (tableNumbers == null || tableNumbers.isEmpty()) {
+                tableNumbers = Collections.singletonList(1);
+            }
             // 조회된 테이블 번호 리스트의 길이 만큼 1부터 처리하여 메뉴를 추가
             for (int i = 1; i <= tableNumbers.size(); i++) {
                 MenuInfo menuInfo = new MenuInfo(
