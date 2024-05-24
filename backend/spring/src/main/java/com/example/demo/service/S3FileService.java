@@ -46,7 +46,6 @@ public class S3FileService {
     public String uploadToDatabase(S3UploadRequest request, String url) {
         try {
             // 특정 가게 코드에 대한 테이블 번호를 조회
-            // null 일경우 case 추가 해야 함
             List<Integer> tableNumbers = menuInfoRepository.findTableNumbersByStoreCode(request.getStoreCode());
             // tableNumbers가 null이거나 비어 있으면 1로 설정
             if (tableNumbers == null || tableNumbers.isEmpty()) {
@@ -62,7 +61,7 @@ public class S3FileService {
                         0, // amount는 어디서 받는지에 따라 결정
                         request.getMenuCode(),
                         1, // available 기본값 1로 설정 (활성화 상태)
-                        0, // recommend 기본값 0으로 설정
+                        request.getRecommend(), // recommend 기본값 0으로 설정
                         url, // 이미지 URL
                         request.getIntroduce()
                 );
@@ -109,9 +108,10 @@ public class S3FileService {
 
             // 모든 조회된 메뉴 정보에 대해 업데이트 수행
             for (MenuInfo menuInfo : menuInfos) {
-                menuInfo.setMenu(request.getMenu());
+                menuInfo.setMenu(request.getNewMenu());
                 menuInfo.setPrice(request.getPrice());
                 menuInfo.setIntroduce(request.getIntroduce());
+                menuInfo.setRecommend(request.getRecommend());
                 menuInfoRepository.save(menuInfo);
             }
 
