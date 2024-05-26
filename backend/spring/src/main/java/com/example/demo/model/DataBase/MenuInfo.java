@@ -19,7 +19,6 @@ public class MenuInfo{
     @Id
     @Column(name = "menu_info_table_number")
     private Integer tableNumber;
-    @Id
     @Column(name = "menu_info_menu")
     private String menu;
 
@@ -28,6 +27,7 @@ public class MenuInfo{
 
     @Column(name = "menu_info_amount")
     private Integer amount;
+    @Id
     @Column(name = "menu_info_menu_code")
     private String menuCode;
     @Column(name = "menu_info_available")
@@ -103,14 +103,14 @@ public class MenuInfo{
 class MenuInfoKey implements Serializable {
     private Integer storeCode;
     private Integer tableNumber;
-    private String menu;
+    private String menuCode;
 
     public MenuInfoKey() {}
 
-    public MenuInfoKey(Integer storeCode, Integer tableNumber, String menu) {
+    public MenuInfoKey(Integer storeCode, Integer tableNumber, String menuCode) {
         this.storeCode = storeCode;
         this.tableNumber = tableNumber;
-        this.menu = menu;
+        this.menuCode = menuCode;
     }
 
     public Integer getStoreCode() {
@@ -129,11 +129,11 @@ class MenuInfoKey implements Serializable {
         this.tableNumber = tableNumber;
     }
 
-    public String getMenu() {
-        return menu;
+    public String getMenuCode() {
+        return menuCode;
     }
 
-    public void setMenu(String menu) {
-        this.menu = menu;
+    public void setMenuCode(String menuCode) {
+        this.menuCode = menuCode;
     }
 }
