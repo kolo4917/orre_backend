@@ -3,11 +3,12 @@ package com.example.demo.DTO.ToServer;
 public class AdminLoginRequest {
     private String adminPhoneNumber;
     private String adminPassword;
+    private String adminFcmToken;
 
-
-    public AdminLoginRequest(String adminPhoneNumber, String adminPassword) {
+    public AdminLoginRequest(String adminPhoneNumber, String adminPassword, String adminFcmToken) {
         this.adminPhoneNumber = adminPhoneNumber;
         this.adminPassword = adminPassword;
+        this.adminFcmToken = adminFcmToken;
     }
 
     public String getAdminPhoneNumber() {
@@ -24,5 +25,13 @@ public class AdminLoginRequest {
 
     public void setAdminPassword(String adminPassword) {
         this.adminPassword = adminPassword;
+    }
+
+    public String getAdminFcmToken() {
+        return adminFcmToken;
+    }
+
+    public void setAdminFcmToken(String adminFcmToken) {
+        this.adminFcmToken = adminFcmToken;
     }
 }

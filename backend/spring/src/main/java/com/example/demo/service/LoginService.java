@@ -25,6 +25,17 @@ public class LoginService {
             return "602";
         }
     }
+    public String saveAdminFcmToken(String phoneNumber, String adminFcmToken ){
+        Admin admin = adminRepository.findByAdminPhoneNumber(phoneNumber);
+        if (admin != null) {
+            admin.setAdminFcmToken(adminFcmToken);
+            adminRepository.save(admin);
+            return "200";
+        } else {
+            return "602";
+        }
+    }
+
 
     public Admin validateAdminCredentials(String phoneNumber, String password) {
         Admin admin = adminRepository.findByAdminPhoneNumberAndAdminPassword(phoneNumber, password);

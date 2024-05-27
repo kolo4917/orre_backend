@@ -37,8 +37,8 @@ public class StoreClosingService {
                 user.setStatus(0); // 상태를 비활성화로 변경
                 userStoreWaitRepository.save(user);
                 UserStoreWaitResponse userStoreWaitResponse = new UserStoreWaitResponse();
-                userStoreWaitResponse.setStatus("1103");
-                userStoreWaitResponse.setToken(null); // 필요하다면 여기에 상세 정보를 설정할 수 있습니다.
+                userStoreWaitResponse.setStatus("1106");
+                userStoreWaitResponse.setToken(null);
                 eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
 
             }
