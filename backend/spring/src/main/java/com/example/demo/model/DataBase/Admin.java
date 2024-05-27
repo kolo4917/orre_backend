@@ -15,6 +15,8 @@ public class Admin {
     private String adminPassword;
     @Column(name = "admin_store_code")
     private Integer adminStoreCode;
+    @Column(name = "admin_fcm_token")
+    private String adminFcmToken;
 
     public String getAdminPhoneNumber() {
         return adminPhoneNumber;
@@ -38,5 +40,13 @@ public class Admin {
 
     public void setAdminStoreCode(Integer adminStoreCode) {
         this.adminStoreCode = adminStoreCode;
+    }
+
+    public String getAdminFcmToken() {
+        return adminFcmToken;
+    }
+
+    public void setAdminFcmToken(String adminFcmToken) {
+        this.adminFcmToken = adminFcmToken;
     }
 }

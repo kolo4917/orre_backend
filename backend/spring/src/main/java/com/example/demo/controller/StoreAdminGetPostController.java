@@ -108,7 +108,8 @@ public class StoreAdminGetPostController {
         if (isValidUser != null) {
             // JWT 발급
             String token = generateJwtTokenForAdmin(request.getAdminPhoneNumber());
-            return new LoginResponse("success", token, isValidUser.getAdminStoreCode());
+            String status = loginService.saveAdminFcmToken(request.getAdminPhoneNumber(),request.getAdminFcmToken());
+            return new LoginResponse(status, token, isValidUser.getAdminStoreCode());
         } else {
             // 인증 실패 시
             return new LoginResponse("failure", null, 0);
