@@ -9,6 +9,7 @@ import com.example.demo.repository.AdminLoginRepository;
 import com.example.demo.service.FireBase.FcmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.service.FireBase.FcmServiceForGaorre;
 
 @Service
 public class FcmPushService {
@@ -18,6 +19,8 @@ public class FcmPushService {
     private AdminLoginRepository adminLoginRepository;
     @Autowired
     private FcmService fcmService;
+    @Autowired
+    private FcmServiceForGaorre fcmServiceForGaorre;
     public void sendCallNotification(String userPhoneNumber, Integer waitingTeam, String storeName, Integer minutesToAdd) {
         // 사용자 정보 조회
         User user = userSaveRepository.findByPhoneNumber(userPhoneNumber);
@@ -91,7 +94,7 @@ public class FcmPushService {
 
             // FCM 메시지 전송
             try {
-                fcmService.sendMessage(fcmRequest);
+                fcmServiceForGaorre.sendMessage(fcmRequest);
             } catch (Exception e) {
                 e.printStackTrace();
             }
