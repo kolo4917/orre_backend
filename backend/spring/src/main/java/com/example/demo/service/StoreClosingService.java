@@ -43,16 +43,16 @@ public class StoreClosingService {
             String storeName = store.getStoreName();
 
             for (UserStoreWait user : usersInQueue) {
-                userLogService.modifyWaitingByClosing(user.getUserPhoneNumber(), storeCode, "store canceled");
                 user.setStatus(0); // 상태를 비활성화로 변경
                 userStoreWaitRepository.save(user);
                 UserStoreWaitResponse userStoreWaitResponse = new UserStoreWaitResponse();
                 userStoreWaitResponse.setStatus("1106");
                 userStoreWaitResponse.setToken(null);
                 String userPhoneNumber = user.getUserPhoneNumber();
+                userLogService.modifyWaitingByClosing(user.getUserPhoneNumber(), storeCode, "store closed");
+                eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
                 //fcm push service
                 fcmPushService.sendClosingNotification(userPhoneNumber, storeName);
-                eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
 
             }
             List<UserStoreWait> usersInQueueWith0 = userStoreWaitRepository.findByStoreCodeAndStatus(storeCode, 0);
