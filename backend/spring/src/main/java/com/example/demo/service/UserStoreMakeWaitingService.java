@@ -12,6 +12,8 @@ import com.example.demo.config.events.StoreQueueUpdatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import com.example.demo.config.events.EventPublisherService;
 
+import com.example.demo.service.FireBase.FcmPushService;
+
 @Service
 public class UserStoreMakeWaitingService {
 
@@ -23,6 +25,8 @@ public class UserStoreMakeWaitingService {
     private EventPublisherService eventPublisherService;
     @Autowired
     private UserLogService userLogService;
+    @Autowired
+    private FcmPushService fcmPushService;
     @Autowired
     private StoreRepository storeRepository;
 
@@ -63,6 +67,8 @@ public class UserStoreMakeWaitingService {
         userLogService.makeWaiting(request.getUserPhoneNumber(), request.getStoreCode(),nextWaiting,request.getPersonNumber());
         // 이벤트 발행
         eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, request.getStoreCode()), 1000); // 1초 딜레이
+        // 관리자에게 fcm 알림 전송
+        fcmPushService.sendUserWaitingMakeNotification(storeCode, userStoreWait.getPersonNumber());
         return savedUserStoreWait;
     }
 
