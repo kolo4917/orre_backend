@@ -51,7 +51,7 @@ public class StoreClosingService {
                 userStoreWaitResponse.setToken(null);
                 String userPhoneNumber = user.getUserPhoneNumber();
                 //fcm push service
-                fcmPushService.sendNoShowNotification(userPhoneNumber, storeName);
+                fcmPushService.sendClosingNotification(userPhoneNumber, storeName);
                 eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
 
             }
