@@ -29,6 +29,8 @@ public class UserCallService {
     private StoreRepository storeRepository;
     @Autowired
     private FcmPushService fcmPushService;
+    @Autowired
+    private KakaoPushService kakaoPushService;
 
     public UserCallResponse callUser(UserCallRequest request) {
         Integer storeCode = request.getStoreCode();
@@ -60,7 +62,8 @@ public class UserCallService {
 
         // FCM 알림 전송
         fcmPushService.sendCallNotification(userPhoneNumber, waitingTeam, storeName, minutesToAdd);
-
+        //FCM 알림 전송이 fail 일 경우 카카오톡 알림 전송
+        kakaoPushService.sendOneAta(userPhoneNumber,waitingTeam,storeName,minutesToAdd);
         // 응답 반환
         return userCallResponse;
     }
