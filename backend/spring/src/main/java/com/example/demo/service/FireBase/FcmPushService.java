@@ -21,7 +21,7 @@ public class FcmPushService {
     private FcmService fcmService;
     @Autowired
     private FcmServiceForGaorre fcmServiceForGaorre;
-    public void sendCallNotification(String userPhoneNumber, Integer waitingTeam, String storeName, Integer minutesToAdd) {
+    public Integer sendCallNotification(String userPhoneNumber, Integer waitingTeam, String storeName, Integer minutesToAdd) {
         // 사용자 정보 조회
         User user = userSaveRepository.findByPhoneNumber(userPhoneNumber);
         if (user != null && user.getUserFcmToken() != null) {
@@ -35,11 +35,14 @@ public class FcmPushService {
             // FCM 메시지 전송
             try {
                 fcmService.sendMessage(fcmRequest);
+                return 1; // 예외가 발생하지 않으면 성공으로 간주
             } catch (Exception e) {
                 // 예외 처리
                 e.printStackTrace();
+                return 0; // 예외 발생 시 실패
             }
         }
+        else return -1;
     }
 
     public void sendNoShowNotification(String userPhoneNumber, String storeName) {
