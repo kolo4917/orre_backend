@@ -30,12 +30,6 @@ public class UserCallService {
     @Autowired
     private FcmPushService fcmPushService;
 
-    /**
-     * 사용자를 호출하고, 관련 정보를 반환하는 메서드
-     *
-     * @param request 사용자의 호출 요청 정보
-     * @return UserCallResponse 호출 응답 정보
-     */
     public UserCallResponse callUser(UserCallRequest request) {
         Integer storeCode = request.getStoreCode();
         Integer waitingTeam = request.getWaitingTeam();
