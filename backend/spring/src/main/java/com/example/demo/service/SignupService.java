@@ -1,6 +1,7 @@
 package com.example.demo.service;
 import com.example.demo.repository.UserSaveRepository;
 import com.example.demo.model.DataBase.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,9 +137,13 @@ public class SignupService {
         System.out.println(storedVerificationCode+"////////"+verificationCode);
         // 맵에 저장된 인증번호와 유저가 입력한 인증번호 비교
         if (storedVerificationCode != null && storedVerificationCode.equals(verificationCode)) {
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(password);  // 비밀번호 해시
+
             User newUser = new User();
             newUser.setPhoneNumber(phoneNumber);
-            newUser.setPassword(password); // 실제 서비스에서는 비밀번호를 해시하여 저장
+            newUser.setPassword(hashedPassword);
             newUser.setName(userName);
             newUser.setStoreCode(1);
             newUser.setToken(generateUniqueToken()); // 중복되지 않는 토큰 생성
@@ -162,8 +167,12 @@ public class SignupService {
 
         // 맵에 저장된 인증번호와 유저가 입력한 인증번호 비교
         if (storedVerificationCode != null && storedVerificationCode.equals(verificationCode)) {
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(newPassword);  // 비밀번호 해시
             // 인증번호 일치할 경우, 해당 전화번호의 사용자 정보의 비밀번호 업데이트
-            userSaveRepository.updateUserPassword(phoneNumber, newPassword);
+
+            userSaveRepository.updateUserPassword(phoneNumber, hashedPassword);
 
             // 인증번호 맵에서 해당 전화번호 삭제
             verificationCodeMap.remove(phoneNumber);
