@@ -18,6 +18,7 @@ import com.example.demo.service.StoreCategoriesService;
 import com.example.demo.service.StoreEnteringService;
 import com.example.demo.service.LogQueryService;
 import com.example.demo.service.StoreClosingService;
+import com.example.demo.service.SignupService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -55,6 +56,7 @@ public class StoreAdminGetPostController {
     private final StoreEnteringService storeEnteringService;
     private final LogQueryService logQueryService;
     private final StoreClosingService storeClosingService;
+    private final SignupService signupService;
 
 
 
@@ -70,7 +72,7 @@ public class StoreAdminGetPostController {
                                        StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService ,
                                        StoreWaitingAvailableService storeWaitingAvailableService, StoreCategoriesService storeCategoriesService,
                                        StoreEnteringService storeEnteringService, LogQueryService logQueryService,
-                                       StoreClosingService storeClosingService) {
+                                       StoreClosingService storeClosingService, SignupService signupService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -86,6 +88,7 @@ public class StoreAdminGetPostController {
         this.storeEnteringService = storeEnteringService;
         this.logQueryService = logQueryService;
         this.storeClosingService = storeClosingService;
+        this.signupService = signupService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -113,6 +116,17 @@ public class StoreAdminGetPostController {
         } else {
             // 인증 실패 시
             return new LoginResponse("failure", null, 0);
+        }
+    }
+    @PostMapping("/api/admin/StoreAdmin/login/reset")
+    public StatusResponse resetAdminPassword(@RequestBody AdminPasswordModifyRequest request){
+        String jwtAdmin = request.getJwtAdmin();
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            String status = signupService.resetAdmin(request.getAdminPhoneNumber(),request.getNewAdminPassword());
+            return new StatusResponse(status);
+        } else {
+            return new StatusResponse("400");
         }
     }
     @PostMapping("/api/admin/StoreAdmin/storeInfo")
