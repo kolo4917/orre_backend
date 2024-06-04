@@ -1,12 +1,15 @@
 package com.example.demo.controller;
 
 import com.example.demo.DTO.ToClient.StatusResponse;
+import com.example.demo.DTO.ToClient.AppVersionCheckRespose;
 import com.example.demo.DTO.ToClient.StoreDTO;
+import com.example.demo.DTO.ToServer.AppVersionCheckRequest;
 import com.example.demo.DTO.ToServer.StoreInfoRequest;
 import com.example.demo.DTO.ToServer.StoreMenuOrderRequest;
 import com.example.demo.service.StoreService;
 import com.example.demo.service.WaitingService;
 import com.example.demo.service.JwtService;
+import com.example.demo.service.AppVersionCheckService;
 import com.example.demo.service.StoreMenuOrderService;
 import com.example.demo.DTO.ToClient.StoreListDTO;
 import com.example.demo.model.LocationData;
@@ -27,14 +30,22 @@ public class WaitingGetPostController {
     private final WaitingService waitingService;
     private final JwtService jwtService;
     private final StoreMenuOrderService storeMenuOrderService;
+    private final AppVersionCheckService appVersionCheckService;
 
     @Autowired
     public WaitingGetPostController(StoreService storeService, WaitingService waitingService,
-                                    JwtService jwtService, StoreMenuOrderService storeMenuOrderService) {
+                                    JwtService jwtService, StoreMenuOrderService storeMenuOrderService,
+                                    AppVersionCheckService appVersionCheckService) {
         this.storeService = storeService;
         this.waitingService = waitingService;
         this.jwtService = jwtService;
         this.storeMenuOrderService = storeMenuOrderService;
+        this.appVersionCheckService = appVersionCheckService;
+    }
+
+    @PostMapping("/api/appVersion")
+    public AppVersionCheckRespose appVersionCheckRespose(@RequestBody AppVersionCheckRequest request){
+        return appVersionCheckService.checkVersion(request.getAppCode(), request.getAppVersion());
     }
 
     @PostMapping("/api/user/storeInfo")
