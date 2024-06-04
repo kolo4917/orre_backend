@@ -1,4 +1,5 @@
 package com.example.demo.service;
+import com.example.demo.repository.AdminLoginRepository;
 import com.example.demo.repository.UserSaveRepository;
 import com.example.demo.model.DataBase.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +27,8 @@ public class SignupService {
     private final Map<String, String> verificationCodeMap;
     @Autowired
     private UserSaveRepository userSaveRepository; // UserRepository 주입
+    @Autowired
+    private AdminLoginRepository adminLoginRepository;
     private final String apiKey;
     private final String apiSecret;
     private final String senderNumber;
@@ -183,6 +186,21 @@ public class SignupService {
             // 인증번호가 일치하지 않을 경우
             System.out.println("비밀번호 수정 실패: 인증번호 불일치");
             return false;
+        }
+    }
+    @Transactional
+    public String resetAdmin(String adminPhoneNumber, String newPassword) {
+        try {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(newPassword);  // 비밀번호 해시
+
+            adminLoginRepository.updateAdminPassword(adminPhoneNumber, hashedPassword);
+            System.out.println("비밀번호 수정 완료: " + adminPhoneNumber);
+            return "200";
+        } catch (Exception e) {
+            // 예외가 발생했을 때 예외 메시지를 로그에 출력할 수 있습니다.
+            System.err.println("비밀번호 수정 실패: " + e.getMessage());
+            return "6501";
         }
     }
 }
