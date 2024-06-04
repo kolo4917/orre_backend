@@ -118,17 +118,23 @@ public class StoreAdminGetPostController {
             return new LoginResponse("failure", null, 0);
         }
     }
-    @PostMapping("/api/admin/StoreAdmin/login/reset")
-    public StatusResponse resetAdminPassword(@RequestBody AdminPasswordModifyRequest request){
-        String jwtAdmin = request.getJwtAdmin();
-        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
-        if (isValidAdmin) {
-            String status = signupService.resetAdmin(request.getAdminPhoneNumber(),request.getNewAdminPassword());
-            return new StatusResponse(status);
+    @PostMapping("/api/admin/StoreAdmin/generate-verification-code")
+    public StatusResponse generateVerificationCode(@RequestBody AdminPhoneNumberRequest request) {
+        String adminPhoneNumber = request.getAdminPhoneNumber();
+        String generatedVerificationCode = signupService.sendVerificationSMSForFindAdminPassword(adminPhoneNumber);
+
+        if (generatedVerificationCode != null) {
+            return new StatusResponse("200");
         } else {
-            return new StatusResponse("400");
+            return new StatusResponse("701");
         }
     }
+    @PostMapping("/api/admin/StoreAdmin/login/reset")
+    public StatusResponse resetAdminPassword(@RequestBody AdminPasswordModifyRequest request){
+            String status = signupService.resetAdmin(request.getAdminPhoneNumber(),request.getNewAdminPassword(),request.getVerificationCode());
+            return new StatusResponse(status);
+    }
+
     @PostMapping("/api/admin/StoreAdmin/storeInfo")
     public StoreDTO getStoreInfo(@RequestBody StoreInfoRequest request) {
         return storeService.getStoreDetailsByStoreCode(request.getStoreCode());

@@ -12,6 +12,8 @@ public interface AdminLoginRepository extends JpaRepository<Admin, String> { // 
     Admin findByAdminPhoneNumberAndAdminPassword(String adminPhoneNumber, String adminPassword);
     Admin findByAdminPhoneNumber(String adminPhoneNumber);
     Admin findByAdminStoreCode(Integer adminStoreCode);
+    boolean existsByAdminPhoneNumber(String adminPhoneNumber);
+
 
     @Modifying
     @Query("UPDATE Admin u SET u.adminPassword = :newPassword WHERE u.adminPhoneNumber = :phoneNumber")
