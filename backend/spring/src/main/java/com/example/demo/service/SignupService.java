@@ -105,7 +105,35 @@ public class SignupService {
             return null;
         }
     }
+    public String sendVerificationSMSForFindAdminPassword(String adminPhoneNumber) {
+        // 이미 등록된 전화번호인지 확인
+        if (!adminLoginRepository.existsByAdminPhoneNumber(adminPhoneNumber)) {
+            System.out.println("인증 실패: 등록되지 않은 전화번호 입니다.");
+            return null; // 또는 적절한 에러 메시지 또는 코드 반환
+        }
+        // 인증번호 생성
+        String verificationCode = generateVerificationCode();
 
+
+        // 메시지 객체 생성
+        Message message = new Message();
+        message.setFrom(senderNumber); // 발신전화번호
+        message.setTo(adminPhoneNumber); // 수신전화번호
+        message.setText("[ORRE] 비밀번호 찾기 - 본인인증 서비스 : 인증번호는 [" + verificationCode + "] 입니다.");
+
+        try {
+            SingleMessageSentResponse response;
+            response = messageService.sendOne(new SingleMessageSendingRequest(message));
+            System.out.println(response);
+            // 전화번호와 인증번호 맵에 저장
+            verificationCodeMap.put(adminPhoneNumber, verificationCode);
+            System.out.println(verificationCode);
+            return verificationCode;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
     // 인증번호 생성 메서드
     public String generateVerificationCode() {
         Random random = new Random();
@@ -189,18 +217,22 @@ public class SignupService {
         }
     }
     @Transactional
-    public String resetAdmin(String adminPhoneNumber, String newPassword) {
-        try {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPassword = passwordEncoder.encode(newPassword);  // 비밀번호 해시
+    public String resetAdmin(String adminPhoneNumber, String newPassword, String verificationCode) {
+        String storedVerificationCode = verificationCodeMap.get(adminPhoneNumber);
+        if (storedVerificationCode != null && storedVerificationCode.equals(verificationCode)) {
+            try {
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String hashedPassword = passwordEncoder.encode(newPassword);  // 비밀번호 해시
 
-            adminLoginRepository.updateAdminPassword(adminPhoneNumber, hashedPassword);
-            System.out.println("비밀번호 수정 완료: " + adminPhoneNumber);
-            return "200";
-        } catch (Exception e) {
-            // 예외가 발생했을 때 예외 메시지를 로그에 출력할 수 있습니다.
-            System.err.println("비밀번호 수정 실패: " + e.getMessage());
-            return "6501";
+                adminLoginRepository.updateAdminPassword(adminPhoneNumber, hashedPassword);
+                System.out.println("비밀번호 수정 완료: " + adminPhoneNumber);
+                return "200";
+            } catch (Exception e) {
+                // 예외가 발생했을 때 예외 메시지를 로그에 출력할 수 있습니다.
+                System.err.println("비밀번호 수정 실패: " + e.getMessage());
+                return "6501";
+            }
         }
+        else return "6502";
     }
 }
