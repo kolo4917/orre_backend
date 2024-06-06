@@ -18,20 +18,13 @@ public class LogQueryService {
 
     @Autowired
     private UserLogRepository userLogRepository;
-    @Autowired
-    private UserSaveRepository userSaveRepository;
-
     public LogResponse getUserLogs(String phoneNumber) {
         // 사용자의 로그 조회
-        User user = userSaveRepository.findByPhoneNumber(phoneNumber);
         List<UserLog> userLogs = userLogRepository.findByUserPhoneNumber(phoneNumber);
         userLogs.forEach(log -> log.setMakeWaitingTime(addHours(log.getMakeWaitingTime(), 9)));
         userLogs.forEach(log -> log.setStatusChangeTime(addHours(log.getStatusChangeTime(), 9)));
 
-        // 응답 생성
-        if (user == null) {
-            return new LogResponse(userLogs, "1202");
-        }
+
         if (!userLogs.isEmpty()) {
             return new LogResponse(userLogs, "200");
         } else {
