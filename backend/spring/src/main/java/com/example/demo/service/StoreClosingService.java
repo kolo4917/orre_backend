@@ -41,7 +41,6 @@ public class StoreClosingService {
             }
             Store store= storeRepository.findByStoreCode(storeCode);
             String storeName = store.getStoreName();
-
             for (UserStoreWait user : usersInQueue) {
                 user.setStatus(0); // 상태를 비활성화로 변경
                 userStoreWaitRepository.save(user);
@@ -53,14 +52,11 @@ public class StoreClosingService {
                 eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
                 //fcm push service
                 fcmPushService.sendClosingNotification(userPhoneNumber, storeName);
-
             }
             List<UserStoreWait> usersInQueueWith0 = userStoreWaitRepository.findByStoreCodeAndStatus(storeCode, 0);
-
             for (UserStoreWait user: usersInQueueWith0){
                 userStoreWaitRepository.delete(user);
             }
-
             eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
             return "200";
         } catch (EmptyResultDataAccessException e) {
