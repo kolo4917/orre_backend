@@ -2,61 +2,72 @@ package com.example.demo.service.FireBase;
 
 import com.example.demo.DTO.ToFireBase.FcmRequest;
 import com.example.demo.model.DataBase.Admin;
-import com.example.demo.model.DataBase.Store;
 import com.example.demo.model.DataBase.User;
 import com.example.demo.repository.UserSaveRepository;
 import com.example.demo.repository.AdminLoginRepository;
-import com.example.demo.service.FireBase.FcmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.demo.service.FireBase.FcmServiceForGaorre;
 
 @Service
 public class FcmPushService {
+
     @Autowired
     private UserSaveRepository userSaveRepository;
+
     @Autowired
     private AdminLoginRepository adminLoginRepository;
+
     @Autowired
     private FcmService fcmService;
+
     @Autowired
     private FcmServiceForGaorre fcmServiceForGaorre;
+
+
+    private FcmRequest createFcmRequest(String token, String title, String body) {
+        // Create the notification
+        FcmRequest.Notification notification = new FcmRequest.Notification(title, body);
+
+        // Create Android notification settings
+        FcmRequest.Android.AndroidNotification androidNotification = new FcmRequest.Android.AndroidNotification("default");
+        FcmRequest.Android android = new FcmRequest.Android(androidNotification);
+
+        // Create APNs notification settings
+        FcmRequest.Apns.ApnsPayload.Aps aps = new FcmRequest.Apns.ApnsPayload.Aps("default");
+        FcmRequest.Apns.ApnsPayload apnsPayload = new FcmRequest.Apns.ApnsPayload(aps);
+        FcmRequest.Apns apns = new FcmRequest.Apns(apnsPayload);
+
+        // Create the message
+        FcmRequest.Message message = new FcmRequest.Message(token, notification, android, apns);
+        return new FcmRequest(message);
+    }
+
     public Integer sendCallNotification(String userPhoneNumber, Integer waitingTeam, String storeName, Integer minutesToAdd) {
-        // 사용자 정보 조회
         User user = userSaveRepository.findByPhoneNumber(userPhoneNumber);
         if (user != null && user.getUserFcmToken() != null) {
-            // 알림 제목과 내용 설정
             String notificationTitle = "웨이팅 호출 알림";
             String notificationBody = waitingTeam + "번 오리님 " + storeName + " 가게로 " + minutesToAdd + "분 안으로 방문해주세요!";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
-            FcmRequest.Message message = new FcmRequest.Message(user.getUserFcmToken(), notification);
-            FcmRequest fcmRequest = new FcmRequest(message);
+            FcmRequest fcmRequest = createFcmRequest(user.getUserFcmToken(), notificationTitle, notificationBody);
 
-            // FCM 메시지 전송
             try {
                 fcmService.sendMessage(fcmRequest);
-                return 1; // 예외가 발생하지 않으면 성공으로 간주
+                return 1;
             } catch (Exception e) {
-                // 예외 처리
                 e.printStackTrace();
-                return 0; // 예외 발생 시 실패
+                return 0;
             }
+        } else {
+            return -1;
         }
-        else return -1;
     }
 
     public void sendNoShowNotification(String userPhoneNumber, String storeName) {
-        // 사용자 정보 조회
         User user = userSaveRepository.findByPhoneNumber(userPhoneNumber);
         if (user != null && user.getUserFcmToken() != null) {
-            // 알림 제목과 내용 설정
             String notificationTitle = "웨이팅 취소 알림";
             String notificationBody = storeName + " 가게에서 웨이팅을 취소하였습니다.";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
-            FcmRequest.Message message = new FcmRequest.Message(user.getUserFcmToken(), notification);
-            FcmRequest fcmRequest = new FcmRequest(message);
+            FcmRequest fcmRequest = createFcmRequest(user.getUserFcmToken(), notificationTitle, notificationBody);
 
-            // FCM 메시지 전송
             try {
                 fcmService.sendMessage(fcmRequest);
             } catch (Exception e) {
@@ -64,18 +75,14 @@ public class FcmPushService {
             }
         }
     }
+
     public void sendClosingNotification(String userPhoneNumber, String storeName) {
-        // 사용자 정보 조회
         User user = userSaveRepository.findByPhoneNumber(userPhoneNumber);
         if (user != null && user.getUserFcmToken() != null) {
-            // 알림 제목과 내용 설정
             String notificationTitle = "웨이팅 취소 알림";
             String notificationBody = storeName + " 가게에서 영업을 종료하였습니다.";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
-            FcmRequest.Message message = new FcmRequest.Message(user.getUserFcmToken(), notification);
-            FcmRequest fcmRequest = new FcmRequest(message);
+            FcmRequest fcmRequest = createFcmRequest(user.getUserFcmToken(), notificationTitle, notificationBody);
 
-            // FCM 메시지 전송
             try {
                 fcmService.sendMessage(fcmRequest);
             } catch (Exception e) {
@@ -85,17 +92,12 @@ public class FcmPushService {
     }
 
     public void sendUserWaitingMakeNotification(Integer storeCode, Integer personNumber) {
-        // 사용자 정보 조회
         Admin admin = adminLoginRepository.findByAdminStoreCode(storeCode);
         if (admin != null && admin.getAdminFcmToken() != null) {
-            // 알림 제목과 내용 설정
             String notificationTitle = "신규 웨이팅 접수 알림";
-            String notificationBody = personNumber + "명 팀의 신규 웨이팅이 접수되었습니다";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
-            FcmRequest.Message message = new FcmRequest.Message(admin.getAdminFcmToken(), notification);
-            FcmRequest fcmRequest = new FcmRequest(message);
+            String notificationBody = personNumber + "명 팀의 신규 웨이팅이 접수되었습니다.";
+            FcmRequest fcmRequest = createFcmRequest(admin.getAdminFcmToken(), notificationTitle, notificationBody);
 
-            // FCM 메시지 전송
             try {
                 fcmServiceForGaorre.sendMessage(fcmRequest);
             } catch (Exception e) {
