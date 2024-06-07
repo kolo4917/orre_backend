@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class KakaoPushService {
+public class KakaoCallService {
     private final DefaultMessageService messageService;
 
     private final String apiKey;
@@ -22,7 +22,7 @@ public class KakaoPushService {
     private final String templeteId;
 
     @Autowired // 생성자에서 필요한 값들을 주입받습니다.
-    public KakaoPushService(
+    public KakaoCallService(
             @Value("${coolsms.apikey}") String apiKey,
             @Value("${coolsms.apisecret}") String apiSecret,
             @Value("${coolsms.fromnumber}") String senderNumber,

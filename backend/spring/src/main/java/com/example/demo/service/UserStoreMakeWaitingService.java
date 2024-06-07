@@ -14,6 +14,8 @@ import com.example.demo.config.events.EventPublisherService;
 
 import com.example.demo.service.FireBase.FcmPushService;
 
+import java.util.List;
+
 @Service
 public class UserStoreMakeWaitingService {
 
@@ -29,6 +31,8 @@ public class UserStoreMakeWaitingService {
     private FcmPushService fcmPushService;
     @Autowired
     private StoreRepository storeRepository;
+    @Autowired
+    private KakaoWaitingMakeService kakaoWaitingMakeService;
 
     @Transactional
     public UserStoreWait createUserStoreWait(UserStoreWaitRequest request) {
@@ -36,6 +40,8 @@ public class UserStoreMakeWaitingService {
         Integer storeCode = request.getStoreCode();
         Store store = storeRepository.findByStoreCode(storeCode);
         Integer available = store.getStoreWaitingAvailable();
+        List<UserStoreWait> userStoreWaitList = userStoreWaitRepository.findByStoreCodeAndStatus(storeCode,1);
+        int listSize = userStoreWaitList.size();
         if(available == 1){
             return new UserStoreWait(request.getUserPhoneNumber(), request.getStoreCode(),-1,1101,-1);
         }
@@ -69,6 +75,7 @@ public class UserStoreMakeWaitingService {
         eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, request.getStoreCode()), 1000); // 1초 딜레이
         // 관리자에게 fcm 알림 전송
         fcmPushService.sendUserWaitingMakeNotification(storeCode, userStoreWait.getPersonNumber());
+        kakaoWaitingMakeService.sendOneAta(request.getUserPhoneNumber(),nextWaiting, store.getStoreName(),listSize*5);
         return savedUserStoreWait;
     }
 
