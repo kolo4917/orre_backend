@@ -4,14 +4,10 @@ import com.example.demo.DTO.ToClient.UserCallResponse;
 import com.example.demo.DTO.ToServer.UserCallRequest;
 import com.example.demo.config.events.UserCallEvent;
 import com.example.demo.config.events.EventPublisherService;
-import com.example.demo.service.FireBase.FcmService;
 import com.example.demo.service.FireBase.FcmPushService;
 import com.example.demo.model.DataBase.UserStoreWait;
-import com.example.demo.model.DataBase.User;
 import com.example.demo.model.DataBase.Store;
-import com.example.demo.DTO.ToFireBase.FcmRequest;
 import com.example.demo.repository.UserStoreWaitRepository;
-import com.example.demo.repository.UserSaveRepository;
 import com.example.demo.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +26,7 @@ public class UserCallService {
     @Autowired
     private FcmPushService fcmPushService;
     @Autowired
-    private KakaoPushService kakaoPushService;
+    private KakaoCallService kakaoPushService;
 
     public UserCallResponse callUser(UserCallRequest request) {
         Integer storeCode = request.getStoreCode();
