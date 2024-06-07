@@ -28,7 +28,7 @@ public class FcmPushService {
             // 알림 제목과 내용 설정
             String notificationTitle = "웨이팅 호출 알림";
             String notificationBody = waitingTeam + "번 오리님 " + storeName + " 가게로 " + minutesToAdd + "분 안으로 방문해주세요!";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody);
+            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
             FcmRequest.Message message = new FcmRequest.Message(user.getUserFcmToken(), notification);
             FcmRequest fcmRequest = new FcmRequest(message);
 
@@ -52,7 +52,7 @@ public class FcmPushService {
             // 알림 제목과 내용 설정
             String notificationTitle = "웨이팅 취소 알림";
             String notificationBody = storeName + " 가게에서 웨이팅을 취소하였습니다.";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody);
+            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
             FcmRequest.Message message = new FcmRequest.Message(user.getUserFcmToken(), notification);
             FcmRequest fcmRequest = new FcmRequest(message);
 
@@ -71,7 +71,7 @@ public class FcmPushService {
             // 알림 제목과 내용 설정
             String notificationTitle = "웨이팅 취소 알림";
             String notificationBody = storeName + " 가게에서 영업을 종료하였습니다.";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody);
+            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
             FcmRequest.Message message = new FcmRequest.Message(user.getUserFcmToken(), notification);
             FcmRequest fcmRequest = new FcmRequest(message);
 
@@ -91,7 +91,7 @@ public class FcmPushService {
             // 알림 제목과 내용 설정
             String notificationTitle = "신규 웨이팅 접수 알림";
             String notificationBody = personNumber + "명 팀의 신규 웨이팅이 접수되었습니다";
-            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody);
+            FcmRequest.Notification notification = new FcmRequest.Notification(notificationTitle, notificationBody,"default");
             FcmRequest.Message message = new FcmRequest.Message(admin.getAdminFcmToken(), notification);
             FcmRequest fcmRequest = new FcmRequest(message);
 

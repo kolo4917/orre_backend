@@ -50,13 +50,15 @@ public class FcmRequest {
     public static class Notification {
         private String title;
         private String body;
+        private String sound; // sound 필드 추가
 
         public Notification() {
         }
 
-        public Notification(String title, String body) {
+        public Notification(String title, String body, String sound) { // 생성자 수정
             this.title = title;
             this.body = body;
+            this.sound = sound;
         }
 
         public String getTitle() {
@@ -73,6 +75,14 @@ public class FcmRequest {
 
         public void setBody(String body) {
             this.body = body;
+        }
+
+        public String getSound() { // getter 추가
+            return sound;
+        }
+
+        public void setSound(String sound) { // setter 추가
+            this.sound = sound;
         }
     }
 }
