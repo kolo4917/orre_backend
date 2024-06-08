@@ -18,6 +18,8 @@ import com.example.demo.repository.UserStoreWaitRepository;
 import com.example.demo.repository.UserSaveRepository;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.DTO.ToClient.BooleanResponse;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 public class NoShowService {
@@ -59,17 +61,20 @@ public class NoShowService {
             userStoreWait.setStatus(0); // 상태를 비활성화로 변경
             userStoreWaitRepository.save(userStoreWait);
 
-            eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
-
             UserStoreWaitResponse userStoreWaitResponse = new UserStoreWaitResponse();
             userStoreWaitResponse.setStatus("1103");
             userStoreWaitResponse.setToken(null); // 필요하다면 여기에 상세 정보를 설정할 수 있습니다.
             //로그 기록
             userLogService.modifyWaiting(userStoreWait.getUserPhoneNumber(),userStoreWait.getStoreCode(),"store canceled");
-
-            eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, noShowUserPhoneNumber, storeCode, userStoreWaitResponse), 1000);
-
             fcmPushService.sendNoShowNotification(userPhoneNumber, storeName);
+            // 트랜잭션이 완료된 후에 이벤트 발행
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
+                    eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, noShowUserPhoneNumber, storeCode, userStoreWaitResponse), 1000);
+                }
+            });
 
 
             return new BooleanResponse(true); // 성공 시 true 반환

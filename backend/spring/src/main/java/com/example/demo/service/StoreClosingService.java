@@ -14,6 +14,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import com.example.demo.config.events.EventPublisherService;
 
 import com.example.demo.service.FireBase.FcmPushService;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 @Service
@@ -49,16 +51,25 @@ public class StoreClosingService {
                 userStoreWaitResponse.setToken(null);
                 String userPhoneNumber = user.getUserPhoneNumber();
                 userLogService.modifyWaitingByClosing(user.getUserPhoneNumber(), storeCode, "store closed");
-                eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
-                //fcm push service
+                // 이벤트를 트랜잭션 커밋 후에 발행
+                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        eventPublisherService.publishNoShowUserEventAfterDelay(new UserNoShowEvent(this, user.getUserPhoneNumber(), storeCode, userStoreWaitResponse), 1000);
+                    }
+                });                //fcm push service
                 fcmPushService.sendClosingNotification(userPhoneNumber, storeName);
             }
             List<UserStoreWait> usersInQueueWith0 = userStoreWaitRepository.findByStoreCodeAndStatus(storeCode, 0);
             for (UserStoreWait user: usersInQueueWith0){
                 userStoreWaitRepository.delete(user);
             }
-            eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
-            return "200";
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    eventPublisherService.publishEventAfterDelay(new StoreQueueUpdatedEvent(this, storeCode), 1000); // 1초 딜레이
+                }
+            });            return "200";
         } catch (EmptyResultDataAccessException e) {
             // storeCode에 해당하는 가게가 없는 경우
             return "6401";
