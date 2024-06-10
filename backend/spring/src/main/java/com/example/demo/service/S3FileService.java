@@ -62,7 +62,7 @@ public class S3FileService {
                         request.getMenuCode(),
                         1, // available 기본값 1로 설정 (활성화 상태)
                         request.getRecommend(), // recommend 기본값 0으로 설정
-                        url, // 이미지 URL
+                        url,
                         request.getIntroduce()
                 );
                 menuInfoRepository.save(menuInfo);
@@ -96,7 +96,7 @@ public class S3FileService {
         }
     }
     @Transactional
-    public String modifyToDatabase(S3ModifyRequest request) {
+    public String modifyToDatabase(S3ModifyRequest request, String url) {
         try {
             // 특정 가게 코드와 메뉴 코드를 기반으로 메뉴 정보를 조회합니다.
             List<MenuInfo> menuInfos = menuInfoRepository.findByStoreCodeAndMenuAndMenuCode(request.getStoreCode(), request.getMenu(),request.getMenuCode());
@@ -112,6 +112,7 @@ public class S3FileService {
                 menuInfo.setPrice(request.getPrice());
                 menuInfo.setIntroduce(request.getIntroduce());
                 menuInfo.setRecommend(request.getRecommend());
+                menuInfo.setImg(url);
                 menuInfoRepository.save(menuInfo);
             }
 
