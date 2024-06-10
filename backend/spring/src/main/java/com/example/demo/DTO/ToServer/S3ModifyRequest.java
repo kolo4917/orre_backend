@@ -8,10 +8,11 @@ public class S3ModifyRequest {
     private int price;
     private int recommend;
     private String introduce;
+    private String singleMenuCode;
 
     private String jwtAdmin;
 
-    public S3ModifyRequest(int storeCode, String menuCode, String menu, String newMenu,int price, int recommend, String introduce, String jwtAdmin) {
+    public S3ModifyRequest(int storeCode, String menuCode, String menu, String newMenu, int price, int recommend, String introduce, String singleMenuCode, String jwtAdmin) {
         this.storeCode = storeCode;
         this.menuCode = menuCode;
         this.menu = menu;
@@ -19,6 +20,7 @@ public class S3ModifyRequest {
         this.price = price;
         this.recommend = recommend;
         this.introduce = introduce;
+        this.singleMenuCode = singleMenuCode;
         this.jwtAdmin = jwtAdmin;
     }
 
@@ -84,5 +86,13 @@ public class S3ModifyRequest {
 
     public void setJwtAdmin(String jwtAdmin) {
         this.jwtAdmin = jwtAdmin;
+    }
+
+    public String getSingleMenuCode() {
+        return singleMenuCode;
+    }
+
+    public void setSingleMenuCode(String singleMenuCode) {
+        this.singleMenuCode = singleMenuCode;
     }
 }
