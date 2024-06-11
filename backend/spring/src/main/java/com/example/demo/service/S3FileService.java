@@ -99,7 +99,9 @@ public class S3FileService {
     public String modifyToDatabase(S3ModifyRequest request, String url) {
         try {
             // 특정 가게 코드와 메뉴 코드를 기반으로 메뉴 정보를 조회합니다.
-            List<MenuInfo> menuInfos = menuInfoRepository.findByStoreCodeAndMenuAndMenuCode(request.getStoreCode(), request.getMenu(),request.getMenuCode());
+            List<MenuInfo> menuInfos = menuInfoRepository.findByStoreCodeAndMenuAndMenuCode(
+                    request.getStoreCode(), request.getMenu(), request.getMenuCode()
+            );
 
             // 조회된 메뉴 정보가 없을 경우
             if (menuInfos == null || menuInfos.isEmpty()) {
@@ -112,7 +114,12 @@ public class S3FileService {
                 menuInfo.setPrice(request.getPrice());
                 menuInfo.setIntroduce(request.getIntroduce());
                 menuInfo.setRecommend(request.getRecommend());
-                menuInfo.setImg(url);
+
+                // url이 null이 아닐 경우에만 이미지를 설정합니다.
+                if (url != null) {
+                    menuInfo.setImg(url);
+                }
+
                 menuInfoRepository.save(menuInfo);
             }
 
@@ -123,5 +130,6 @@ public class S3FileService {
             return "5006";
         }
     }
+
 
 }

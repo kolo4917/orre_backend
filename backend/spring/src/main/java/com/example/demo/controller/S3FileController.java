@@ -62,23 +62,27 @@ public class S3FileController {
         }
     }
     @PostMapping("/api/admin/StoreAdmin/menu/s3/modify")
-    public StatusResponse modifyFile(@RequestPart(name = "file") MultipartFile file,
-                                     @RequestPart (name = "request") S3ModifyRequest request){
+    public StatusResponse modifyFile(
+            @RequestPart(name = "file", required = false) MultipartFile file,
+            @RequestPart(name = "request") S3ModifyRequest request
+    ) {
         int storeCode = request.getStoreCode();
         String singleMenuCode = request.getSingleMenuCode();
         String jwtAdmin = request.getJwtAdmin();
 
         boolean isValidAdmin = jwtService.isValid(jwtAdmin);
         if (isValidAdmin) {
-            String fileUrl = s3FileService.uploadFile(file, storeCode, singleMenuCode);
+            String fileUrl = null;
+            if (file != null && !file.isEmpty()) {
+                fileUrl = s3FileService.uploadFile(file, storeCode, singleMenuCode);
+            }
             String status = s3FileService.modifyToDatabase(request, fileUrl);
             return new StatusResponse(status);
-        }
-        else {
+        } else {
             return new StatusResponse("5001");
         }
-
     }
+
 
 
 }
