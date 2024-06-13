@@ -6,6 +6,7 @@ import com.example.demo.model.DataBase.MenuInfo;
 import com.example.demo.repository.MenuInfoRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -82,6 +83,14 @@ public class S3FileService {
 
             if (menus.isEmpty()) {
                 return "5004"; // 메뉴 정보가 없는 경우
+            }
+            // 메뉴 정보 중 첫 번째 항목의 이미지를 삭제
+            MenuInfo firstMenu = menus.get(0);
+            String imageUrl = firstMenu.getImg();
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                // s3://orre/storeCode/3/A/A001.jpg 형식의 URL에서 키를 추출
+                String key = imageUrl.substring(imageUrl.indexOf("storeCode/"));
+                amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, key));
             }
 
             // 조회된 메뉴 정보를 모두 삭제
