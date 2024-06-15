@@ -14,15 +14,15 @@ import jakarta.persistence.Column;
         private String appName;
         @Column(name = "app_version")
         private String appVersion;
-        @Column(name = "app_essential_update")
-        private Integer appEssentialUpdate;
+        @Column(name = "app_essential_update_version")
+        private String appEssentialUpdateVersion;
         public AppVersion() {}
 
-        public AppVersion(Integer appCode, String appName, String appVersion, Integer appEssentialUpdate) {
+        public AppVersion(Integer appCode, String appName, String appVersion, String appEssentialUpdateVersion) {
             this.appCode = appCode;
             this.appName = appName;
             this.appVersion = appVersion;
-            this.appEssentialUpdate = appEssentialUpdate;
+            this.appEssentialUpdateVersion = appEssentialUpdateVersion;
         }
 
         public Integer getAppCode() {
@@ -49,12 +49,12 @@ import jakarta.persistence.Column;
             this.appVersion = appVersion;
         }
 
-        public Integer getAppEssentialUpdate() {
-            return appEssentialUpdate;
+        public String getAppEssentialUpdateVersion() {
+            return appEssentialUpdateVersion;
         }
 
-        public void setAppEssentialUpdate(Integer appEssentialUpdate) {
-            this.appEssentialUpdate = appEssentialUpdate;
+        public void setAppEssentialUpdateVersion(String appEssentialUpdateVersion) {
+            this.appEssentialUpdateVersion = appEssentialUpdateVersion;
         }
     }
 

@@ -4,7 +4,7 @@ public class AppVersionCheckRespose {
     private String status;
     private Integer appCode;
     private String appVersion;
-    private Integer appEssentialUpdate;
+    private String appEssentialUpdateVersion;
 
 
     public String getStatus() {
@@ -31,11 +31,11 @@ public class AppVersionCheckRespose {
         this.appVersion = appVersion;
     }
 
-    public Integer getAppEssentialUpdate() {
-        return appEssentialUpdate;
+    public String getAppEssentialUpdateVersion() {
+        return appEssentialUpdateVersion;
     }
 
-    public void setAppEssentialUpdate(Integer appEssentialUpdate) {
-        this.appEssentialUpdate = appEssentialUpdate;
+    public void setAppEssentialUpdateVersion(String appEssentialUpdateVersion) {
+        this.appEssentialUpdateVersion = appEssentialUpdateVersion;
     }
 }

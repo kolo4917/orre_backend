@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.DataBase.AppVersion;
 import com.example.demo.DTO.ToClient.AppVersionCheckRespose;
+import com.example.demo.DTO.ToClient.StatusResponse;
 import com.example.demo.repository.AppVersionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 @Service
-public class AppVersionCheckService {
+public class AppVersionService {
     @Autowired
     private AppVersionRepository appVersionRepository;
     public AppVersionCheckRespose checkVersion(Integer appCode, String appVersion){
@@ -20,14 +21,28 @@ public class AppVersionCheckService {
             response.setStatus("200");
             response.setAppVersion(Version.getAppVersion());
             response.setAppCode(Version.getAppCode());
-            response.setAppEssentialUpdate(0);
+            response.setAppEssentialUpdateVersion(Version.getAppEssentialUpdateVersion());
         }
         else{
             response.setStatus("1301");
             response.setAppVersion(Version.getAppVersion());
             response.setAppCode(Version.getAppCode());
-            response.setAppEssentialUpdate(Version.getAppEssentialUpdate());
+            response.setAppEssentialUpdateVersion(Version.getAppEssentialUpdateVersion());
         }
         return response;
+    }
+
+    public StatusResponse modifyVersion(Integer appCode, String newAppVersion, Integer essential) {
+        AppVersion version = appVersionRepository.findByAppCode(appCode);
+
+        version.setAppVersion(newAppVersion);
+
+        if (essential == 1) {
+            version.setAppEssentialUpdateVersion(newAppVersion);
+        }
+
+        appVersionRepository.save(version);
+
+        return new StatusResponse("200");
     }
 }
