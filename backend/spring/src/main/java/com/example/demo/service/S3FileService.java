@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 public class S3FileService {
 
     private final AmazonS3 amazonS3Client;
@@ -30,12 +32,18 @@ public class S3FileService {
     public String uploadFile(MultipartFile file, int storeCode, String singleMenuCode) {
         try {
             String fileName = file.getOriginalFilename();
+
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            String formattedNow = now.format(formatter);
+            String fileNameWithTime = fileName + "_" + formattedNow;
+
             String directory = "storeCode/" + storeCode + "/" + singleMenuCode;
-            String fileUrl = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + directory + "/" + fileName;
+            String fileUrl = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + directory + "/" + fileNameWithTime;
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
-            amazonS3Client.putObject(bucket, directory + "/" + fileName, file.getInputStream(), metadata);
+            amazonS3Client.putObject(bucket, directory + "/" + fileNameWithTime, file.getInputStream(), metadata);
             return fileUrl;
         } catch (IOException e) {
             // IOException 발생 시 예외 처리
