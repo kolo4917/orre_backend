@@ -19,6 +19,7 @@ import com.example.demo.service.StoreEnteringService;
 import com.example.demo.service.LogQueryService;
 import com.example.demo.service.StoreClosingService;
 import com.example.demo.service.SignupService;
+import com.example.demo.service.StoreUserDeleteService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -57,6 +58,7 @@ public class StoreAdminGetPostController {
     private final LogQueryService logQueryService;
     private final StoreClosingService storeClosingService;
     private final SignupService signupService;
+    private final StoreUserDeleteService storeUserDeleteService;
 
 
 
@@ -72,7 +74,7 @@ public class StoreAdminGetPostController {
                                        StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService ,
                                        StoreWaitingAvailableService storeWaitingAvailableService, StoreCategoriesService storeCategoriesService,
                                        StoreEnteringService storeEnteringService, LogQueryService logQueryService,
-                                       StoreClosingService storeClosingService, SignupService signupService) {
+                                       StoreClosingService storeClosingService, SignupService signupService, StoreUserDeleteService storeUserDeleteService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -89,6 +91,7 @@ public class StoreAdminGetPostController {
         this.logQueryService = logQueryService;
         this.storeClosingService = storeClosingService;
         this.signupService = signupService;
+        this.storeUserDeleteService = storeUserDeleteService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -161,8 +164,11 @@ public class StoreAdminGetPostController {
 
     @PostMapping("/api/admin/StoreAdmin/noShow")
     public BooleanResponse handleNoShow(@RequestBody AdminNoShowRequest request) {
-        // NoShowService를 사용하여 no-show 처리
         return noShowService.handleNoShowCustomers(request.getNoShowUserCode(), request.getStoreCode());
+    }
+    @PostMapping("/api/admin/StoreAdmin/userDelete")
+    public BooleanResponse handleUserDelete(@RequestBody AdminDeleteUserRequest request) {
+        return storeUserDeleteService.handleDeleteUser(request.getDeleteUserCode(), request.getStoreCode());
     }
     @PostMapping("/api/admin/StoreAdmin/userCall")
     public UserCallResponse userCall(@RequestBody UserCallRequest request) {
