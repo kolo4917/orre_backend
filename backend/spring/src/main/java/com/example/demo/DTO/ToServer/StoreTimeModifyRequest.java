@@ -2,20 +2,29 @@ package com.example.demo.DTO.ToServer;
 
 import java.sql.Time;
 
-public class storeTimeModifyRequest {
+public class StoreTimeModifyRequest {
+    private Integer storeCode;
     private Time newOpeningTime;
     private Time newClosingTime;
     private Time newLastOrderTime;
     private Time newStartBreakTime;
     private Time newEndBreakTime;
 
-    public storeTimeModifyRequest(Time newOpeningTime, Time newClosingTime, Time newLastOrderTime, Time newStartBreakTime, Time newEndBreakTime) {
+    public StoreTimeModifyRequest(Integer storeCode, Time newOpeningTime, Time newClosingTime, Time newLastOrderTime, Time newStartBreakTime, Time newEndBreakTime) {
+        this.storeCode = storeCode;
         this.newOpeningTime = newOpeningTime;
         this.newClosingTime = newClosingTime;
         this.newLastOrderTime = newLastOrderTime;
         this.newStartBreakTime = newStartBreakTime;
         this.newEndBreakTime = newEndBreakTime;
+    }
 
+    public Integer getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(Integer storeCode) {
+        this.storeCode = storeCode;
     }
 
     public Time getNewOpeningTime() {
