@@ -20,6 +20,7 @@ import com.example.demo.service.LogQueryService;
 import com.example.demo.service.StoreClosingService;
 import com.example.demo.service.SignupService;
 import com.example.demo.service.StoreUserDeleteService;
+import com.example.demo.service.StoreTimeModifyService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import javax.crypto.SecretKey;
 import java.util.Base64;
@@ -59,6 +61,7 @@ public class StoreAdminGetPostController {
     private final StoreClosingService storeClosingService;
     private final SignupService signupService;
     private final StoreUserDeleteService storeUserDeleteService;
+    private final StoreTimeModifyService storeTimeModifyService;
 
 
 
@@ -74,7 +77,8 @@ public class StoreAdminGetPostController {
                                        StoreMenuOrderService storeMenuOrderService, StoreMenuOrderedCheckService storeMenuOrderedCheckService ,
                                        StoreWaitingAvailableService storeWaitingAvailableService, StoreCategoriesService storeCategoriesService,
                                        StoreEnteringService storeEnteringService, LogQueryService logQueryService,
-                                       StoreClosingService storeClosingService, SignupService signupService, StoreUserDeleteService storeUserDeleteService) {
+                                       StoreClosingService storeClosingService, SignupService signupService, StoreUserDeleteService storeUserDeleteService,
+                                       StoreTimeModifyService storeTimeModifyService) {
         this.emptySeatService = emptySeatService;
         this.loginService = loginService;
         this.noShowService = noShowService;
@@ -92,6 +96,7 @@ public class StoreAdminGetPostController {
         this.storeClosingService = storeClosingService;
         this.signupService = signupService;
         this.storeUserDeleteService = storeUserDeleteService;
+        this.storeTimeModifyService = storeTimeModifyService;
     }
 
     private String generateJwtTokenForAdmin(String adminPhoneNumber) {
@@ -271,6 +276,17 @@ public class StoreAdminGetPostController {
             return logResponse;
         } else {
             return new LogResponse(null,"400");
+        }
+    }
+    @PostMapping("/api/admin/StoreAdmin/storeTimeModify")
+    public StatusResponse handleStoreTimeModify(
+            @RequestHeader(name = "Authorization") String jwtAdmin,
+            @RequestBody StoreTimeModifyRequest request) {
+        boolean isValidAdmin = jwtService.isValid(jwtAdmin);
+        if (isValidAdmin) {
+            return storeTimeModifyService.updateStoreTimes(request);
+        } else {
+            return new StatusResponse("6601");
         }
     }
 
