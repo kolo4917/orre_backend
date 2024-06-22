@@ -14,6 +14,7 @@ public interface UserLogRepository extends JpaRepository<UserLog, Long> {
     Integer findLatestHistoryNumByUserPhoneNumber(String phoneNumber);
 
     UserLog findFirstByUserPhoneNumberAndStoreCodeOrderByHistoryNumDesc(String phoneNumber, int storeCode);
+    UserLog findByUserPhoneNumberAndStoreCodeAndStatusStartingWith(String phoneNumber, int storeCode, String statusPrefix);
 
     UserLog findByUserPhoneNumberAndStatusAndStoreCode(String phoneNumber, String status, int storeCode); //순서 맞아야 함
 

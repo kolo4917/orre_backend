@@ -58,6 +58,14 @@ public class UserLogService {
         // 가장 최근의 UserLog 가져오기
         UserLog latestUserLog = userLogRepository.findByUserPhoneNumberAndStatusAndStoreCode(phoneNumber, "waiting", storeCode);
 
+        if (latestUserLog == null) {
+            // waiting 상태가 없는 경우 called로 시작하는 가장 최근의 UserLog 가져오기
+            latestUserLog = userLogRepository.findByUserPhoneNumberAndStoreCodeAndStatusStartingWith(phoneNumber, storeCode, "called");
+//            if (!calledLogs.isEmpty()) {
+//                latestUserLog = calledLogs.get(0); // 가장 최근의 것 선택
+//            } 리스트 형태일 경우 다중 예약 서비스 개시 할 경우
+        }
+
         if(latestUserLog != null){
             Date currentTime = new Date();
             latestUserLog.setStatusChangeTime(currentTime);
