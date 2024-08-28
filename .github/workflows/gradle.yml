@@ -63,7 +63,7 @@ jobs:
             echo "Removing existing container if it exists..."
             docker rm orre || true
 
-            echo "Removing all Docker images..."
+            echo "도커 이미지 삭제 Removing all Docker images..."
             docker rmi $(docker images -q) --force || true
 
             echo "Pulling new Docker image..."
