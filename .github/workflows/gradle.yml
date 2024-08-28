@@ -50,37 +50,38 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
 
       - name: Deploy to EC2
-          uses: appleboy/ssh-action@v0.1.3
-          with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: ${{ secrets.PORT }}
-            script: |
-              echo "Stopping existing container if it exists..."
-              docker stop orre || true
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            echo "Stopping existing container if it exists..."
+            docker stop orre || true
 
-              echo "Removing existing container if it exists..."
-              docker rm orre || true
+            echo "Removing existing container if it exists..."
+            docker rm orre || true
 
-              echo "Removing unused Docker images..."
-              
-              RUNNING_CONTAINERS=$(docker ps -q)
-              
-              # Get a list of all images in use by running containers
-              IMAGES_IN_USE=$(docker ps --format '{{.Image}}' | sort | uniq)
-              
-              # Get a list of all images
-              ALL_IMAGES=$(docker images -q)
-              
-              # Get a list of images that are not in use by any running container
-              UNUSED_IMAGES=$(echo "$ALL_IMAGES" | grep -vF -f <(echo "$IMAGES_IN_USE"))
-              
-              # Remove unused images
-              echo "$UNUSED_IMAGES" | xargs -r docker rmi
+            echo "Removing unused Docker images..."
+            
+            # Get a list of all running containers
+            RUNNING_CONTAINERS=$(docker ps -q)
+            
+            # Get a list of all images in use by running containers
+            IMAGES_IN_USE=$(docker ps --format '{{.Image}}' | sort | uniq)
+            
+            # Get a list of all images
+            ALL_IMAGES=$(docker images -q)
+            
+            # Get a list of images that are not in use by any running container
+            UNUSED_IMAGES=$(echo "$ALL_IMAGES" | grep -vF -f <(echo "$IMAGES_IN_USE"))
+            
+            # Remove unused images
+            echo "$UNUSED_IMAGES" | xargs -r docker rmi
 
-              echo "Pulling new Docker image..."
-              docker pull ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
-              
-              echo "Running new container..."
-              docker run -d --name orre -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
+            echo "Pulling new Docker image..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
+            
+            echo "Running new container..."
+            docker run -d --name orre -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
