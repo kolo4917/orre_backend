@@ -65,7 +65,6 @@ jobs:
 
               echo "Removing unused Docker images..."
               
-              # Get a list of all running containers
               RUNNING_CONTAINERS=$(docker ps -q)
               
               # Get a list of all images in use by running containers
