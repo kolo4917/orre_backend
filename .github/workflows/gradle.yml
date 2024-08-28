@@ -63,22 +63,8 @@ jobs:
             echo "Removing existing container if it exists..."
             docker rm orre || true
 
-            echo "Removing unused Docker images..."
-            
-            # Get a list of all running containers
-            RUNNING_CONTAINERS=$(docker ps -q)
-            
-            # Get a list of all images in use by running containers
-            IMAGES_IN_USE=$(docker ps --format '{{.Image}}' | sort | uniq)
-            
-            # Get a list of all images
-            ALL_IMAGES=$(docker images -q)
-            
-            # Get a list of images that are not in use by any running container
-            UNUSED_IMAGES=$(echo "$ALL_IMAGES" | grep -vF -f <(echo "$IMAGES_IN_USE"))
-            
-            # Remove unused images
-            echo "$UNUSED_IMAGES" | xargs -r docker rmi
+            echo "Removing all Docker images..."
+            docker rmi $(docker images -q) --force || true
 
             echo "Pulling new Docker image..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
