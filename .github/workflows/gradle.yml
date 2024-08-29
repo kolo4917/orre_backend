@@ -57,13 +57,17 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            echo "Logging in to Docker Registry..."
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-            echo "Pulling Docker image..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
             echo "Stopping existing container if it exists..."
             docker stop orre || true
+
             echo "Removing existing container if it exists..."
             docker rm orre || true
+
+            echo "도커 이미지 삭제 Removing all Docker images..."
+            docker rmi $(docker images -q) --force || true
+
+            echo "Pulling new Docker image..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
+            
             echo "Running new container..."
             docker run -d --name orre -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/orre:${{ steps.datetime.outputs.tag }}
