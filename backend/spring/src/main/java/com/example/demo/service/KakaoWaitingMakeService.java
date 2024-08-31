@@ -54,6 +54,7 @@ public class KakaoWaitingMakeService {
 
         Message message = new Message();
         message.setFrom(senderNumber);
+        System.out.println("★★★★★"+senderNumber);
         message.setTo(userPhoneNumber);
         message.setKakaoOptions(kakaoOption);
 
