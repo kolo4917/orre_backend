@@ -25,7 +25,7 @@ public class KakaoWaitingMakeService {
     public KakaoWaitingMakeService(
             @Value("${coolsms.apikey}") String apiKey,
             @Value("${coolsms.apisecret}") String apiSecret,
-            @Value("${coolsms.fromnumber}") String senderNumber,
+            @Value("${coolsms.fromnumber}") String senderNumber, // 240831 수정 : 현재 정민호 번호
             @Value("${coolsms.pfid}") String pfId,
             @Value("${coolsms.templeteid2}")String templeteId) {
 
